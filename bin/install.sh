@@ -1,6 +1,6 @@
 # 
 
-apiport=5120
+apiport=5122
 gwport=8199
 # setting jekyll's _config.yml file
 cat > _config.yml <<EOF
@@ -14,7 +14,7 @@ mkdir _data
 cat > _data/gw.yml <<EOF
 --- 
 webui: http://127.0.0.1:$apiport
-lgw: http://127.0.0.1:$gqport
+lgw: http://127.0.0.1:$gwport
 EOF
 
 

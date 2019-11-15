@@ -9,7 +9,7 @@
  2. run the command :
  
  ```sh
- install.sh
+ sh ./bin/install.sh
  ```
  or directly execute the /bin/sh shell script
  ```sh
