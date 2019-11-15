@@ -1,21 +1,18 @@
 # 
 
+# defined ipfs ports
 apiport=5122
 gwport=8199
-# setting jekyll's _config.yml file
-cat > _config.yml <<EOF
---- # jekyll configuration file
-api: /ip4/127.0.0.1/tcp/$apiport
-gateway: /ip4/127.0.0.1/tcp/$gwport
-webui: http://127.0.0.1:$apiport/webui
-lgw: http://127.0.0.1:$gwport
-EOF
+if test ! -e _data; then
 mkdir _data
+fi
+if test ! -e _data/gw.yml; then
 cat > _data/gw.yml <<EOF
 --- 
 webui: http://127.0.0.1:$apiport
 lgw: http://127.0.0.1:$gwport
 EOF
+fi
 
 
 installdir=_ipfs
@@ -31,6 +28,7 @@ fi
 ipfs config profile apply randomports
 ipfs config Addresses.API /ip4/127.0.0.1/tcp/$apiport
 ipfs config Addresses.Gateway /ip4/127.0.0.1/tcp/$gwport
+ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
 
 echo test w/o daemon running
 t0=$(echo ready | ipfs add -Q --hash ID --cid-base=base64)
