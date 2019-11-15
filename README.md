@@ -1,17 +1,17 @@
 ## mini blockchain (mychelium)
 
-prerequisites : ipfs
+### installing ipfs
 
  1. clone this repository :
  ```sh
  git clone  https://github.com/Gradual-Quanta/minichain.git minichain
  ```
- 2. to install by running the command :
+ 2. run the command :
  
  ```sh
  install.sh
  ```
- or running 
+ or directly execute the /bin/sh shell script
  ```sh
- curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/install.sh | sh /dev/stdin
+curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/install.sh | sh /dev/stdin
  ```
