@@ -2,10 +2,16 @@
 
 <head><title> Mutables conversion </title>
 <meta charset="utf8"/>
+{% if site.GH_ENV == 'gh_pages' %}
+<!-- GITHUB pages -->
+<link href="https://cdn.jsdelivr.net/gh/iglake/cssjs@{{ site.cssversion }}/css/style.css" rel="stylesheet" type="text/css"/>
+{% else %}
 {% if jekyll.environment == 'production' %}
 <link href="https://cdn.jsdelivr.net/gh/iglake/cssjs@{{ site.cssversion }}/css/style.css" rel="stylesheet" type="text/css"/>
 {% else %}
+<!-- jekyll in development mode -->
 <link href="http://ocean:8088/GITrepo/iglake/cssjs/css/style.css" rel="stylesheet" type="text/css"/>
+{% endif %}
 {% endif %}
 </head>
 <body>

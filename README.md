@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-## mini blockchain (mychelium)
+## mini blockchain ([mychelium][42])
 <meta charset="utf8"/>
 
 Our blockchain uses [IPFS][4] as a backbone, and has a application layer made with [perl][5],
@@ -28,8 +28,15 @@ Therefore the integrity of a document referenced with an immutable address is gu
 [8]: https://duckduckgo.com/?q=!g+cryptographycally+secure+hash+%23M4GC
 [9]: https://duckduckgo.com/?q=!g+content+addressed+storage
 [10]: https://duckduckgo.com/?q=!g+Human+IP+address+ydentity
+[42]: https://duckduckgo.com/?q=!g+%22mychelium%22
 
-### installing (2 methods)
+#### examples
+
+* mutable : [/files/etc/motd](http://gateway.local/webuid#/files/etc/motd)
+
+* immutable : [/ipfs/{{site.data.install.qm}}](https://cloudflare-ipfs.com/ipfs/{{site.data.install.qm}})
+
+## INSTALLATION (2 methods)
 
 A. running a shell script :
 
