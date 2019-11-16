@@ -3,6 +3,9 @@ layout: default
 ---
 ## mini blockchain ([mychelium][42])
 <meta charset="utf8"/>
+[![HitCount](http://hits.dwyl.io/Gradual-Quanta/minichain.svg)](http://hits.dwyl.io/Gradual-Quanta/minichain)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9861b9fa-9749-4a61-b1fb-f32502348934/deploy-status)](https://app.netlify.com/sites/festive-leakey-329460/deploys)
+[![Github all releases](https://img.shields.io/github/downloads/Gradual-Quanta/minichain/total.svg)](https://GitHub.com/Gradual-Quanta/minichain/releases/)
 
 Our blockchain uses [IPFS][4] as a backbone, and has a application layer made with [perl][5],
 so it requires the installation of a few modules prior to use.
