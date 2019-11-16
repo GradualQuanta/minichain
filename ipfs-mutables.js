@@ -18,7 +18,7 @@ const webui = '{{site.data.ipfs.webui}}'
 const api_url = webui + '/api/v0/'
 
 //const lgw = 'http://127.0.0.1:8080'
-const lgw = '{{site.data.ipfs.lgw}}'
+const lgw = '{{site.data.ipfs.gateway}}'
 const pgw = 'https://ipfs.blockringtm.ml';
 
 var bod = document.getElementsByTagName('body')[0];
@@ -27,28 +27,34 @@ var bod = document.getElementsByTagName('body')[0];
 
 var map = {}
 var promises = []
-    let matches = bod.innerHTML.matchAll( new RegExp('/webui#/files((/[^"]+)?/([^/" ]+))','g') )
-    for(let result of matches) {
-      let mutable = result[0];
-      let fname = result[3];
+let matches = bod.innerHTML.matchAll( new RegExp('/webui#/files((/[^"]+)?/([^/" <>]+))','g') )
+for(let result of matches) {
+   let mutable = result[0];
+   let fname = result[3];
 
-      console.log('result: ',result)
-      if (typeof(map[mutable]) == 'undefined') {
-         promises.push( getHashKey(result[2]).then( h => {
-		    console.log('s,'+mutable+',/ipfs/'+h+'/'+fname+',g') // OK
-		    map[mutable] = '/ipfs/'+h+'/'+fname;
-                    bod.innerHTML = bod.innerHTML.replace( new RegExp(mutable,'g'),map[mutable]);
-		    } ).catch(error) );
-	  
-      } else {
-                    bod.innerHTML = bod.innerHTML.replace( new RegExp(mutable,'g'),map[mutable]);
-      }
+   console.log('result: ',result)
+   if (typeof(map[mutable]) == 'undefined') {
+      promises.push( getHashKey(result[2]).then( h => {
+	 if (typeof(h) != 'undefined') {
+	    console.log('s,'+mutable+',/ipfs/'+h+'/'+fname+',g') // OK
+	    map[mutable] = '/ipfs/'+h+'/'+fname;
+	    bod.innerHTML = bod.innerHTML.replace( new RegExp(mutable,'g'),map[mutable]);
+	    bod.innerHTML = bod.innerHTML.replace(/http:\/\/webui.local\/ip/g,lgw+'/ip');
+	 }
+      } ).catch(error) );
 
-    }
+   } else {
+      bod.innerHTML = bod.innerHTML.replace( new RegExp(mutable,'g'),map[mutable]);
+      bod.innerHTML = bod.innerHTML.replace(/http:\/\/webui.local\/ip/g,lgw+'/ip');
+
+   }
+
+}
 
     Promise.all(promises).then(callback).catch(error)
 
 function callback(results) {
+  bod.innerHTML = bod.innerHTML.replace(/http:\/\/webui.local\/webui/g,webui+'/webui');
   console.log(results)
 }
 

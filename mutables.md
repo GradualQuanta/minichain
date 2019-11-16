@@ -11,5 +11,5 @@ the addresses.
 
 
 
-* /etc/motd -> [/files/etc/motd](http://gateway.local/webui#/files/etc/motd)
-* /my/identity/public.yml -> [/files/my/identity/public.yml](http://gateway.local/webui#/files/my/identity/public.yml)
+* /etc/motd -> [/files/etc/motd](http://webui.local/webui#/files/etc/motd)
+* /my/identity/public.yml -> [/files/my/identity/public.yml](http://webui.local/webui#/files/my/identity/public.yml)

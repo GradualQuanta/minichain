@@ -1,5 +1,7 @@
 # 
 
+# installation [script](https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/_data/install.yml)
+
 # 1. INSTALLING LOCAL PERL MODULES ...
 # ------------------------------------
 
