@@ -3,7 +3,9 @@ layout: default
 ---
 ## mini blockchain ([mychelium][42])
 <meta charset="utf8"/>
-[![HitCount](http://hits.dwyl.io/Gradual-Quanta/minichain.svg)](http://hits.dwyl.io/Gradual-Quanta/minichain)
+{% if site.GH_ENV == 'gh_pages' %}
+[![HitCount](https://hits.dwyl.io/Gradual-Quanta/minichain.svg)](http://hits.dwyl.io/Gradual-Quanta/minichain)
+{% endif %}
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9861b9fa-9749-4a61-b1fb-f32502348934/deploy-status)](https://app.netlify.com/sites/festive-leakey-329460/deploys)
 [![Github all releases](https://img.shields.io/github/downloads/Gradual-Quanta/minichain/total.svg)](https://GitHub.com/Gradual-Quanta/minichain/releases/)
 
