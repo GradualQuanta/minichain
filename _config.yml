@@ -4,6 +4,8 @@ gateway: /ip4/127.0.0.1/tcp/8199
 webui: http://127.0.0.1:5122/webui
 lgw: http://127.0.0.1:8199
 
+cssversion: 1.8
+
 exclude:
  - _ipfs
  - _perl

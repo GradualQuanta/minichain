@@ -1,0 +1,14 @@
+# 
+
+export IPFS_PATH=$(pwd)/_ipfs
+export PATH=$IPFS_PATH/bin:bin:$PATH
+
+#gateway=$(ipfs config Addresses.Gateway)
+#gwport=$(echo $gateway | cut -d/ -f 5)
+#gwhost=$(echo $gateway | cut -d/ -f 3)
+
+api=$(ipfs config Addresses.API)
+apiport=$(echo $api | cut -d/ -f 5)
+apihost=$(echo $api | cut -d/ -f 3)
+
+firefox http://$apihost:$apiport/webui

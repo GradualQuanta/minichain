@@ -2,11 +2,18 @@
 
 <head><title> Mutables conversion </title>
 <meta charset="utf8"/>
+{% if jekyll.environment == 'production' %}
+<link href="https://cdn.jsdelivr.net/gh/iglake/cssjs@{{ site.cssversion }}/css/style.css" rel="stylesheet" type="text/css"/>
+{% else %}
+<link href="http://ocean:8088/GITrepo/iglake/cssjs/css/style.css" rel="stylesheet" type="text/css"/>
+{% endif %}
 </head>
 <body>
 <input id=username name=user value='michelc' type="hidden"/>
 
+<div class=content>
 {{content}}
+</div>
 
 <script src=ipfs-mutables.js></script>
 </body>

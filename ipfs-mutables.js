@@ -14,11 +14,11 @@ const error = err => { console.log(err); }
 
 // ipfs config Addresses.API
 //const webui = 'http://127.0.0.1:5001';
-const webui = '{{site.data.gw.webui}}'
+const webui = '{{site.data.ipfs.webui}}'
 const api_url = webui + '/api/v0/'
 
 //const lgw = 'http://127.0.0.1:8080'
-const lgw = '{{site.data.gw.lgw}}'
+const lgw = '{{site.data.ipfs.lgw}}'
 const pgw = 'https://ipfs.blockringtm.ml';
 
 var bod = document.getElementsByTagName('body')[0];

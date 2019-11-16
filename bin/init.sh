@@ -2,18 +2,22 @@
 
 export IPFS_PATH=$(pwd)/_ipfs
 export PATH=_ipfs/bin:$(pwd)/bin:$PATH
-export DICT="$(pwd)/etc"
 # This script initialize the blockchain
 export LC_TIME='fr_FR.UTF-8'
+
 name=minichain
 # set a few log variables
 tic=$(date +%s)
 date=$(date +%D)
 peerid=$(ipfs config Identity.PeerID)
 echo peerid: $peerid
+
+# get a hip6 and a name
+export DICT="$(pwd)/etc"
 eval $(bin/hip6.pl 2>/dev/null | eyml)
 fullname=$(fullname $peerid | xyml fullname)
 uniq="${hipq:-cadavre exquis}"
+
 # creation de profile
 if false; then
 echo "enter your full public name :"
@@ -41,6 +45,8 @@ ipfs files mkdir -p /etc
 ipfs files write --create --truncate /etc/motd <<EOF
 Date: $date
 Welcome to $name demo
+
+$fullname will be your *bot, managing the blockchain.
 
 --
 EOF

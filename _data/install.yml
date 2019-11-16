@@ -1,3 +1,6 @@
----
-qmhash: QmUWS9fCEMK8q4v1MLgDUWCpjMLWgGU1kGmoTMmJSfuQDr
-
+--- # install scripts, command line
+pk: QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
+date: Sat 16 Nov 07:12:30 CET 2019
+pv: QmVGAFYoN4zNaXcnNLNYYHh3atJJBQtAXDWVAb6Neb6wrd
+qm: QmQMEcuv3cSasSFnZkRNkHzT3JZ4k7PCuvaBe7hioXpcAd
+cmd: "curl https://ipfs.blockring™.ml/ipfs/QmQMEcuv3cSasSFnZkRNkHzT3JZ4k7PCuvaBe7hioXpcAd | sh /dev/stdin"

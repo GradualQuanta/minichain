@@ -17,5 +17,9 @@ eval $(perl -I$rootdir/_perl5/lib/perl5 -Mlocal::lib=$rootdir/_perl5)
 #eval $(perl -Mlocal::lib=--deactivate,~/perl5)
 #perl -Mlocal::lib=--deactivate-all
 
+cd $rootdir
+rm -rf local-lib-${ver}
+
+
 echo PERL5LIB: $PERL5LIB
 
