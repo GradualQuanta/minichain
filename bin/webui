@@ -3,12 +3,21 @@
 export IPFS_PATH=$(pwd)/_ipfs
 export PATH=$IPFS_PATH/bin:bin:$PATH
 
-#gateway=$(ipfs config Addresses.Gateway)
-#gwport=$(echo $gateway | cut -d/ -f 5)
-#gwhost=$(echo $gateway | cut -d/ -f 3)
+gateway=$(ipfs config Addresses.Gateway)
+gwport=$(echo $gateway | cut -d/ -f 5)
+gwhost=$(echo $gateway | cut -d/ -f 3)
 
 api=$(ipfs config Addresses.API)
 apiport=$(echo $api | cut -d/ -f 5)
 apihost=$(echo $api | cut -d/ -f 3)
+
+cat > _data/ipfs.yml <<EOT
+--- # ipfs webui and gateway parameters
+gwport: $gwport
+apiport: $apiport
+gateway: http://$gwhost:$gwport
+webui: http://$apihost:$apiport
+EOT
+
 
 firefox http://$apihost:$apiport/webui

@@ -1,0 +1,5 @@
+--- # ipfs webui and gateway parameters
+gwport: 
+apiport: 
+gateway: http://:
+webui: http://:

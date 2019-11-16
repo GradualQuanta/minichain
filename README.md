@@ -35,7 +35,7 @@ Therefore the integrity of a document referenced with an immutable address is gu
 
 #### examples
 
-* mutable : [/files/etc/motd](http://gateway.local/webuid#/files/etc/motd)
+* mutable : [/files/etc/motd](http://gateway.local/webui#/files/etc/motd)
 
 * immutable : [/ipfs/{{site.data.install.qm}}](https://cloudflare-ipfs.com/ipfs/{{site.data.install.qm}})
 
