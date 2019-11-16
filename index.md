@@ -9,5 +9,5 @@ were mutables are "living records" and immutables are "permanent records"
 
 Bridging the two makes the perfect solution for ledger technologies (blockchains)
 
-
- [mutable conversion][mutables.html]
+* [README](README.html)
+* [mutable conversion](mutables.html)
