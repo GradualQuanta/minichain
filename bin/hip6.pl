@@ -7,7 +7,6 @@ $ENV{LC_TIME} = 'en_US.UTF-8';
 
 # HIPv6 ...
 #
-use Proquint qw(uint32proquint hex2proquint);
 # IPFS peerid
 my $peerid = `ipfs config Identity.PeerID`; chomp($peerid);
 

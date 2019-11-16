@@ -3,6 +3,7 @@
 our $dbug=0;
 
 use YAML::Syck qw();
+# get key as argument or stdin
 if (@ARGV) {
  $key = shift;
 } else {
@@ -11,10 +12,11 @@ if (@ARGV) {
 }
 $key =~ s,.*/ip[fhn]s/,,;
 $key = 'QmboiLojgoteK2P1NWhAjUutsgCpBmgpbrD1iKDAjSWxf4' unless $key;
-print "key: $key\n" if $dbug;
+print "key: $key\n";
 
 
 # ----------------------------------------------------------------
+# decode data (keep only the binary-hash value
 my $bindata = "\0";
 if ($key =~ m/^Qm/) {
  $bindata = &decode_base58($key);
@@ -36,7 +38,7 @@ if ($key =~ m/^Qm/) {
  }
 printf "sha2: f%s\n",unpack('H*',$bindata) if $dbug;
 # ----------------------------------------------------------------
-} else {
+} else { # if key is plain text ... do a sha2 on it
   $key =~ s/\\n/\n/g;
   $key .= ' '.join' ',@ARGV if (@ARGV);
   $bindata = &hashr('SHA-256',1,$key); # SHA-256 if cleartext !
@@ -75,7 +77,7 @@ sub load_wlist {
          $file = sprintf '%s/%s.txt',$DICT,$wlist;
          return undef if (! -e $file);
       }
-      printf "dict: %s\n",$file; 
+      printf "dict: %s\n",$file if $dbug; 
       local *F; open F,'<',$file or die $!;
 #local $/ = "\n"; @$wordlist = map { chomp($_); (split(' ',$_))[0] } <F>;
       local $/ = "\n"; @$wordlist = map { chomp($_); $_ } grep !/^#/, <F>;

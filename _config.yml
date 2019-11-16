@@ -3,3 +3,8 @@ api: /ip4/127.0.0.1/tcp/5122
 gateway: /ip4/127.0.0.1/tcp/8199
 webui: http://127.0.0.1:5122/webui
 lgw: http://127.0.0.1:8199
+
+exclude:
+ - _ipfs
+ - _perl
+ - bin

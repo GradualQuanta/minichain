@@ -6,14 +6,17 @@ gwport=8199
 if test ! -e _data; then
 mkdir _data
 fi
-if test ! -e _data/gw.yml; then
-cat > _data/gw.yml <<EOF
+if test ! -e _data/ipfs.yml; then
+cat > _data/ipfs.yml <<EOF
 --- 
 webui: http://127.0.0.1:$apiport
 lgw: http://127.0.0.1:$gwport
 EOF
 fi
 
+
+# INSTALLING IPFS ...
+# -------------------
 
 installdir=_ipfs
 mkdir $installdir
