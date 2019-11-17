@@ -22,4 +22,3 @@ if test -d $cwd/etc; then
 export DICT=${cwd}/etc
 fi
 
-#export LC_TIME=en_US.UTF-8

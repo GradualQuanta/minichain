@@ -26,18 +26,30 @@ var bod = document.getElementsByTagName('body')[0];
     bod.innerHTML = bod.innerHTML.replace(/http:\/\/gateway.public/g,pgw);
 
 var map = {}
-var promises = []
-let matches = bod.innerHTML.matchAll( new RegExp('/webui#/files((/[^"]+)?/([^/" <>]+))','g') )
+var promises = [ getPeerID().then( id => {
+	    map['/ipns/self/'] = '/ipns/'+id+'/';
+	    bod.innerHTML = bod.innerHTML.replace(/%peerid%/g,id);
+	    bod.innerHTML = bod.innerHTML.replace(new RegExp('/ipns/self','g'),'/ipns/'+id);
+}).catch(error) ]
+
+
+/* Ex: /webui#/files/root/path/to/file -> /ipfs/QmePDtaxkqnR5kKL4qNp1w91WuJ6X5r3mYux7Bv6Vnd5zK */
+// ( /webui#/files( /[^"" <>]* )? )/?( [^/"" <>]+ ) 
+let matches = bod.innerHTML.matchAll(
+    new RegExp('(/webui#/files(/[^" <>]*)?)/([^/" <>]+)','g') )
 for(let result of matches) {
-   let mutable = result[0];
-   let fname = result[3];
+   let match = result[0]; // all that match
+   let mutable = result[1]; // all mutable path
+   let parentdir = result[2] || '/' ; // parent folder 
+   let fname = result[3]; // filename
 
    console.log('result: ',result)
    if (typeof(map[mutable]) == 'undefined') {
-      promises.push( getHashKey(result[2]).then( h => {
+      promises.push( getHashKey(parentdir).then( h => {
 	 if (typeof(h) != 'undefined') {
-	    console.log('s,'+mutable+',/ipfs/'+h+'/'+fname+',g') // OK
-	    map[mutable] = '/ipfs/'+h+'/'+fname;
+	    console.log('[ '+match+'=> /ipfs/'+h+'/'+fname+' ]')
+	    console.log('s,'+mutable+',/ipfs/'+h+',g') // OK
+	    map[mutable] = '/ipfs/'+h;
 	    bod.innerHTML = bod.innerHTML.replace( new RegExp(mutable,'g'),map[mutable]);
 	    bod.innerHTML = bod.innerHTML.replace(/http:\/\/webui.local\/ip/g,lgw+'/ip');
 	 }
@@ -54,8 +66,17 @@ for(let result of matches) {
     Promise.all(promises).then(callback).catch(error)
 
 function callback(results) {
+
   bod.innerHTML = bod.innerHTML.replace(/http:\/\/webui.local\/webui/g,webui+'/webui');
   console.log(results)
+}
+
+function getPeerID() {
+  var url = api_url + 'config?&arg=Identity.PeerID&encoding=json'
+  console.log(url);
+  return fetchjson(url)
+     .then( obj => { return Promise.resolve(obj.Value) })
+     .catch(error)
 }
 
 function getHashKey(path) {

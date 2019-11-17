@@ -3,7 +3,7 @@
 # vim: sw=3
 
 $ENV{PATH} = '_ipfs/bin:'.$ENV{PATH};
-$ENV{LC_TIME} = 'en_US.UTF-8';
+#$ENV{LC_TIME} = 'en_US.UTF-8';
 
 # HIPv6 ...
 #

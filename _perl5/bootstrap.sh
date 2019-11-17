@@ -23,3 +23,8 @@ rm -rf local-lib-${ver}
 
 echo PERL5LIB: $PERL5LIB
 
+if false; then
+export LC_TIME=en_US.UTF-8
+sudo locale-gen en_US.UTF-8
+fi
+

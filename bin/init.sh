@@ -27,7 +27,7 @@ read uniq
 fi
 date=$(date)
 
-if ! ipfs files stat -hash /my/identity/public.yml 1>/dev/null 2>&1; then
+if ! ipfs files stat --hash /my/identity/public.yml 1>/dev/null 2>&1; then
 ipfs files mkdir -p /my/identity
 ipfs files write --create --truncate /my/identity/public.yml <<EOF
 --- # This is my blockRing™ Sovereign identity
@@ -50,4 +50,15 @@ $fullname will be your *bot, managing the blockchain.
 
 --
 EOF
+
+if ! ipfs files stat --hash /root 1>/dev/null 2>&1; then
+ipfs files mkdir -p /root
+fi
+rootkey=$(ipfs files stat --hash /root)
+ipfs --offline name publish $rootkey
+if ! ipfs files stat --hash /my/friends 1>/dev/null 2>&1; then
+ipfs files mkdir -p /my/friends
+ipfs files cp /ipns/QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ /my/friends/michelc
+fi
+
 
