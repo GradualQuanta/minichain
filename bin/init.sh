@@ -60,10 +60,11 @@ EOF
 
 if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
 ipfs files mkdir -p /root/directory
+else
+ipfs files rm "/root/directory/$email"
+fi
 qm=$(ipfs files stat --hash /my/identity/public.yml)
 ipfs files cp /ipfs/$qm "/root/directory/$email"
-
-fi
 rootkey=$(ipfs files stat --hash /root)
 ipfs name publish --allow-offline $rootkey &
 if ! ipfs files stat --hash /my/friends 1>/dev/null 2>&1; then
