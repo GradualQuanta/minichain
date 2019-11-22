@@ -22,3 +22,13 @@ if test -d $cwd/etc; then
 export DICT=${cwd}/etc
 fi
 
+unset LC_MEASUREMENT
+unset LC_PAPER
+unset LC_MONETARY
+unset LC_NAME
+unset LC_ADDRESS
+unset LC_NUMERIC
+unset LC_TELEPHONE
+unset LC_IDENTIFICATION
+unset LC_TIME
+unset LC_ALL
