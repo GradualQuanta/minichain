@@ -3,7 +3,14 @@
 export IPFS_PATH=$(pwd)/_ipfs
 export PATH=_ipfs/bin:$(pwd)/bin:$PATH
 # This script initialize the blockchain
-export LC_TIME='fr_FR.UTF-8'
+#export LC_TIME='fr_FR.UTF-8'
+
+if ! perl -Mlocal::lib=$(pwd)/_perl5 -e 1; then
+  echo "perl: local::lib not found"
+  echo " check if your PERL5LIB environment variable is properly set"
+  echo " maybe you forgot to run . rc.sh !"
+  exit $?
+fi
 
 name=minichain
 # set a few log variables
@@ -15,7 +22,7 @@ echo peerid: $peerid
 # get a hip6 and a name
 export DICT="$(pwd)/etc"
 eval $(bin/hip6.pl 2>/dev/null | eyml)
-fullname=$(fullname $peerid | xyml fullname)
+eval $(fullname $peerid | eyml)
 uniq="${hipq:-cadavre exquis}"
 
 # creation de profile
@@ -51,11 +58,14 @@ $fullname will be your *bot, managing the blockchain.
 --
 EOF
 
-if ! ipfs files stat --hash /root 1>/dev/null 2>&1; then
-ipfs files mkdir -p /root
+if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
+ipfs files mkdir -p /root/directory
+qm=$(ipfs files stat --hash /my/identity/public.yml)
+ipfs files cp /ipfs/$qm "/root/directory/$email"
+
 fi
 rootkey=$(ipfs files stat --hash /root)
-ipfs --offline name publish $rootkey
+ipfs name publish --allow-offline $rootkey &
 if ! ipfs files stat --hash /my/friends 1>/dev/null 2>&1; then
 ipfs files mkdir -p /my/friends
 ipfs files cp /ipns/QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ /my/friends/michelc
