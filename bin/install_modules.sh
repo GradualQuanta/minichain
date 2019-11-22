@@ -4,14 +4,14 @@
 rootdir=$(pwd)
 
 if test -e /etc/environment; then
-   source /etc/environment
+   . /etc/environment
 else
    export PATH=/usr/local/bin:/usr/bin:/bin; 
 fi
 export PATH=${rootdir}/bin:$PATH
 
 # perl's local lib
-[ $SHLVL -eq 1 ] && eval $(perl -I$rootdir/_perl5/lib/perl5 -Mlocal::lib=$rootdir/_perl5)
+eval $(perl -I$rootdir/_perl5/lib/perl5 -Mlocal::lib=$rootdir/_perl5)
 
 
 export DICT=${cwd}/etc

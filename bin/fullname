@@ -14,7 +14,6 @@ $key =~ s,.*/ip[fhn]s/,,;
 $key = 'QmboiLojgoteK2P1NWhAjUutsgCpBmgpbrD1iKDAjSWxf4' unless $key;
 print "key: $key\n";
 
-
 # ----------------------------------------------------------------
 # decode data (keep only the binary-hash value
 my $bindata = "\0";
@@ -49,6 +48,10 @@ our $wordlists;
 my $DICT = (exists $ENV{DICT}) ? $ENV{DICT} : '../etc'; # '/usr/share/dict';
 printf "// DICT=%s\n",$DICT if $dbug;
 
+my $sha16 = unpack('H*',$bindata);
+my $id7 = substr($sha16,0,7);
+printf "id7: %s\n",$id7;
+
 my $fnamelist = &load_wlist('fnames');
 my $lnamelist = &load_wlist('lnames');
 
@@ -57,6 +60,7 @@ my @fullname = &fullname($bindata);
 printf "fullname: %s %s. %s\n",$fullname[0],substr($fullname[1],0,1),$fullname[-2];
 #printf "https://robohash.org/%s.png/set=set4&bgset=bg1&size=120x120&ignoreext=false\n",join'.',map { lc $_; } @fullname;
 
+printf "email %s%s+%s\@%s\n",lc(substr($fullname[0],0,1)),lc($fullname[-2]),$id7,'ydentity.ml';
 
 exit $?;
 

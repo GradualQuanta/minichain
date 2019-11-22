@@ -1,3 +1,5 @@
 *.sw*
 .jekyll-cache
 _site
+_ipfs
+_perl5

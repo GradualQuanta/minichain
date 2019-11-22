@@ -6,7 +6,7 @@
 cwd=$(pwd)
 
 if test -e /etc/environment; then
-   source /etc/environment
+   . /etc/environment
 else
    export PATH=/usr/local/bin:/usr/bin:/bin; 
 fi
@@ -15,7 +15,7 @@ export PATH=${cwd}/bin:$IPFS_PATH/bin:$PATH
 
 if test -d $cwd/_perl5/lib/perl5; then
 # perl's local lib
-[ $SHLVL -eq 1 ] && eval $(perl -I$cwd/_perl5/lib/perl5 -Mlocal::lib=$cwd/_perl5)
+eval $(perl -I$cwd/_perl5/lib/perl5 -Mlocal::lib=$cwd/_perl5)
 fi
 
 if test -d $cwd/etc; then
