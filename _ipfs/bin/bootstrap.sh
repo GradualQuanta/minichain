@@ -19,13 +19,15 @@ fi
 # -------------------
 
 installdir=_ipfs
+if test ! -d $installdir; then
 mkdir $installdir
+fi
 export PATH=$installdir/bin:$PATH
 export IPFS_PATH=$(pwd)/$installdir
 # install go-ipfs ...
-if test ! -x _ipfs/bin/ipfs; then
+if test ! -x $installdir/bin/ipfs; then
   curl https://dist.ipfs.io/go-ipfs/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz | tar zxfv - 
-  mv go-ipfs $installdir/bin
+  mv go-ipfs/* $installdir/bin
   ipfs init
 fi
 ipfs config profile apply randomports
