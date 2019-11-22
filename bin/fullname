@@ -60,7 +60,7 @@ my @fullname = &fullname($bindata);
 printf "fullname: %s %s. %s\n",$fullname[0],substr($fullname[1],0,1),$fullname[-2];
 #printf "https://robohash.org/%s.png/set=set4&bgset=bg1&size=120x120&ignoreext=false\n",join'.',map { lc $_; } @fullname;
 
-printf "email %s%s+%s\@%s\n",lc(substr($fullname[0],0,1)),lc($fullname[-2]),$id7,'ydentity.ml';
+printf "email: %s%s+%s\@%s\n",lc(substr($fullname[0],0,1)),lc($fullname[-2]),$id7,'ydentity.ml';
 
 exit $?;
 
