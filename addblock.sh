@@ -17,7 +17,7 @@ peerid=$(ipfs config Identity.PeerID)
 echo peerid: $peerid
 
 # get the last block number from the toc.yml file
-n=$(cat data/toc.yml | xyml log | wc -l)
+n=$(cat _data/toc.yml | xyml log | wc -l)
 if  [ "$n" != '0' ]; then
 n=$(expr $n - 1)
 echo n: $n

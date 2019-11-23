@@ -1,0 +1,263 @@
+#!/usr/bin/perl
+
+my $dec;
+if ($ARGV[0] eq '-d') {
+ $dec++;
+}
+local $/ = undef;
+my $buf = <STDIN>;
+local $/ = "\n";
+chomp $buf;
+
+my $bin = '';
+if ($dec) {
+   if ($buf =~ m/^Qm/) {
+      $cidv = 0;
+      $mhash = &decode_base58($buf);
+      $bin = pack('H*','0170'). &decode_base58($buf);
+   } elsif ($buf =~ m/^z/) { # decode multiformat ...
+      $cidv = 1;
+      $bin = &decode_base58(substr($buf,1));
+      $mhash = substr($bin,2);
+   } elsif ($buf =~ m/^b/i) {
+      $bin = &decode_base32(substr($buf,1));
+      $cidv = unpack'C',substr($bin,0,1);
+      $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+   } elsif ($buf =~ m/^f/i) {
+      $bin = pack('H*',substr($buf,1));
+      $cidv = unpack'C',substr($bin,0,1);
+      $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+   } elsif ($buf =~ m/^([um])/i) {
+      $buf =~ tr{-_}{+/} if ($1 eq 'u');
+      $bin = &decode_base64m(substr($buf,1));
+      $cidv = unpack'C',substr($bin,0,1);
+      $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+   } else {
+      $bin = &decode_base58($buf);
+      $cidv = unpack'C',substr($bin,0,1);
+      $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+   }
+} else {
+   $bin = $buf;
+   $cidv = unpack'C',substr($bin,0,1);
+   $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+}
+my $qm = &encode_base58($mhash);
+my $quint = &hex2quint(unpack'H*',$mhash);
+my $b16 = unpack'H*',$bin;
+my $b10 = &encode_base10($bin);
+my $b32 = &encode_base32($bin);
+my $b32z = &encode_base32z($bin);
+my $b58 = &encode_base58($bin);
+my $b58f = &encode_base58f($bin);
+my $b63 = &encode_base63($bin);
+my $b64m = &encode_base64m($bin); $b64m =~ tr /=//d;
+my $b64u = &encode_base64u($bin); $b64u =~ tr /=//d;
+
+print "--- # other encoding for z.$qm\n";
+printf "qm: %s\n",$qm;
+printf "quint: %s\n",$quint;
+printf "b10: 9%s\n",$b10;
+printf "b16: f%s\n",$b16;
+printf "b32: B%s\n",$b32;
+printf "b32z: h%s\n",lc$b32z;
+printf "b58: z%s\n",$b58;
+printf "b58f: Z%s\n",$b58f;
+printf "b63l: l%s\n",$b63;
+printf "b64m: m%s\n",$b64m;
+printf "b64u: u%s\n",$b64u;
+print "...\n";
+
+exit $?;
+
+#
+
+# -----------------------------------------------------------------------
+sub hex2quint {
+  return join '-', map { u16toq ( hex('0x'.$_) ) } $_[0] =~ m/(.{4})/g;
+}
+sub u16toq {
+   my $n = shift;
+   #printf "u2q(%04x) =\n",$n;
+   my $cons = [qw/ b d f g h j k l m n p r s t v z /]; # 16 consonants only -c -q -w -x
+   my $vow = [qw/ a i o u  /]; # 4 wovels only -e -y
+   my $s = '';
+      for my $i ( 1 .. 5 ) { # 5 letter words
+         if ($i & 1) { # consonant
+            $s .= $cons->[$n & 0xF];
+            $n >>= 4;
+            #printf " %d : %s\n",$i,$s;
+         } else { # vowel
+            $s .= $vow->[$n & 0x3];
+            $n >>= 2;
+            #printf " %d : %s\n",$i,$s;
+         }
+      }
+   #printf "%s.\n",$s;
+   return scalar reverse $s;
+}
+# -----------------------------------------------------
+
+# --------------------------------------------
+sub encode_base10 {
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $bin = join'',@_;
+  my $bint = Math::BigInt->from_bytes($bin);
+  return $bint;
+}
+# --------------------------------------------
+sub encode_base32z {
+  use MIME::Base32 qw();
+  my $z32 = uc MIME::Base32::encode($_[0]);
+  $z32 =~ y/A-Z2-7/ybndrfg8ejkmcpqxotluwisza345h769/;
+  return $z32;
+}
+sub decode_base32z {
+  use MIME::Base32 qw();
+  my $b32 = $_[0];
+  $b32 =~ y/ybndrfg8ejkmcpqxotluwisza345h769/A-Z2-7/;
+  my $bin = MIME::Base32::decode($b32);
+  return $bin;
+}
+# --------------------------------------------
+sub encode_base32 {
+  use MIME::Base32 qw();
+  my $mh32 = uc MIME::Base32::encode($_[0]);
+  return $mh32;
+}
+sub decode_base32 {
+  use MIME::Base32 qw();
+  my $bin = MIME::Base32::decode($_[0]);
+  return $bin;
+}
+# --------------------------------------------
+sub encode_base58f { # flickr
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $bin = join'',@_;
+  my $bint = Math::BigInt->from_bytes($bin);
+  my $h58 = Encode::Base58::BigInt::encode_base58($bint);
+  return $h58;
+}
+sub encode_base58 { # btc
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $bin = join'',@_;
+  my $bint = Math::BigInt->from_bytes($bin);
+  my $h58 = Encode::Base58::BigInt::encode_base58($bint);
+  $h58 =~ tr/a-km-zA-HJ-NP-Z/A-HJ-NP-Za-km-z/;
+  return $h58;
+}
+# ------------------
+sub decode_base58 {
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $s = $_[0];
+  # $e58 =~ tr/a-km-zA-HJ-NP-Z/A-HJ-NP-Za-km-z/;
+  $s =~ tr/A-HJ-NP-Za-km-z/a-km-zA-HJ-NP-Z/;
+  my $bint = Encode::Base58::BigInt::decode_base58($s);
+  my $bin = Math::BigInt->new($bint)->as_bytes();
+  return $bin;
+}
+# --------------------------------------------
+sub encode_base63 {
+  return &encode_basen($_[0],63);
+}
+sub decode_base63 {
+  return &decode_basen($_[0],63);
+}
+# --------------------------------------------
+sub encode_basen { # n < 94;
+  use Math::BigInt;
+  my ($data,$radix) = @_;
+  my $alphab = &alphab($radix);;
+  my $mod = Math::BigInt->new($radix);
+  #printf "mod: %s, lastc: %s\n",$mod,substr($alphab,$mod,1);
+  my $h = '0x'.unpack('H*',$data);
+  my $n = Math::BigInt->from_hex($h);
+  my $e = '';
+  while ($n->bcmp(0) == +1)  {
+    my $c = Math::BigInt->new();
+    ($n,$c) = $n->bdiv($mod);
+    $e .= substr($alphab,$c->numify,1);
+  }
+  return scalar reverse $e;
+}
+# --------------------------------------------
+sub decode_basen { # n < 94
+  use Math::BigInt;
+  my ($s,$radix) = @_;
+  my $alphab = &alphab($radix);;
+  die "alphab: %uc < %d\n",length($alphab) if (length($alphab) < $radix);
+  my $n = Math::BigInt->new(0);
+  my $j = Math::BigInt->new(1);
+  while($s ne '') {
+    my $c = substr($s,-1,1,''); # consume chr from the end !
+    my $i = index($alphab,$c);
+    return '' if ($i < 0);
+    my $w = $j->copy();
+    $w->bmul($i);
+    $n->badd($w);
+    $j->bmul($radix);
+  }
+  my $h = $n->as_hex();
+  # byte alignment ...
+  my $d = int( (length($h)+1-2)/2 ) * 2;
+  $h = substr('0' x $d . substr($h,2),-$d);
+  return pack('H*',$h);
+}
+# --------------------------------------------
+sub alphab {
+  my $radix = shift;
+  my $alphab;
+  if ($radix < 12) {
+    $alphab = '0123456789-';
+  } elsif ($radix <= 16) {
+    $alphab = '0123456789ABCDEF';
+  } elsif ($radix <= 26) {
+    $alphab = 'ABCDEFGHiJKLMNoPQRSTUVWXYZ';
+  } elsif ($radix == 32) {
+    $alphab = '0123456789ABCDEFGHiJKLMNoPQRSTUV'; # Triacontakaidecimal
+    $alphab = join('',('A' .. 'Z', '2' .. '7')); # RFC 4648
+    $alphab = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; # Crockfordś ![ILOU] (U:accidental obsceni
+    $alphab = 'ybndrfg8ejkmcpqxotluwisza345h769';  # z-base32 ![0lv2]
+
+  } elsif ($radix == 36) {
+    $alphab = 'ABCDEFGHiJKLMNoPQRSTUVWXYZ0123456789';
+  } elsif ($radix <= 38) {
+    $alphab = '0123456789ABCDEFGHiJKLMNoPQRSTUVWXYZ.-';
+  } elsif ($radix <= 40) {
+    $alphab = 'ABCDEFGHiJKLMNoPQRSTUVWXYZ0123456789-_.+';
+  } elsif ($radix <= 43) {
+    $alphab = 'ABCDEFGHiJKLMNoPQRSTUVWXYZ0123456789 -+.$%*';
+  } elsif ($radix == 58) {
+    $alphab = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+  } elsif ($radix == 62) {
+    $alphab = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  } else { # n < 94
+    $alphab = '-0123456789'. 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.
+                             'abcdefghijklmnopqrstuwvxyz'.
+             q/+.@$%_,~`'=;!^[]{}()#&/.      '<>:"/\\|?*'; #
+  }
+  # printf "// alphabet: %s (%uc)\n",$alphab,length($alphab);
+  return $alphab;
+}
+# --------------------------------------------
+sub encode_base64m {
+  use MIME::Base64 qw();
+  my $m64 = MIME::Base64::encode_base64($_[0],'');
+  return $m64;
+}
+sub decode_base64m {
+  use MIME::Base64 qw();
+  my $bin = MIME::Base64::decode_base64($_[0]);
+  return $bin;
+}
+sub encode_base64u {
+  use MIME::Base64 qw();
+  my $u64 = MIME::Base64::encode_base64($_[0],'');
+  $u64 =~ y,+/,-_,;
+  return $u64;
+}
+# --------------------------------------------
