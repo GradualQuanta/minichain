@@ -7,7 +7,7 @@ gwport=$(echo $gateway | cut -d/ -f 5)
 gwhost=$(echo $gateway | cut -d/ -f 3)
 
 bpath=/tmp/blockchaindemo
-export LC_ALL=en_US.UTF-8
+#export LC_ALL=en_US.UTF-8
 payload="$*"
 # set a few log variables
 tic=$(date +%s)
