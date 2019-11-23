@@ -1,6 +1,5 @@
 #
 
-set -x
 export IPFS_PATH=$(pwd)/_ipfs
 export PATH=$IPFS_PATH/bin:bin:$PATH
 gateway=$(ipfs config Addresses.Gateway)
@@ -62,14 +61,14 @@ sed -i -e "s,date: .*,date: $date," \
        -e "s,mutable: /ipns/[^/]*,mutable: /ipns/$peerid," \
        -e "s,prev: .*,prev: $pv/toc.yml," \
        -e "s/cur: .*/cur: ~/" \
-       -e "s/\.\.\./ - $qm # block $n/" data/toc.yml
+       -e "s/\.\.\./ - $qm # block $n/" _data/toc.yml
 echo "..." >> toc.yml
-bafy=$(ipfs add -Q data/toc.yml --cid-base base32)
+bafy=$(ipfs add -Q _data/toc.yml --cid-base base32)
 ipfs files rm $bpath/toc.yml
 ipfs files cp /ipfs/$bafy $bpath/toc.yml
 nv=$(ipfs files stat --hash $bpath)
 sed -i -e "s,cur: .*,cur: $nv/toc.yml," toc.yml
-bafy=$(ipfs add -Q data/toc.yml --cid-base base32)
+bafy=$(ipfs add -Q _data/toc.yml --cid-base base32)
 ipfs files rm $bpath/toc.yml
 ipfs files cp /ipfs/$bafy $bpath/toc.yml
 echo url: http://127.0.0.1:${gwport}/ipfs/$(ipfs files stat --hash $bpath)
