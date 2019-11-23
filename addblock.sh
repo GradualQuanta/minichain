@@ -1,5 +1,6 @@
 #
 
+set -e
 export IPFS_PATH=$(pwd)/_ipfs
 export PATH=$IPFS_PATH/bin:bin:$PATH
 gateway=$(ipfs config Addresses.Gateway)
@@ -32,6 +33,7 @@ pn=z6cYNbecZSFzLjbSimKuibtdpGt7DAUMMt46aKQNdwfs
 fi
 
 if [ ! -e _includes/block$n.txt ]; then
+if [ ! -e _includes ]; then mkdir _includes ; fi
 # create the new block with the payload
 cat > _includes/block$n.txt <<EOF
 ---
