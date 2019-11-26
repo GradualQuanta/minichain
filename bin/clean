@@ -1,0 +1,12 @@
+#
+
+rm -f _data/toc.yml
+rm -f _includes/block[0-9].txt
+if true; then
+  ipfs files rm -rf /tmp/blockchaindemo
+else
+  rm -rf _ipfs/blocks/??
+  rm -rf _ipfs/datastore
+fi
+
+

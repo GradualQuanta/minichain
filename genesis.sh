@@ -7,7 +7,7 @@ gwport=$(echo $gateway | cut -d/ -f 5)
 gwhost=$(echo $gateway | cut -d/ -f 3)
 
 bpath=/tmp/blockchaindemo
-ipfs files rm -r $bpath
+ipfs files rm -r $bpath 2>/dev/null
 
 #export LC_ALL=en_US.UTF-8
 payload="$*"
@@ -27,12 +27,12 @@ name: blockchain demo
 block: 0 (genesis)
 tic: $tic
 prevhash: QmXV2wm2uWhCYPsNTUau6whiwCg4hg9CkaVjs9WnVwdLLX
-payload: "$1"
+payload: "$payload"
 ...
 EOF
 fi
 qm=$(ipfs add -Q  _includes/block0.txt)
-if ipfs files mkdir $bpath 2>/dev/null; then true; fi
+if ipfs files mkdir -p $bpath 2>/dev/null; then true; fi
 ipfs files cp /ipfs/$qm $bpath/block0.txt
 
 if [ ! -e _data/toc.yml ] ; then
@@ -51,6 +51,7 @@ date: $date
 spot: ~
 log:
  - $qm # block genesis
+...
 EOF
 fi
 qm=$(ipfs add -Q  _data/toc.yml)
