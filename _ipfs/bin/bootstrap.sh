@@ -34,6 +34,8 @@ ipfs config profile apply randomports
 ipfs config Addresses.API /ip4/127.0.0.1/tcp/$apiport
 ipfs config Addresses.Gateway /ip4/127.0.0.1/tcp/$gwport
 ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
+ipfs bootstrap add /ip4/212.129.2.151/tcp/24001/ws/ipfs/Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV
+ipfs bootstrap list | grep 212.129.2.151
 
 echo test w/o daemon running
 t0=$(echo ready | ipfs add -Q --hash ID --cid-base=base64)

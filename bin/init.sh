@@ -71,7 +71,8 @@ ipfs files cp /ipfs/$qm "/root/directory/$email"
 
 # publish root
 rootkey=$(ipfs files stat --hash /root)
-ipfs --offline name publish --allow-offline $rootkey 1>/dev/null
+ipfs --offline name publish --allow-offline $rootkey 1>/dev/null &
+ipfs name publish --allow-offline $rootkey 1>/dev/null
 echo "url: https://gateway.ipfs.io/ipns/$peerid"
 echo "url: http://$gwhost:$gwport/ipfs/$rootkey"
 
@@ -79,7 +80,7 @@ echo "url: http://$gwhost:$gwport/ipfs/$rootkey"
 if ! ipfs files stat --hash /my/friends 1>/dev/null 2>&1; then
 ipfs files mkdir -p /my/friends
 ipfs files cp /ipns/QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ /my/friends/michelc
-ipfs file cp /ipns/QmVMV1xJsLH3rxmmYVEU4SZ4rjmdGBgLZF3ddbXuyKXSBy /my/friends/emilea
+ipfs files cp /ipns/QmVMV1xJsLH3rxmmYVEU4SZ4rjmdGBgLZF3ddbXuyKXSBy /my/friends/emilea
 fi
 
 

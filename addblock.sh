@@ -16,16 +16,36 @@ date=$(date +%D)
 peerid=$(ipfs config Identity.PeerID)
 echo peerid: $peerid
 
+if [ ! -e _data/toc.yml ]; then
+  echo "the blockchain $bpath doesn't exist"
+  echo "Creating toc.yml"
+  cat > _data/toc.yml <<EOF
+--- # blockchain demo
+name: demo
+owner: $peerid
+peers:
+ - QmRLZbRZcqdrM6L3rTFYFuz56vBoS1Z5dsu4V4X5yboZc1
+ - QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
+mutable: /files/$bpath/toc.yml
+irqn: $bpath/preq.yml
+prev: ~
+cur: ~ # Genesis
+date: $date
+spot: ~
+log:
+...
+EOF
+
+fi
+
 # get the last block number from the toc.yml file
 n=$(cat _data/toc.yml | xyml log | wc -l)
 if  [ "$n" != '0' ]; then
   n=$(expr $n - 1)
   echo n: $n
   if p=$(expr $n - 1); then true; fi # if to mask error if p = 0
-  echo p: $p
   if [ -e _includes/block$p.txt ]; then
     pn=$(ipfs add -Q _includes/block$p.txt)
-    echo pn: $pn
   else
     echo pn: $pn
   fi
@@ -50,15 +70,15 @@ fi
 qm=$(ipfs add -Q _includes/block$n.txt --cid-version=0)
 echo qm: $qm
 # save blockchain previous state:
-pv=$(ipfs files stat --hash $bpath)
-if [ "x$pv" = 'x' ]; then
-   ipfs files mkdir -p $bpath
-   pv=$(ipfs files stat --hash $bpath)
+if pv=$(ipfs files stat --hash $bpath) 2>/dev/null; then
+  if ipfs files rm -r $bpath.prev 2>/dev/null; then true; fi # if to mask error
+  ipfs files mv $bpath $bpath.prev
+  ipfs files mkdir -p $bpath
+  ipfs files mv $bpath.prev $bpath/prev
+else
+  ipfs files mkdir -p $bpath
+  pv=$(ipfs add -Q -w _data/toc.yml)
 fi
-if ipfs files rm -r $bpath.prev 2>/dev/null; then true; fi # if to mask error
-ipfs files mv $bpath $bpath.prev
-ipfs files mkdir $bpath
-ipfs files mv $bpath.prev $bpath/prev
 ipfs files cp /ipfs/$qm $bpath/block$n.txt
 
 sed -i -e "s,date: .*,date: $date," \

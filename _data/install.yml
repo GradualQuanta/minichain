@@ -1,6 +1,6 @@
 --- # install scripts, command line
 pk: QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
-date: Sat Nov 16 09:40:10 CET 2019
-pv: QmQMEcuv3cSasSFnZkRNkHzT3JZ4k7PCuvaBe7hioXpcAd
-qm: QmWNWCjKRSMagit9rAEmgQiDvX6DymVBMmQNmKBmWfNHRi
-cmd: "curl https://ipfs.blockring™.ml/ipfs/QmWNWCjKRSMagit9rAEmgQiDvX6DymVBMmQNmKBmWfNHRi | sh /dev/stdin"
+date: Wed Nov 27 06:55:37 CET 2019
+pv: QmTXVe2Qog6jvyga1vGAqzHwFm8vpTtBK6V7WP4KtA5NXQ
+qm: QmTXVe2Qog6jvyga1vGAqzHwFm8vpTtBK6V7WP4KtA5NXQ
+cmd: "curl https://ipfs.blockring™.ml/ipfs/QmTXVe2Qog6jvyga1vGAqzHwFm8vpTtBK6V7WP4KtA5NXQ | sh /dev/stdin"

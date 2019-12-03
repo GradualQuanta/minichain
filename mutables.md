@@ -15,5 +15,8 @@ exemple of conversion :
 * [/my/identity/public.yml](http://webui.local/webui#/files/my/identity/public.yml) -> [/webui#/files/my/identity/public.yml](http://webui.local/webui#/files/my/identity/public.yml)
 * [/ipns][1][/self](http://gateway.local/ipns/%peerid%) -> [/webui#/files/root/](http://gateway.local/ipns/self)
 
+### more info about this mini blockchain :
+
+* [/minichain](.)
 
 [1]: https://duckduckgo.com/?q=mutable+naming+system+blockRing

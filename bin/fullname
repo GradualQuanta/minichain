@@ -1,9 +1,26 @@
 #!/usr/bin/env perl
 
 our $dbug=0;
+#--------------------------------
+# -- Options parsing ...
+#
+my $all = 0;
+while (@ARGV && $ARGV[0] =~ m/^-/)
+{
+  $_ = shift;
+  #/^-(l|r|i|s)(\d+)/ && (eval "\$$1 = \$2", next);
+  if (/^-v(?:erbose)?/) { $verbose= 1; }
+  elsif (/^-a(?:ll)?/) { $all= 1; }
+  elsif (/^-y(?:ml)?/) { $yml= 1; }
+  else                  { die "Unrecognized switch: $_\n"; }
+
+}
+#understand variable=value on the command line...
+eval "\$$1='$2'"while $ARGV[0] =~ /^(\w+)=(.*)/ && shift;
 
 use YAML::Syck qw();
 # get key as argument or stdin
+
 if (@ARGV) {
  $key = shift;
 } else {
@@ -12,7 +29,7 @@ if (@ARGV) {
 }
 $key =~ s,.*/ip[fhn]s/,,;
 $key = 'QmboiLojgoteK2P1NWhAjUutsgCpBmgpbrD1iKDAjSWxf4' unless $key;
-print "key: $key\n";
+print "key: $key\n" if $all;
 
 # ----------------------------------------------------------------
 # decode data (keep only the binary-hash value
@@ -22,7 +39,7 @@ if ($key =~ m/^Qm/) {
  printf "mh58: %s (%uc, %uB) : f%s...\n",$key,length($key),
         length($bindata), substr(unpack('H*',$bindata),0,11) if $dbug;
  $bindata = substr($bindata,-32); # remove header
- printf "bin: %s\n",unpack'H*',$bindata;
+ printf "bin: %s\n",unpack'H*',$bindata if $all;
 # ----------------------------------------------------------------
 } elsif ($key =~ m/^z[bd]/) {
  $bindata = &decode_base58(substr($key,1));
@@ -50,17 +67,25 @@ printf "// DICT=%s\n",$DICT if $dbug;
 
 my $sha16 = unpack('H*',$bindata);
 my $id7 = substr($sha16,0,7);
-printf "id7: %s\n",$id7;
+printf "id7: %s\n",$id7 if $all;
 
 my $fnamelist = &load_wlist('fnames');
 my $lnamelist = &load_wlist('lnames');
 
 my @fullname = &fullname($bindata);
 #printf "%s.\n",YAML::Syck::Dump(\@fullname) if $dbug;
+if ($all) {
 printf "fullname: %s %s. %s\n",$fullname[0],substr($fullname[1],0,1),$fullname[-2];
+} else {
+printf "%s %s. %s\n",$fullname[0],substr($fullname[1],0,1),$fullname[-2];
+}
 #printf "https://robohash.org/%s.png/set=set4&bgset=bg1&size=120x120&ignoreext=false\n",join'.',map { lc $_; } @fullname;
 
-printf "email: %s%s+%s\@%s\n",lc(substr($fullname[0],0,1)),lc($fullname[-2]),$id7,'ydentity.ml';
+if ($all) {
+   printf "ini: %s%s%s\n",uc(substr($fullname[0],0,1)),uc(substr($fullname[1],0,1)),uc(substr($fullname[-2],0,1));
+   printf "user: %s%s\n",lc(substr($fullname[0],0,1)),lc($fullname[-2]);
+   printf "email: %s%s+%s\@%s\n",lc(substr($fullname[0],0,1)),lc($fullname[-2]),$id7,'ydentity.ml';
+}
 
 exit $?;
 
