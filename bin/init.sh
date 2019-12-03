@@ -24,7 +24,7 @@ gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
 # get a hip6 and a name
 export DICT="$(pwd)/etc"
 eval $(bin/hip6.pl 2>/dev/null | eyml)
-eval $(fullname $peerid | eyml)
+eval $(fullname -a $peerid | eyml)
 uniq="${hipq:-cadavre exquis}"
 
 # creation de profile
