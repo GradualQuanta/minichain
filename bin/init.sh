@@ -73,7 +73,7 @@ fi
 if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
 ipfs files mkdir -p /root/directory
 else
-ipfs files rm "/root/directory/$email"
+ipfs files rm -r "/root/directory/$email"
 fi
 qm=$(ipfs files stat --hash /my/identity/public.yml)
 ipfs files cp /ipfs/$qm "/root/directory/$email"

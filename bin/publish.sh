@@ -31,19 +31,25 @@ tic=$(date +%s)
 
 qm=$(ipfs files stat --hash /my/identity/public.yml)
 if sz=$(ipfs files stat --format="<size>" /.brings/identity.log 2>/dev/null); then
-echo "$tic: $qm" | ipfs files write -o $sz --raw-leaves "/.brings/identity.log"
+  ipfs files read "/.brings/identity.log" > /tmp/idendity.log
+  echo "$tic: $qm" >> /tmp/identity.log
+  ipfs files write --create  --truncate "/.brings/identity.log" < /tmp/identity.log
+  rm -f /tmp/identity.log
 else
-echo "$tic: $qm" | ipfs files write --create --raw-leaves "/.brings/identity.log"
+  echo "$tic: $qm" | ipfs files write --create --raw-leaves "/.brings/identity.log"
 fi
 
 # publish /public
 qm=$(ipfs files stat --hash /public)
 if sz=$(ipfs files stat --format="<size>" /.brings/public.log 2>/dev/null); then
-echo "$tic: $qm" | ipfs files write -o $sz "/.brings/public.log"
+  ipfs files read "/.brings/public.log" > /tmp/public.log
+  echo "$tic: $qm" >> /tmp/public.log
+  ipfs files write --create  --truncate "/.brings/public.log" < /tmp/public.log
+  rm -f /tmp/public.log
 else
 echo "$tic: $qm" | ipfs files write --create "/.brings/public.log"
 fi
-# publish root
+# publish /root
 if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
   ipfs files mkdir /root/directory
 else
@@ -53,14 +59,20 @@ qm=$(ipfs files stat --hash /my/identity)
 ipfs files cp /ipfs/$qm "/root/directory/$email"
 qm=$(ipfs files stat --hash /root)
 if sz=$(ipfs files stat --format="<size>" /.brings/root.log 2>/dev/null); then
-echo "$tic: $qm" | ipfs files write -o $sz "/.brings/root.log"
+  ipfs files read "/.brings/root.log" > /tmp/root.log
+  echo "$tic: $qm" >> /tmp/root.log
+  ipfs files write --create  --truncate "/.brings/root.log" < /tmp/root.log
+  rm -f /tmp/root.log
 else
 echo "$tic: $qm" | ipfs files write --create "/.brings/root.log"
 fi
-# publish my
+# publish /my
 qm=$(ipfs files stat --hash /my)
 if sz=$(ipfs files stat --format="<size>" /.brings/my.log 2>/dev/null); then
-echo "$tic: $qm" | ipfs files write -o $sz "/.brings/my.log"
+  ipfs files read "/.brings/my.log" > /tmp/my.log
+  echo "$tic: $qm" >> /tmp/my.log
+  ipfs files write --create  --truncate "/.brings/my.log" < /tmp/my.log
+  rm -f /tmp/my.log
 else
 echo "$tic: $qm" | ipfs files write --create --truncate "/.brings/my.log"
 fi
@@ -77,12 +89,14 @@ echo "brkey: $brkey"
 echo .
 if ipfs files stat --hash /.brings/brings.log 1>/dev/null 2>&1 ; then
 sz=$(ipfs files stat --format="<size>" /.brings/brings.log 2>/dev/null)
-echo "$tic: $brkey" | ipfs files write -o $sz --raw-leaves "/.brings/brings.log"
-ipfs files read /.brings/brings.log 2>/dev/null | wc -c
+  ipfs files read "/.brings/brings.log" > /tmp/brings.log
+  echo "$tic: $qm" >> /tmp/brings.log
+  ipfs files write --create  --truncate "/.brings/brings.log" < /tmp/brings.log
+  rm -f /tmp/brings.log
 else
 echo "$tic: $brkey" | ipfs files write --create --raw-leaves "/.brings/brings.log"
 fi
-ipfs files read "/.brings/brings.log"
+#ipfs files read "/.brings/brings.log"
 ipfs files stat /.brings/brings.log
 echo .
 brkey=$(ipfs files stat --hash /.brings)
