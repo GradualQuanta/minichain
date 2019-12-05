@@ -1,5 +1,8 @@
 # 
 
+yellow="[33m"
+red="[31m"
+nc="[0m"
 export IPFS_PATH=$(pwd)/_ipfs
 export PATH=_ipfs/bin:$(pwd)/bin:$PATH
 # This script initialize the blockchain
@@ -7,8 +10,8 @@ export PATH=_ipfs/bin:$(pwd)/bin:$PATH
 
 if ! perl -Mlocal::lib=$(pwd)/_perl5 -e 1; then
   echo "perl: local::lib not found"
-  echo " check if your PERL5LIB environment variable is properly set"
-  echo " maybe you forgot to run . rc.sh !"
+  echo " ${yellow}check if your PERL5LIB environment variable is properly set${nc}"
+  echo " ${red}maybe you forgot to run . rc.sh !${nc}"
   exit $?
 fi
 
@@ -59,28 +62,67 @@ $fullname will be your *bot, managing the blockchain.
 
 --
 EOF
+if ipfs key list -l | grep -q -w etc; then
+  key=$(ipfs key list -l | grep -w etc | cut -d' ' -f 1)
+else
+  key=$(ipfs key gen -t rsa -s 3072 etc)
+fi
 
-# make identity publicly visible
+
+# /root/directory
 if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
 ipfs files mkdir -p /root/directory
-else
-ipfs files rm "/root/directory/$email"
 fi
 qm=$(ipfs files stat --hash /my/identity/public.yml)
 ipfs files cp /ipfs/$qm "/root/directory/$email"
+if ipfs key list -l | grep -q -w root; then
+  key=$(ipfs key list -l | grep -w root | cut -d' ' -f 1)
+else
+  key=$(ipfs key gen -t rsa -s 3072 root)
+fi
 
-# publish root
-rootkey=$(ipfs files stat --hash /root)
+
+# /public
+if ! ipfs files stat --hash /public 1>/dev/null 2>&1; then
+ipfs files mkdir -p /public
+fi
+if ipfs key list -l | grep -q -w public; then
+  key=$(ipfs key list -l | grep -w public | cut -d' ' -f 1)
+else
+  key=$(ipfs key gen -t rsa -s 3072 public)
+fi
+
+# /.brings
+if ! ipfs files stat --hash /.brings 1>/dev/null 2>&1; then
+ipfs files mkdir -p /.brings
+fi
+if ipfs key list -l | grep -q -w brings; then
+  key=$(ipfs key list -l | grep -w brings | cut -d' ' -f 1)
+else
+  key=$(ipfs key gen -t rsa -s 3072 brings)
+fi
+
+if ! ipfs files stat --hash /my 1>/dev/null 2>&1; then
+ipfs files mkdir -p /my
+fi
+
+# publish /.brings
+brkey=$(ipfs files stat --hash /.brings)
 ipfs --offline name publish --allow-offline $rootkey 1>/dev/null &
-ipfs name publish --allow-offline $rootkey 1>/dev/null
+ipfs name publish --allow-offline $brkey 1>/dev/null
 echo "url: https://gateway.ipfs.io/ipns/$peerid"
-echo "url: http://$gwhost:$gwport/ipfs/$rootkey"
+echo "url: http://$gwhost:$gwport/ipfs/$brkey"
 
-# bootstrap friends ...
+# bootstrap /my/friends ...
 if ! ipfs files stat --hash /my/friends 1>/dev/null 2>&1; then
 ipfs files mkdir -p /my/friends
 ipfs files cp /ipns/QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ /my/friends/michelc
-ipfs files cp /ipns/QmVMV1xJsLH3rxmmYVEU4SZ4rjmdGBgLZF3ddbXuyKXSBy /my/friends/emilea
+fi
+
+if ipfs key list -l | grep -q -w my; then
+  key=$(ipfs key list -l | grep -w my | cut -d' ' -f 1)
+else
+  key=$(ipfs key gen -t rsa -s 3072 my)
 fi
 
 

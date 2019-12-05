@@ -20,14 +20,13 @@ if qmroot=$(ipfs files stat --hash $rootdir) 2>/dev/null; then
  echo qmroot: $qmroot
  echo url: http://gateway.ipfs.io/ipns/$key
  echo url: http://$gwhost:$gwport/ipfs/$qmroot
- if [ "x$USER" = 'xmichelc' ]; then
-   echo publishing to ipns
-   ipfs name publish --key=root --allow-offline /ipfs/$qmroot 1>/dev/null 2>&1 
-   echo publishing on serv01
-   time ssh serv01 ipfs name publish --key=root --allow-offline /ipfs/$qmroot 2>/dev/null | sed -e 's/^/info: /'
+ if [ "x$(ssh blockring id -un 2>/dev/null)" = 'xmichelc' ]; then
+   ipfs --offline name publish --key=root --allow-offline /ipfs/$qmroot 1>/dev/null 2>&1 
+   echo info: publishing on blockring
+   time ssh blockring ipfs name publish --key=root --allow-offline /ipfs/$qmroot 2>/dev/null | sed -e 's/^/info: /'
  else
-   echo publishing to ipns
-   ipfs name publish --key=root --allow-offline /ipfs/$qmroot | sed -e 's/^/info: /'
+   echo info: publishing to ipns
+   time ipfs name publish --key=root --allow-offline /ipfs/$qmroot | sed -e 's/^/info: /'
  fi
 else
  echo no $rootdir
