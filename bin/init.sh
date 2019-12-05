@@ -72,6 +72,8 @@ fi
 # /root/directory
 if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
 ipfs files mkdir -p /root/directory
+else
+ipfs files rm "/root/directory/$email"
 fi
 qm=$(ipfs files stat --hash /my/identity/public.yml)
 ipfs files cp /ipfs/$qm "/root/directory/$email"
@@ -108,7 +110,7 @@ fi
 
 # publish /.brings
 brkey=$(ipfs files stat --hash /.brings)
-ipfs --offline name publish --allow-offline $rootkey 1>/dev/null &
+ipfs --offline name publish --key=brings --allow-offline $brkey 1>/dev/null &
 ipfs name publish --allow-offline $brkey 1>/dev/null
 echo "url: https://gateway.ipfs.io/ipns/$peerid"
 echo "url: http://$gwhost:$gwport/ipfs/$brkey"
