@@ -6,12 +6,14 @@ nc="[0m"
 
 name=minichain
 
+if test -e ./rc.sh; then
 idir=$(pwd)
 export IPFS_PATH=$(pwd)/_ipfs
 export PATH=_ipfs/bin:$(pwd)/bin:$PATH
 
 # This script initialize the blockchain
-sed -i -e "s|^idir=.*$|idir=$idir|" rc.sh
+sed -i -e "s|^idir=/.brings$|idir=$idir|" rc.sh
+fi
 
 . ./rc.sh
 

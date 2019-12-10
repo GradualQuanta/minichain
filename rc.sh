@@ -3,7 +3,12 @@
 
 # vim: sw=3 et ts=2
 
+if test -e ./rc.sh; then
 idir=$(pwd)
+echo idir: $idir
+else
+idir=/.brings
+fi
 
 if test -e /etc/environment; then
    . /etc/environment
