@@ -3,10 +3,17 @@
 yellow="[33m"
 red="[31m"
 nc="[0m"
+
+name=minichain
+
+idir=$(pwd)
 export IPFS_PATH=$(pwd)/_ipfs
 export PATH=_ipfs/bin:$(pwd)/bin:$PATH
+
 # This script initialize the blockchain
-#export LC_TIME='fr_FR.UTF-8'
+sed -i -e "s|^idir=.*$|idir=$idir|" rc.sh
+
+. ./rc.sh
 
 if ! perl -Mlocal::lib=$(pwd)/_perl5 -e 1; then
   echo "perl: local::lib not found"
@@ -15,7 +22,6 @@ if ! perl -Mlocal::lib=$(pwd)/_perl5 -e 1; then
   exit $?
 fi
 
-name=minichain
 # set a few log variables
 tic=$(date +%s)
 date=$(date +%D)
@@ -24,7 +30,8 @@ echo peerid: $peerid
 gwhost=$(ipfs config Addresses.Gateway | cut -d'/' -f 3)
 gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
 
-# get a hip6 and a name
+exit
+# get an hip6 and a name
 export DICT="$(pwd)/etc"
 eval $(bin/hip6.pl 2>/dev/null | eyml)
 eval $(fullname -a $peerid | eyml)
@@ -126,6 +133,8 @@ if ipfs key list -l | grep -q -w my; then
 else
   key=$(ipfs key gen -t rsa -s 3072 my)
 fi
+
+ipfs key list -l
 
 
 

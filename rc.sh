@@ -3,23 +3,23 @@
 
 # vim: sw=3 et ts=2
 
-cwd=$(pwd)
+idir=$(pwd)
 
 if test -e /etc/environment; then
    . /etc/environment
 else
    export PATH=/usr/local/bin:/usr/bin:/bin; 
 fi
-export IPFS_PATH=${cwd}/_ipfs
-export PATH=${cwd}/bin:$IPFS_PATH/bin:$PATH
+export IPFS_PATH=${idir}/_ipfs
+export PATH=${idir}/bin:$IPFS_PATH/bin:$PATH
 
-if test -d $cwd/_perl5/lib/perl5; then
+if test -d $idir/_perl5/lib/perl5; then
 # perl's local lib
-eval $(perl -I$cwd/_perl5/lib/perl5 -Mlocal::lib=$cwd/_perl5)
+eval $(perl -I$idir/_perl5/lib/perl5 -Mlocal::lib=$idir/_perl5)
 fi
 
-if test -d $cwd/etc; then
-export DICT=${cwd}/etc
+if test -d $idir/etc; then
+export DICT=${idir}/etc
 fi
 
 unset LC_MEASUREMENT
