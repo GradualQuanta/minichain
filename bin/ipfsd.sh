@@ -14,7 +14,7 @@ if ! ipfs swarm addrs local 2>/dev/null; then
   pp=$(cat $IPFS_PATH/config | xjson Addresses.Gateway | cut -d'/' -f 5)
   name=$(cat $IPFS_PATH/config | xjson Identity.PeerID | fullname)
 
-  if which irxvt 1>/dev/null; then
+  if which rxvt 1>/dev/null; then
     rxvt -geometry 128x18 -bg black -fg orange -name IPFS -n "$pp" -title "ipfs daemon:$pp ($IPFS_PATH) ~ $name" -e ipfs daemon $OPTIONS &
   else
     gnome-terminal --title "ipfs daemon:$pp ($IPFS_PATH) ~ $name" -- ipfs daemon $OPTIONS &
