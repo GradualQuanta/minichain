@@ -1,12 +1,11 @@
 ---
 layout: default
 ---
-<meta charset="utf8"/>
 ## mini blockchain ([mychelium][42])
-
-<!-- {% if site.GH_ENV == 'gh_pages' %} /-->
+<meta charset="utf8"/>
+<!-- {% if site.GH_ENV == 'gh_pages' %} -->
 [![HitCount](https://hits.dwyl.io/Gradual-Quanta/minichain.svg)](http://hits.dwyl.io/Gradual-Quanta/minichain)
-<!-- {% endif %} /-->
+<!-- {% endif %} -->
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9861b9fa-9749-4a61-b1fb-f32502348934/deploy-status)](https://app.netlify.com/sites/festive-leakey-329460/deploys)
 [![Github all releases](https://img.shields.io/github/downloads/Gradual-Quanta/minichain/total.svg)](https://GitHub.com/Gradual-Quanta/minichain/releases/)
 
@@ -20,7 +19,7 @@ so it requires the installation of a few modules prior to use.
 * a mutable to immutable resolver acting as a [decentralized namespace][6]
 * an authentication system for access control ([ydentity][7]'s [HIP6][10])
 
-### mutables and immutables addresses
+### mutables and immutables address
 
 A mutable address is a permanent reference (URI) to a document which content can be update
 without changing in its address.
@@ -36,10 +35,16 @@ Therefore the integrity of a document referenced with an immutable address is gu
 [10]: https://duckduckgo.com/?q=!g+Human+IP+address+ydentity
 [42]: https://duckduckgo.com/?q=!g+%22mychelium%22
 
+#### examples
+
+* mutable : [/files/etc/motd](http://gateway.local/webui#/files/etc/motd)
+
+* immutable : [/ipfs/{{site.docs.data.install.qm}}](https://cloudflare-ipfs.com/ipfs/{{site.docs.data.install.qm}})
+
 ## INSTALLATION (2 methods)
 
-
 A. running a shell script :
+
 
  1. clone this [repository][1] :
  ```sh
@@ -62,41 +67,9 @@ B. running the script form the web (curl) :
    curl https://ipfs.blockring™.ml/ipfs/{{site.docs.data.install.qmhash}} | sh /dev/stdin
  ```
 
-For the present, only \*nix is supported, however the script might run under *windows10's bash*.
-
-This installation is downloading the IPFS archive [v0.4.22][43] and
-also covers the perl's local modules using ([Local::lib][44]) and is calling 
-an [installation script][45] for the CPAN modules used in the front-end mutable system
-
-## MINICHAIN DEMO
-
-All blockRing have two disctinctive part : the [list of records][LoR] on one side which are immutable,
-and a [mutable record][mut] to store the "head" of the blockchain.
-all mutables are organized as a global mutable file system, where every participant have their own [name-space][files].
-
-### DATA ORGANIZATION [#/files/][files]
-
-* [/.brings](http://ipfs.io/webui/#/files/.brings) : where the software reside
-* [/root](http://ipfs.io/webui/#/files/root) : the /root for sharing files
-* [/public](http://ipfs.io/webui/#/files/public) : the your public files
-* [/my](http://ipfs.io/webui/#/files/my) : the your personal files
-* [/etc](http://ipfs.io/webui/#/files/etc) : miscelleaneous files
-
-The only required files are under [/.brings][brng]
-
-
 [1]: https://github.com/Gradual-Quanta/minichain
 [2]: https://github.com/Gradual-Quanta/minichain/blob/master/install.sh
 [2raw]: https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/install.sh 
 [3]: https://github.com/Gradual-Quanta
 [4]: https://github.com/ipfs/go-ipfs
 [5]: https://github.com/Perl/perl5
-[43]: https://dist.ipfs.io/go-ipfs/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz
-[44]: https://duckduckgo.com/?q=Perl+Local::Lib
-[45]: https://github.com/Gradual-Quanta/minichain/blob/master/.brings/bootstrap/perl5/install_modules.sh
-[LoR]: https://ipfs.io/ipfs/QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub/#/files/.brings/files
-[mut]: https://ipfs.io/ipfs/QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub/#/files/.brings/mutables
-[files]: https://ipfs.io/ipfs/QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub/#/files/
-[brng]: https://ipfs.io/ipfs/QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub/#/files/.brings
-
-
