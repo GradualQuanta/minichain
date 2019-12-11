@@ -53,34 +53,6 @@ echo test w/ daemon running
 t3=$(curl -s http://127.0.0.1:$gwport/ipfs/QmejvEPop4D7YUadeGqYWmZxHhLc4JBUCzJJHWMzdcMe2y)
 t4=$(ipms --api=/ip4/127.0.0.1/tcp/$apiport cat $t0)
 
-# ----------------------------------------------------------------
-# update bootstrap folder (Pablo O. Haggar)
-key='QmVdu2zd1B8VLn3R8xTMoD2yBVScQ1w9UMbW7CR1EJTVYw'
-# ipfs name publish --key=bootstrap $(ipfs add -r -Q $PROJDIR/.brings/bootstrap)
-if ipath=$(ipms --timeout 5s resolve /ipns/$key 2>/dev/null); then
- echo "ipath: $ipath"
-else
-  # default to Cheryl M. Dewiel
-  # ipfs add -r -Q $PROJDIR/.brings/bootstrap
-  ipath='/ipfs/QmYSTrLraVaMUGwaCpGYNw4hpt9JYXnYMDCiVv2FJfGorP'
-fi
-if ipms files stat --hash /.brings 1>/dev/null 2>&1; then
-  if pv=$(ipms files stat --hash /.brings/bootstrap 2>/dev/null); then
-    ipfs files rm -r /.brings/bootstrap
-    ipms files cp $ipath /.brings/bootstrap
-    if [ "${ipath#/ipfs/}" != "$pv" ]; then
-      ipms files cp /ipfs/$pv /.brings/bootstrap/prev
-    fi
-  else
-    ipms files cp $ipath /.brings/bootstrap
-  fi
-else
-  ipms files mkdir /.brings
-  ipms files cp $ipath /.brings/bootstrap
-fi
-echo "bootstrap: ${ipath#/ipfs/}"
-# ----------------------------------------------------------------
-
 ipms shutdown
 
 if [ "$t0" = 'mAVUABnJlYWR5Cg' -a "$t1" = 'ipfs' -a "$t2" = 'ready' -a "$t3" = 'ipfs' -a "$t4" = 'ready' ]; then

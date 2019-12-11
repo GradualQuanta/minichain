@@ -1,9 +1,9 @@
 # 
 
 OPTION='--unrestricted-api --enable-namesys-pubsub'
-installdir=${BRNG_HOME:-$HOME/.brings}
-export IPFS_PATH=$installdir/ipms
-export PATH=$installdir/bin:$IPFS_PATH/bin:$PATH
+export IPMS_HOME=${IPMS_HOME:-$HOME/.ipms}
+export IPFS_PATH=${IPFS_PATH:-$HOME/.brings/ipfs}
+export PATH=$IPMS_HOME/bin:$PATH
 
 gateway=$(ipms --offline config Addresses.Gateway)
 gwport=$(echo $gateway | cut -d/ -f 5)

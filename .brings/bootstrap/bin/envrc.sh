@@ -11,36 +11,6 @@ else
    export PATH=/usr/local/bin:/usr/bin:/bin; 
 fi
 # ---------------------------------------------------------------------
-if test -d $IPMS_HOME/bin; then
-PATH=$IPMS_HOME/bin:$PATH
-fi
-
-# update bootstrap folder (Pablo O. Haggar)
-key='QmVdu2zd1B8VLn3R8xTMoD2yBVScQ1w9UMbW7CR1EJTVYw'
-# ipfs name publish --key=bootstrap $(ipfs add -r -Q $PROJDIR/.brings/bootstrap)
-if ipath=$(ipms --timeout 5s resolve /ipns/$key 2>/dev/null); then
- echo "ipath: $ipath"
-else 
-  # default to Edwin S. Hoylton
-  # ipfs add -r -Q $PROJDIR/.brings/bootstrap
-  ipath='/ipfs/QmeNKo4kry3LixfPGbCKsUeS1pm56gUuCo6h1edN7qhiVz'
-fi
-if ipms files stat --hash /.brings 1>/dev/null 2>&1; then
-  if pv=$(ipms files stat --hash /.brings/bootstrap 2>/dev/null); then
-    ipfs files rm -r /.brings/bootstrap
-    ipms files cp $ipath /.brings/bootstrap
-    if [ "${ipath#/ipfs/}" != "$pv" ]; then
-      ipms files cp /ipfs/$pv /.brings/bootstrap/prev
-    fi
-  else
-    ipms files cp $ipath /.brings/bootstrap
-  fi
-else
-  ipms files mkdir /.brings
-  ipms files cp $ipath /.brings/bootstrap
-fi
-echo "bootstrap: ${ipath#/ipfs/}"
-# ---------------------------------------------------------------------
 echo IPFS_PATH: $IPFS_PATH
 
 if test -d $BRNG_HOME/bin ; then

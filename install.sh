@@ -2,10 +2,15 @@
 
 # installation [script](https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/_data/install.yml)
 
-export BRNG_HOME=$HOME/.brings
+if test -e config.sh; then
+. ./config.sh
+else
 export IPMS_HOME=$HOME/.ipms
-export IPFS_PATH=$HOME/.brings/ipfs
 export PERL5LIB=$HOME/.brings/perl5/lib/perl5
+
+export BRNG_HOME=/tmp/.brings
+export IPFS_PATH=/tmp/.brings/ipms
+fi
 
 # 1. INSTALLING IPFS ...
 # ----------------------
@@ -19,8 +24,9 @@ curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/start.
 # 2. SETTING BRNG ENVIRONMENT ...
 # --------------------------------
 
-# ipfs add -r -Q $PROJDIR/.brings/bootstrap/bin/envrc.sh
-eval "$($IPFS_PATH/bin/ipms cat QmP4GqXnZtcNUQF94Qx3UCynQKoMtcAEA5HfQ8FZ4Jkw9i)"
+# ipfs add -r -Q $PROJDIR/.brings/bootstrap
+$IPMS_HOME/bin/ipms cat QmRHojNyd6zabbDE5ZyNnXJdNKb1pTjXQvWx5UQFmFy3g7/bin/bootstrap.sh | sh /dev/stdin
+eval "$($IPMS_HOME/bin/ipms files read /.brings/bootstrap/bin/envrc.sh)"
 
 # 3. INSTALLING LOCAL PERL MODULES ...
 # ------------------------------------

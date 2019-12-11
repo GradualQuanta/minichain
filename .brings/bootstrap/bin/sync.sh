@@ -7,7 +7,11 @@ else
   ipms files mkdir -p /.brings/bootstrap
 fi
 ipms files cp /ipfs/$qm /.brings/bootstrap/bin
+echo -n 'bin: '
 ipms files stat /.brings/bootstrap/bin
+qm=$(ipms files stat --hash /.brings/bootstrap)
+echo bootstrap: $qm
+sed -i "s,ipath='/ipfs/.*'$,ipath='/ipfs/$qm'," bootstrap.sh
 exit $?
 
 
