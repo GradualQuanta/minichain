@@ -1,10 +1,9 @@
 # 
-
-installdir=_ipfs
-export PATH=$installdir/bin:$PATH
-export IPFS_PATH=$(pwd)/$installdir
-ipfs shutdown
+installdir=${BRNG_HOME:-$HOME/.brings}
+export IPFS_PATH=$installdir/ipms
+export PATH=$installdir/bin:$IPFS_PATH/bin:$PATH# 
+ipms shutdown
 sleep 1
-ps ux | grep [i]pfs
+ps ux | grep -w [i]p[fm]s
 echo .
 

@@ -2,7 +2,7 @@
 
 # script for retrieving publish.sh (it places a copy at official_publishj.sh)
 # $author: QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ@ipfs$
-# $qm: ~$
+# $qm: z6t$
 
 echoerr() { printf "%s\n" "$*" >&2; }
 
@@ -42,4 +42,4 @@ resolve_path(){
 
 
 main;
-exit $?; # $Source: /my/shell/scripts/get_publish_script.sh$
+exit $?; # $Source: /.brings/files/examples/get_publish_script.sh$

@@ -1,0 +1,123 @@
+<h2 id="but-de-cette-page">But de cette page</h2>
+<p>Cette page définit un <strong>Réseau-pair-à-pair</strong> capable de produire un texte dans un but bien défini.</p>
+<h2 id="définition">Définition</h2>
+<ul>
+<li>Un <strong></strong> est un ensemble de noeuds constitués par des ordinateurs ou des téléphones portables reliés en pair-à-pair <font color=red>à un instant donné ?</font></li>
+</ul>
+<h2 id="blockchain-texte">blockchain-texte</h2>
+<h3 id="noeud-initiateur">noeud-initiateur</h3>
+<ul>
+<li>Un <strong>noeud-initiateur</strong> initie le réseau
+<ul>
+<li>en lui donnant un nom (par exemple : <strong>Réseau-Revendications des Gilets Jaunes</strong>).</li>
+<li>en définissant le <strong>but</strong> que doit atteindre, le texte produit par ce réseau. Ce but est rédigé sous forme d'une liste d'assertions (Voir par exemple )</li>
+</ul></li>
+<li>Le réseau va se constituer sous la forme d'une <strong>toile-de-confiance</strong> enregistrant les clé-publiques des noeuds qui désirent participer à la réalisation de ce but.</li>
+<li>Le réseau va produire deux blockchains:
+<ul>
+<li>une <strong>blockchain-texte</strong> contenant les versions successives du texte à produire</li>
+<li>une <strong>blockchain-note</strong> contenant les notes attribuées à chaque version du texte par les différents noeuds</li>
+</ul></li>
+</ul>
+<h3 id="création-de-la-blockchain-texte-par-le-noeud-initiateur">création de la blockchain-texte par le <strong>noeud-initiateur</strong></h3>
+<ul>
+<li>le <strong>noeud-initiateur</strong> rédige une liste d'assertions définissant le <strong>but du réseau</strong>.</li>
+<li>le <strong>noeud-initiateur</strong> crée le <strong>bloc-genesis</strong> de la <strong>blockchain-texte</strong> qui contient la liste des assertions du <strong>but du réseau</strong>.</li>
+<li>le <strong>noeud-initiateur</strong> ajoute au bloc-genesis le <strong>bloc-initial</strong> contient la première version du texte exprimant le <strong>but du réseau</strong>.</li>
+<li>le <strong>noeud-initiateur</strong> publie les deux blocs de la blockchain-texte vers un <strong>noeud-rédacteur</strong> tiré au hasard parmi les noeuds connectés du réseau.</li>
+</ul>
+<h3 id="noeud-rédacteur">noeud-rédacteur</h3>
+<h4 id="diffusion-de-la-blockchain-texte-par-les-noeud-rédacteurs">diffusion de la blockchain-texte par les <strong>noeud-rédacteurs</strong></h4>
+<p>à un instant donné lorsqu'un <strong>noeud-rédacteur</strong> est tiré au hasard :</p>
+<ul>
+<li>il est éliminé de la liste des futurs <strong>noeud-rédacteurs</strong>.</li>
+<li>il reçoit la <strong>blockchain-texte</strong>.</li>
+<li>il vérifie la validité de la <strong>blockchain-texte</strong>.</li>
+<li>il ajoute sa version.</li>
+<li>il publie la nouvelle <strong>blockchain-texte</strong> vers un <strong>noeud-rédacteur</strong> tiré au hasard parmi les <strong>noeuds connectés du réseau n'ayant pas encore participé</strong>.</li>
+</ul>
+<h4 id="modification-du-texte">modification du texte</h4>
+<ul>
+<li>chaque noeud peut créer un nouveau bloc qui contiendra sa version du texte à produire.
+<ul>
+<li>publie la blockchain à ses <strong>pair-de-confiance</strong>.</li>
+</ul></li>
+</ul>
+<h3 id="un-bloc-texte">un bloc-texte</h3>
+<ul>
+<li>une date</li>
+<li>une cle publique de l'auteur</li>
+<li>le texte</li>
+<li>le hash du bloc-texte précédent</li>
+</ul>
+<h2 id="blockchain-notation">blockchain-notation</h2>
+<h3 id="notation-en-local">notation en local</h3>
+<p>A l'intant <strong>t</strong>, un noeud :</p>
+<ul>
+<li>lit la blockchain-texte courante.</li>
+<li>construit la liste des couples (hashs, clé-rédacteur).</li>
+<li>construit la liste des hashs dont il n'est pas le rédacteur et qui ne sont pas dans sa <strong>liste-de-bloc-notation</strong>.</li>
+</ul>
+<ul>
+<li>extrait au plus 10 hashs au hasard.
+<ul>
+<li>construit le <strong>bloc-notation</strong> pour chaque hash</li>
+<li>ajoute ce <strong>bloc-notation</strong> à sa <strong>liste-de-bloc-notation</strong></li>
+</ul></li>
+</ul>
+<h3 id="création-de-la-liste-des-noeuds-connectés">création de la liste-des-noeuds-connectés</h3>
+<ul>
+<li>Chaque fois qu'un noeud se connecte il ajoute sa clé à la <strong>liste-des-noeuds-connectés</strong>.</li>
+<li>Chaque fois qu'un noeud se déconnecte sa clé est enlevée de la <strong>liste-des-noeuds-connectés</strong>.</li>
+</ul>
+<h3 id="diffusion-de-la-blockchain-notation-par-les-noeud-notateur">diffusion de la blockchain-notation par les <strong>noeud-notateur</strong></h3>
+<p>à un instant donné lorsqu'un <strong>noeud-notateur</strong> est tiré au hasard :</p>
+<ul>
+<li>il est éliminé de la liste des futurs <strong>noeud-notateurs</strong>.</li>
+<li>il reçoit la <strong>blockchain-notation</strong>.</li>
+<li>il vérifie la validité de la <strong>blockchain-notation</strong>.</li>
+<li>il ajoute sa <strong>liste-notation-locale</strong></li>
+<li>il publie la nouvelle <strong>blockchain-notation</strong> vers un <strong>noeud-notateur</strong> tiré au hasard parmi les <strong>noeuds connectés du réseau n'ayant pas encore participé</strong>.</li>
+</ul>
+<h3 id="un-bloc-notation">un bloc-notation</h3>
+<ul>
+<li>une date</li>
+<li>une cle publique</li>
+<li>le hash du bloc-texte</li>
+<li>la note du texte</li>
+</ul>
+<h2 id="méthode">méthode</h2>
+<p>il s'agit de construire des triplets (hash, clé, note) tels que le nombre de couples (hash, clé) c'est-à-dire le nombre de notes pour un texte soit le même pour tous les textes et toutes les notes.</p>
+<p>il faut :</p>
+<ul>
+<li>une liste des hashs (c'est la blockchain-texte)
+<ul>
+<li>chaque texte est repéré par son hash</li>
+<li>un directory /some_hash/ est créé sur ipfs dans lequel tous les couples (clé,note) sont ajoutés dans une blockchain</li>
+<li>pour un hash les clés qui l'ont noté doivent être toutes distinctes.</li>
+<li>pour un hash le nombre de clés qui l'ont noté doit être égal à celui de n'importe quel autre. Sinon ce texte doit être note par de nouveaux hashs pris au hasard parmi les connectés qui ont le plus faible nombre de notes.</li>
+</ul></li>
+</ul>
+<ul>
+<li>une liste des clés (c'est la blockchain-pair)</li>
+</ul>
+<ul>
+<li>pour chaque clé (noeud) on construit une blockchain des hash que cette clé a noté.</li>
+</ul>
+<h2 id="liste-des-hashs-ayant-le-moins-de-notes">liste des hashs ayant le moins de notes</h2>
+<ul>
+<li>on cherche la liste de plus petite taille.</li>
+<li>on construit la liste de tous les hashs ayant obtenus ce même nombre de notes.</li>
+</ul>
+<h2 id="liste-des-clés-connectées-à-t">liste des clés connectées à t</h2>
+<h2 id="choix-au-hasard-dun-noeud-connecté">choix au hasard d'un noeud connecté</h2>
+<ul>
+<li>l'instant <strong>t</strong> il y a une liste de clés connectées.</li>
+<li>on connaît la liste des hashs que cette clé a déjà notés.</li>
+<li>on construit la liste des hashs ayant le moins de notes.</li>
+<li>on tire au hasard un hash parmi ceux-ci.</li>
+</ul>
+<hr />
+
+
+

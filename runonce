@@ -1,0 +1,14 @@
+#
+
+if [ ! -e $HOME/.brings ]; then
+  mkdir $HOME/.brings;
+fi
+if [ ! -e $HOME/.brings/ipms ]; then
+  mkdir $HOME/.brings/ipms
+fi
+if [ -e _ipfs/config ]; then
+cp _ipfs/config $HOME/.brings/ipms/
+fi
+
+exit $?
+
