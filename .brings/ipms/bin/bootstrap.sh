@@ -7,18 +7,19 @@ gwport=8199
 # INSTALLING IPFS ...
 # -------------------
 
-installdir=${BRNG_HOME:=$HOME/.brings}
-if test ! -d $installdir; then
-mkdir -p $installdir
-mkdir $installdir/bin
+export IPFS_PATH=${IPFS_PATH:-$HOME/.ipms}
+if test ! -d $IPFS_PATH; then
+mkdir -p $IPFS_PATH
+mkdir $IPFS_PATH/bin
 fi
-export IPFS_PATH=$installdir/ipms
-export PATH=$installdir/bin:$IPFS_PATH/bin:$PATH
+
+
+export PATH=$IPFS_PATH/bin:$PATH
 # install go-ipfs ...
 if test ! -x $IPFS_PATH/bin/ipms; then
   curl https://dist.ipfs.io/go-ipfs/v0.4.22/go-ipfs_v0.4.22_linux-amd64.tar.gz | tar zxfv - 
   mv go-ipfs/* $IPFS_PATH/bin
-  mv $installdir/bin/ipfs $installdir/bin/ipms
+  mv $IPFS_PATH/bin/ipfs $IPFS_PATH/bin/ipms
   ipms init
 fi
 ipms config profile apply randomports
