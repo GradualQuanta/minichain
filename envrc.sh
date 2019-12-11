@@ -5,10 +5,10 @@
 export BRNG_HOME=${BRNG_HOME:=$HOME/.brings}
 
 if test -e ./rc.sh; then
-idir=$(pwd)
-echo idir: $idir
+PROJDIR=$(pwd)
+echo PROJDIR: $PROJDIR
 else
-idir=/.brings
+PROJDIR=/.brings
 fi
 
 if test -e /etc/environment; then
@@ -18,7 +18,7 @@ else
 fi
 export IPFS_PATH=$BRNG_HOME/ipms
 echo IPFS_PATH: $IPFS_PATH
-PATH=$idir/bin:$IPFS_PATH/bin:$PATH
+PATH=$PROJDIR/bin:$IPFS_PATH/bin:$PATH
 
 if test -d $BRNG_HOME/bin ; then
 PATH=$PATH:$BRNG_HOME/bin;

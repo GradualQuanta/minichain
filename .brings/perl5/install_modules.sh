@@ -12,8 +12,6 @@ export PATH=${rootdir}/bin:$PATH
 # perl's local lib
 eval $(perl -I$rootdir/perl5/lib/perl5 -Mlocal::lib=$rootdir/perl5)
 
-
-export DICT=${cwd}/etc
 perl -MCPAN -Mlocal::lib=$rootdir/perl5 -e 'CPAN::install(YAML::Syck)'
 perl -MCPAN -Mlocal::lib=$rootdir/perl5 -e 'CPAN::install(MIME::Base32)'
 perl -MCPAN -Mlocal::lib=$rootdir/perl5 -e 'CPAN::install(Math::BigInt)'
