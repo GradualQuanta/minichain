@@ -5,7 +5,8 @@
 
 
 # bootstrap : get local::lib tarball from CPAN
-rootdir=${BRNG_HOME:-$HOME/.brings}
+export BRNG_HOME=${BRNG_HOME:=$HOME/.brings}
+export PERL5LIB=${PERL5LIB:-$BRNG_HOME/perl5/lib/perl5}
 
 cwd=$(pwd)
 
@@ -13,10 +14,10 @@ ver=2.000024
 curl https://cpan.metacpan.org/authors/id/H/HA/HAARG/local-lib-${ver}.tar.gz | tar zxf -
 cd local-lib-${ver}
 
-perl Makefile.PL --bootstrap=$rootdir/perl5
+perl Makefile.PL --bootstrap=${PERL5LIB%/lib/perl5}
 make test && make install
 
-eval $(perl -I$rootdir/perl5/lib/perl5 -Mlocal::lib=$rootdir/perl5)
+eval $(perl -I$PERL5LIB -Mlocal::lib=${PERL5LIB%/lib/perl5})
 #eval $(perl -Mlocal::lib=--deactivate,~/perl5)
 #perl -Mlocal::lib=--deactivate-all
 

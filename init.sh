@@ -7,13 +7,17 @@ yellow="[33m"
 red="[31m"
 nc="[0m"
 
-name=minichain
 
 export BRNG_HOME=${BRING_HOME:=$HOME/.brings}
+if test ! -d $BRNG_HOME; then
+ mkdir -p $BRNG_HOME
+fi
 
 if test -e ./envrc.sh; then
 PROJDIR=$(pwd)
-export IPFS_PATH=$BRNG_HOME/ipms
+export IPFS_PATH=${IPFS_PATH:-$HOME/.brings/ipms}
+export PERL5LIB=${PERL5LIB:-$HOME/.brings/perl5/lib/perl5}
+
 export PATH=$BRNG_HOME/bin:$IPFS_PATH/bin:$PATH
 
 sed -e "s|^PROJDIR=/.brings$|PROJDIR=$PROJDIR|" envrc.sh > $BRNG_HOME/envrc.sh
@@ -21,7 +25,10 @@ fi
 
 . $BRNG_HOME/envrc.sh
 
-if ! perl -Mlocal::lib=$HOME/.brings/perl5 -e 1; then
+name=${PROJDIR#/*/*/}
+
+
+if ! perl -Mlocal::lib=${PERL5LIB%/lib/perl5} -e 1; then
   echo "perl: local::lib not found"
   echo " ${yellow}check if your PERL5LIB environment variable is properly set${nc}"
   echo " ${red}maybe you forgot to run . envrc.sh !${nc}"
