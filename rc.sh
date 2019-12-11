@@ -1,8 +1,9 @@
 
 # ipfs add -r -Q $PROJDIR/.brings/bootstrap/bin/envrc.sh
-envrc=QmP4GqXnZtcNUQF94Qx3UCynQKoMtcAEA5HfQ8FZ4Jkw9i
+envrc=QmQgjkdTfDuZQjbuoqmGotxZzuwA1Z2onW648x1WToFCnB
 export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
-export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipms}
+export IPMS_HOME=${IPFS_PATH:-$BRNG_HOME/.ipms}
+export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
 export PERL5LIB=${PERL5LIB:-$BRNG_HOME/perl5/lib/perl5}
 eval "$($IPFS_PATH/bin/ipms cat /ipfs/$envrc)"
 

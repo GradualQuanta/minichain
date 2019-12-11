@@ -3,7 +3,7 @@
 # installation [script](https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/_data/install.yml)
 
 export BRNG_HOME=$HOME/.brings
-export IPMS_HOME=$HOME/.imps
+export IPMS_HOME=$HOME/.ipms
 export IPFS_PATH=$HOME/.brings/ipfs
 export PERL5LIB=$HOME/.brings/perl5/lib/perl5
 

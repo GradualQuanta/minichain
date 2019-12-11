@@ -1,9 +1,5 @@
 # 
 
-# defined ipfs ports
-apiport=5122
-gwport=8199
-
 # INSTALLING IPFS ...
 # -------------------
 ver='v0.4.22';
@@ -12,14 +8,14 @@ export IPFS_PATH=${IPFS_PATH:-$HOME/.ipms}
 if test ! -d $IPFS_PATH; then
 mkdir -p $IPFS_PATH
 fi
-export IPMS_HOME=${IPFS_PATH:-$HOME/.brings/ipms}
-if test ! -d $OPMS_HOME/bin; then
+export IPMS_HOME=${IPMS_HOME:-$HOME/.brings/ipms}
+if test ! -d $IPMS_HOME/bin; then
 mkdir -p $IPMS_HOME/bin
 fi
 
 export PATH=$IPMS_HOME/bin:$PATH
 # install go-ipfs ...
-if test ! -x $IPFS_PATH/bin/ipms; then
+if test ! -x $IPMS_HOME/bin/ipms; then
   if test ! -e $IPMS_HOME/go-ipfs_${ver}_linux-amd64.tar.gz; then
     curl https://dist.ipfs.io/go-ipfs/${ver}/go-ipfs_${ver}_linux-amd64.tar.gz -o $IPMS_HOME/go-ipfs_${ver}_linux-amd64.tar.gz;
   fi
@@ -29,11 +25,17 @@ if test ! -x $IPFS_PATH/bin/ipms; then
   rmdir go-ipfs
 fi
 if test ! -e $IPFS_PATH/config; then
+  # defined ipfs ports
+  apiport=5122
+  gwport=8199
   ipms init
+  ipms config Addresses.API /ip4/127.0.0.1/tcp/$apiport
+  ipms config Addresses.Gateway /ip4/127.0.0.1/tcp/$gwport
+  ipms config profile apply randomports
+else
+  apiport=$(ipms config Addresses.API | cut -d'/' -f 5)
+  gwport=$(ipms config Addresses.Gateway | cut -d'/' -f 5)
 fi
-ipms config profile apply randomports
-ipms config Addresses.API /ip4/127.0.0.1/tcp/$apiport
-ipms config Addresses.Gateway /ip4/127.0.0.1/tcp/$gwport
 ipms config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
 ipms bootstrap add /ip4/212.129.2.151/tcp/24001/ws/ipfs/Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV
 ipms bootstrap list | grep 212.129.2.151
@@ -47,6 +49,7 @@ echo "$t1 $t2"
 ipms daemon &
 sleep 7
 echo test w/ daemon running
+
 t3=$(curl -s http://127.0.0.1:$gwport/ipfs/QmejvEPop4D7YUadeGqYWmZxHhLc4JBUCzJJHWMzdcMe2y)
 t4=$(ipms --api=/ip4/127.0.0.1/tcp/$apiport cat $t0)
 
@@ -57,9 +60,9 @@ key='QmVdu2zd1B8VLn3R8xTMoD2yBVScQ1w9UMbW7CR1EJTVYw'
 if ipath=$(ipms --timeout 5s resolve /ipns/$key 2>/dev/null); then
  echo "ipath: $ipath"
 else
-  # default to Edwin S. Hoylton
+  # default to Cheryl M. Dewiel
   # ipfs add -r -Q $PROJDIR/.brings/bootstrap
-  ipath='/ipfs/QmeNKo4kry3LixfPGbCKsUeS1pm56gUuCo6h1edN7qhiVz'
+  ipath='/ipfs/QmYSTrLraVaMUGwaCpGYNw4hpt9JYXnYMDCiVv2FJfGorP'
 fi
 if ipms files stat --hash /.brings 1>/dev/null 2>&1; then
   if pv=$(ipms files stat --hash /.brings/bootstrap 2>/dev/null); then

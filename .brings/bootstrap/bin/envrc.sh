@@ -1,7 +1,8 @@
 #
 
 export BRNG_HOME=${BRNG_HOME:=$HOME/.brings}
-export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipms}
+export IPMS_HOME=${IPMS_HOME:=$HOME/.ipms}
+export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/repos}
 
 # vim: sw=3 et ts=2
 if test -e /etc/environment; then
@@ -10,8 +11,9 @@ else
    export PATH=/usr/local/bin:/usr/bin:/bin; 
 fi
 # ---------------------------------------------------------------------
-PATH=$IPFS_PATH/bin:$PATH
-echo IPFS_PATH: $IPFS_PATH
+if test -d $IPMS_HOME/bin; then
+PATH=$IPMS_HOME/bin:$PATH
+fi
 
 # update bootstrap folder (Pablo O. Haggar)
 key='QmVdu2zd1B8VLn3R8xTMoD2yBVScQ1w9UMbW7CR1EJTVYw'
@@ -39,6 +41,8 @@ else
 fi
 echo "bootstrap: ${ipath#/ipfs/}"
 # ---------------------------------------------------------------------
+echo IPFS_PATH: $IPFS_PATH
+
 if test -d $BRNG_HOME/bin ; then
 PATH=$PATH:$BRNG_HOME/bin;
 fi
