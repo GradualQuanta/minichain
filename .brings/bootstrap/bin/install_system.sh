@@ -1,8 +1,8 @@
 # 
 
 BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
-key=''
-# ipfs name publish --key=system $(ipfs add -r -Q $PROJDIR/.brings/system)
+key='QmVQd43Y5DQutAbgqiQkZtKJNd8mJiZr9Eq8D7ac2PeSL1' # minimal's key
+# ipfs name publish --key=minimal $(ipfs add -r -Q $PROJDIR/.brings/minimal)
 ipath=$(ipms resolve $key/system)
 qm='QmbXjzH9LzbxP7pCstKVEQZdXyLDkP2jAZFstzbfe9ju4W';
-ipms $qm -o $BRNG_HOME/system
+ipms get $qm -o $BRNG_HOME/system --progress=0

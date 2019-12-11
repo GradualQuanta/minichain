@@ -3,9 +3,9 @@ layout: default
 ---
 ## mini blockchain ([mychelium][42])
 <meta charset="utf8"/>
-{% if site.GH_ENV == 'gh_pages' %}
+<!-- {% if site.GH_ENV == 'gh_pages' %} -->
 [![HitCount](https://hits.dwyl.io/Gradual-Quanta/minichain.svg)](http://hits.dwyl.io/Gradual-Quanta/minichain)
-{% endif %}
+<!-- {% endif %} -->
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9861b9fa-9749-4a61-b1fb-f32502348934/deploy-status)](https://app.netlify.com/sites/festive-leakey-329460/deploys)
 [![Github all releases](https://img.shields.io/github/downloads/Gradual-Quanta/minichain/total.svg)](https://GitHub.com/Gradual-Quanta/minichain/releases/)
 
@@ -39,7 +39,7 @@ Therefore the integrity of a document referenced with an immutable address is gu
 
 * mutable : [/files/etc/motd](http://gateway.local/webui#/files/etc/motd)
 
-* immutable : [/ipfs/{{site.data.install.qm}}](https://cloudflare-ipfs.com/ipfs/{{site.data.install.qm}})
+* immutable : [/ipfs/{{site.docs.data.install.qm}}](https://cloudflare-ipfs.com/ipfs/{{site.docs.data.install.qm}})
 
 ## INSTALLATION (2 methods)
 
@@ -56,7 +56,7 @@ A. running a shell script :
  sh ./install.sh
  ```
 
-B. running a shell script :
+B. running the script form the web (curl) :
 
  Directly execute the /bin/sh [shell script][2] from [github][3] or from [IPFS][2]
  ```sh
@@ -64,7 +64,7 @@ B. running a shell script :
  ```
  or 
  ```sh
-   curl https://ipfs.blockring™.ml/ipfs/{{site.data.install.qmhash}} | sh /dev/stdin
+   curl https://ipfs.blockring™.ml/ipfs/{{site.docs.data.install.qmhash}} | sh /dev/stdin
  ```
 
 [1]: https://github.com/Gradual-Quanta/minichain

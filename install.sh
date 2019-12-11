@@ -18,6 +18,7 @@ fi
 echo $IPMS_HOME/bin/bootstrap.sh
 curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.ipms/bin/bootstrap.sh | sh /dev/stdin
 
+sleep 3
 echo starting daemon
 curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/start.sh | sh /dev/stdin
 
@@ -42,3 +43,5 @@ ipms files read /.brings/bootstrap/perl5/install_modules.sh | sh /dev/stdin
 #curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.brings/bootstrap/perl5/install_modules.sh | sh /dev/stdin
 
 
+echo stopping daemon
+curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/stop.sh | sh /dev/stdin
