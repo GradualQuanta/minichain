@@ -1,9 +1,9 @@
 #
 set -e
 
-export IPFS_PATH=$(pwd)/_ipfs
+export IPFS_PATH=${IPFS_PATH:-$HOME/.ipms}
 export PATH=$IPFS_PATH/bin:bin:$PATH
-gateway=$(ipfs config Addresses.Gateway)
+gateway=$(ipms --offline config Addresses.Gateway)
 gwport=$(echo $gateway | cut -d/ -f 5)
 gwhost=$(echo $gateway | cut -d/ -f 3)
 
@@ -13,7 +13,7 @@ payload="$*"
 # set a few log variables
 tic=$(date +%s)
 date=$(date +%D)
-peerid=$(ipfs config Identity.PeerID)
+peerid=$(ipms config Identity.PeerID)
 echo peerid: $peerid
 
 if [ ! -e _data/toc.yml ]; then
@@ -45,7 +45,7 @@ if  [ "$n" != '0' ]; then
   echo n: $n
   if p=$(expr $n - 1); then true; fi # if to mask error if p = 0
   if [ -e _includes/block$p.txt ]; then
-    pn=$(ipfs add -Q _includes/block$p.txt)
+    pn=$(ipms add -Q _includes/block$p.txt)
   else
     echo pn: $pn
   fi
@@ -67,19 +67,19 @@ payload: $payload
 EOF
 fi
 # file block$n.txt
-qm=$(ipfs add -Q _includes/block$n.txt --cid-version=0)
+qm=$(ipms add -Q _includes/block$n.txt --cid-version=0)
 echo qm: $qm
 # save blockchain previous state:
-if pv=$(ipfs files stat --hash $bpath) 2>/dev/null; then
-  if ipfs files rm -r $bpath.prev 2>/dev/null; then true; fi # if to mask error
-  ipfs files mv $bpath $bpath.prev
-  ipfs files mkdir -p $bpath
-  ipfs files mv $bpath.prev $bpath/prev
+if pv=$(ipms files stat --hash $bpath) 2>/dev/null; then
+  if ipms files rm -r $bpath.prev 2>/dev/null; then true; fi # if to mask error
+  ipms files mv $bpath $bpath.prev
+  ipms files mkdir -p $bpath
+  ipms files mv $bpath.prev $bpath/prev
 else
-  ipfs files mkdir -p $bpath
-  pv=$(ipfs add -Q -w _data/toc.yml)
+  ipms files mkdir -p $bpath
+  pv=$(ipms add -Q -w _data/toc.yml)
 fi
-ipfs files cp /ipfs/$qm $bpath/block$n.txt
+ipms files cp /ipfs/$qm $bpath/block$n.txt
 
 sed -i -e "s,date: .*,date: $date," \
        -e "s/owner: .*/owner: $peerid/" \
@@ -88,15 +88,15 @@ sed -i -e "s,date: .*,date: $date," \
        -e "s/cur: .*/cur: ~/" \
        -e "s/\.\.\./ - $qm # block $n/" _data/toc.yml
 echo "..." >> _data/toc.yml
-bafy=$(ipfs add -Q _data/toc.yml --cid-base base32)
-if ipfs files rm $bpath/toc.yml 2>/dev/null; then true; fi
-ipfs files cp /ipfs/$bafy $bpath/toc.yml
-nv=$(ipfs files stat --hash $bpath)
+bafy=$(ipms add -Q _data/toc.yml --cid-base base32)
+if ipms files rm $bpath/toc.yml 2>/dev/null; then true; fi
+ipms files cp /ipfs/$bafy $bpath/toc.yml
+nv=$(ipms files stat --hash $bpath)
 sed -i -e "s,cur: .*,cur: $nv/toc.yml," _data/toc.yml
-bafy=$(ipfs add -Q _data/toc.yml --cid-base base32)
-ipfs files rm $bpath/toc.yml
-ipfs files cp /ipfs/$bafy $bpath/toc.yml
-echo url: http://127.0.0.1:${gwport}/ipfs/$(ipfs files stat --hash $bpath)
+bafy=$(ipms add -Q _data/toc.yml --cid-base base32)
+ipms files rm $bpath/toc.yml
+ipms files cp /ipfs/$bafy $bpath/toc.yml
+echo url: http://127.0.0.1:${gwport}/ipfs/$(ipms files stat --hash $bpath)
 
 
 

@@ -8,8 +8,7 @@ red="[31m"
 nc="[0m"
 tic=$(date +%s)
 # set up local IPFS environment ...
-export IPFS_PATH=$(pwd)/_ipfs
-export PATH=_ipfs/bin:$(pwd)/bin:$PATH
+export IPFS_PATH=${IPFS_PATH:-$HOME/.ipms}
 
 main(){
 
@@ -41,10 +40,10 @@ echo "verbose: $verbose"
 check_perl_local_lib;
 check_ipfs_running;
 
-# get ipfs config parameters ...
-gwhost=$(ipfs config Addresses.Gateway | cut -d'/' -f 3)
-gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
-peerid=$(ipfs config Identity.PeerID)
+# get ipms config parameters ...
+gwhost=$(ipms config Addresses.Gateway | cut -d'/' -f 3)
+gwport=$(ipms config Addresses.Gateway | cut -d'/' -f 5)
+peerid=$(ipms config Identity.PeerID)
 # get fullname and emails associated with peerid
 eval "$(fullname -a $peerid | eyml)"
 
@@ -60,17 +59,17 @@ writelog_of_mutable_of_logname /my my
 
 post_brings;
 
-#ipfs files read "/.brings/brings.log"
-ipfs files stat /.brings/brings.log
+#ipms files read "/.brings/brings.log"
+ipms files stat /.brings/brings.log
 echo .
-brkey=$(ipfs files stat --hash /.brings)
-ipfs --offline name publish --allow-offline $brkey 1>/dev/null 2>&1
+brkey=$(ipms files stat --hash /.brings)
+ipms --offline name publish --allow-offline $brkey 1>/dev/null 2>&1
 echo "url: https://gateway.ipfs.io/ipfs/$brkey"
 echo "url: http://$gwhost:$gwport/ipns/$peerid"
 
 # -----------------------------------------------------------------------
 # PUBLISH /.brings to self (peerid)
-ipfs $offline name publish --allow-offline $brkey | sed -e 's/^/info: /';
+ipms $offline name publish --allow-offline $brkey | sed -e 's/^/info: /';
 # -----------------------------------------------------------------------
 
 # key is harcoded in function...
@@ -90,16 +89,16 @@ add_dotbrings_directory_of_file()
 
 check_exist_of_directory()
 {
-    if ! ipfs files stat --hash "$1" 1>/dev/null 2>&1; then
-	ipfs files mkdir -p "$1"
+    if ! ipms files stat --hash "$1" 1>/dev/null 2>&1; then
+	ipms files mkdir -p "$1"
     fi
 }
 
 check_ipfs_running()
 {
-   #if ! ipfs cat mAVUACHJ1bm5pbmcK 1>/dev/null 2>&1; then false; fi
-   if ! ipfs swarm addrs local | sed -e 's/^/info: /'; then
-      echo " ${yellow}WARNING no ipfs daemon running${nc}"
+   #if ! ipms cat mAVUACHJ1bm5pbmcK 1>/dev/null 2>&1; then false; fi
+   if ! ipms swarm addrs local | sed -e 's/^/info: /'; then
+      echo " ${yellow}WARNING no ipms daemon running${nc}"
       echo " ${yellow}INFO running start.sh${nc}"
       ./start.sh
       sleep 2
@@ -127,9 +126,9 @@ ipfs_append_of_text_of_file()
     echo "ipfs_append_of_file : fullpath $fullpath"
     echo "ipfs_append_of_file : file $file append"
     
-    ipfs files read "${fullpath}" > /tmp/${file}
+    ipms files read "${fullpath}" > /tmp/${file}
     echo "$text" >> /tmp/${file}
-    ipfs files write --create  --truncate "${fullpath}" < /tmp/${file}
+    ipms files write --create  --truncate "${fullpath}" < /tmp/${file}
     rm -f /tmp/${file}
 }
 
@@ -152,17 +151,17 @@ writelog_of_mutable_of_logname()
       echo "Usage: $here <mutable> <logname>"
       exit
    fi
-   qm=$(ipfs files stat --hash ${mutable})
+   qm=$(ipms files stat --hash ${mutable})
 
    fullpath=`add_dotbrings_directory_of_file ${logname}`
    logfile=$fullpath".log"
    echo logfile: $logfile
 
-   if sz=$(ipfs files stat --format="<size>" ${logfile} 2>/dev/null)
+   if sz=$(ipms files stat --format="<size>" ${logfile} 2>/dev/null)
    then
       ipfs_append_of_text_of_file "$tic: ${qm}" ${logfile}
    else
-      echo "$tic: $qm" | ipfs files write --create --raw-leaves "${logfile}"
+      echo "$tic: $qm" | ipms files write --create --raw-leaves "${logfile}"
    fi
 }
 
@@ -172,11 +171,11 @@ post_brings()
 	echo "Entering in post_brings $*"
     fi
     
-    bot=$(ipfs add -Q $0) # adding self 
-    if ipfs files rm /.brings/${0##*/} 2>/dev/null; then true; fi
-    ipfs files cp /ipfs/$bot "/.brings/${0##*/}"
+    bot=$(ipms add -Q $0) # adding self 
+    if ipms files rm /.brings/${0##*/} 2>/dev/null; then true; fi
+    ipms files cp /ipfs/$bot "/.brings/${0##*/}"
 
-    brkey=$(ipfs files stat --hash /.brings)
+    brkey=$(ipms files stat --hash /.brings)
     echo "brkey: $brkey"
 
     writelog_of_mutable_of_logname /.brings brings
@@ -190,19 +189,19 @@ post_identity_to_root()
     
     if [ "x$email" = 'x' ]; then
        if [ "x$peerid" = 'x' ]; then
-         peerid=$(ipfs config Identity.PeerID)
+         peerid=$(ipms config Identity.PeerID)
        fi
        eval "$(fullname -a $peerid | eyml)"
     fi
     
-    if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
-	ipfs files mkdir /root/directory
+    if ! ipms files stat --hash /root/directory 1>/dev/null 2>&1; then
+	ipms files mkdir /root/directory
     else
-	if ipfs files rm -r "/root/directory/$email" 2>/dev/null; then true; fi
+	if ipms files rm -r "/root/directory/$email" 2>/dev/null; then true; fi
     fi
 
-    qm=$(ipfs files stat --hash /my/identity)
-    ipfs files cp /ipfs/$qm "/root/directory/$email"
+    qm=$(ipms files stat --hash /my/identity)
+    ipms files cp /ipfs/$qm "/root/directory/$email"
 }
 
 update_bootstrap_path() {
@@ -215,12 +214,12 @@ update_bootstrap_path() {
       echo "Entering in update_bootstrap_path $*"
    fi
 
-   if ! ipfs files stat --hash ${mfspath%/*} 1>/dev/null 2>&1; then
-      ipfs files mkdir -p ${mfspath%/*}
+   if ! ipms files stat --hash ${mfspath%/*} 1>/dev/null 2>&1; then
+      ipms files mkdir -p ${mfspath%/*}
    fi
-   if ipath=$(ipfs name resolve ${key} 2>/dev/null); then
-      if ipfs files rm -r ${mfspath} 2>/dev/null; then true; fi
-      if ipfs files cp ${ipath} ${mfspath}; then true; fi
+   if ipath=$(ipms name resolve ${key} 2>/dev/null); then
+      if ipms files rm -r ${mfspath} 2>/dev/null; then true; fi
+      if ipms files cp ${ipath} ${mfspath}; then true; fi
    else
       echo "warning: ${key} not resolved"
    fi

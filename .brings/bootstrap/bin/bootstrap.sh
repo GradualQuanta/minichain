@@ -10,11 +10,11 @@ if ipms key list | grep -q -w $symb; then
  key=$(ipms key list -l | grep -w $symb | cut -d' ' -f 1)
  echo key: $key
  if test -d $rootdir; then
-   qm=$(ipfs add -r -Q $rootdir)
+   qm=$(ipms add -r -Q $rootdir)
    sed -i -e "s/qm='.*'$/qm='$qm'/" \
           -e "s,ipath='/ipfs/.*'$,ipath='/ipfs/$qm'," \
           -e "s/key='.*'$/key='$key'/" $0 # $'s are important /!\
-   ipfs name publish --allow-offline --key=$symb /ipfs/$qm
+   ipms name publish --allow-offline --key=$symb /ipfs/$qm
  fi
 else # for others ...
  key='QmVdu2zd1B8VLn3R8xTMoD2yBVScQ1w9UMbW7CR1EJTVYw'
@@ -26,7 +26,7 @@ if ipath=$(ipms --timeout 5s resolve /ipns/$key 2>/dev/null); then
  echo "$symb: $ipath # (global)"
 else
   # default to Elvis C. Lagoo
-  # ipfs add -r -Q $PROJDIR/.brings/$symb
+  # ipms add -r -Q $PROJDIR/.brings/$symb
   if [ "x$qm" = 'x' ]; then
   ipath='/ipfs/QmVEwqUqoS6CkoEafHtmduUp1gsMGbsyY6fy1mtNwHVddS'
   else 

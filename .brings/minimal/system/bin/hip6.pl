@@ -29,7 +29,7 @@ printf "--- # %s\n",$0 if $yml;
 # IPFS peerid
 $ENV{IPMS_HOME} = $ENV{HOME}.'/.ipms' unless exists $ENV{IPMS_HOME};
 $ENV{PATH} = $ENV{IPMS_HOME}.'/bin:'.$ENV{PATH};
-my $peerid = `ipfs --offline config Identity.PeerID`; chomp($peerid);
+my $peerid = `ipms --offline config Identity.PeerID`; chomp($peerid);
 printf "peerid: %s\n",$peerid if $all;
 
 

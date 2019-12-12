@@ -13,7 +13,7 @@ main(){
 
 get_publish_script() {
  addr=$(get_ipfs_addr)
- fetch_from_ipfs $addr official_publish.sh
+ fetch_from_ipms $addr official_publish.sh
  echoerr ${0##*/}: official_publish.sh downloaded
 }
 
@@ -26,18 +26,18 @@ get_brings_ipath(){
   echo $(resolve_peerid $michel_id)
 }
 
-fetch_from_ipfs(){
+fetch_from_ipms(){
   echoerr ${0##*/}: get $1
-  ipfs get "$1" -o "$2"
+  ipms get "$1" -o "$2"
 }
 
 resolve_peerid(){
   echoerr ${0##*/}: resolving $1
-  echo $(ipfs name resolve "$1")
+  echo $(ipms name resolve "$1")
 }
 resolve_path(){
   echoerr ${0##*/}: resolving $1
-  echo $(ipfs resolve "$1")
+  echo $(ipms resolve "$1")
 }
 
 

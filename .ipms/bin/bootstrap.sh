@@ -25,7 +25,7 @@ if test ! -x $IPMS_HOME/bin/ipms; then
   rmdir go-ipfs
 fi
 if test ! -e $IPFS_PATH/config; then
-  # defined ipfs ports
+  # defined ipms ports
   apiport=5122
   gwport=8199
   ipms init

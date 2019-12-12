@@ -2,9 +2,9 @@
 
 # /!\ not the same IPFS node, but the default user's one
 export IPFS_PATH=$HOME/.ipfs
-pv=$(ipfs --offline add -Q -n https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/install.sh --progress=false)
-if ipfs --offline pin rm $pv 2>/dev/null; then false; fi
-qm=$(ipfs --offline add -Q install.sh --progress=false --pin=true)
+pv=$(ipms --offline add -Q -n https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/install.sh --progress=false)
+if ipms --offline pin rm $pv 2>/dev/null; then false; fi
+qm=$(ipms --offline add -Q install.sh --progress=false --pin=true)
 echo qm: $qm
 
 cat > docs/_data/install.yml <<EOF

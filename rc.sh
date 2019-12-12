@@ -6,7 +6,7 @@ export IPMS_HOME=${IPMS_HOME:-$BRNG_HOME/.ipms}
 export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
 export PERL5LIB=${PERL5LIB:-$BRNG_HOME/perl5/lib/perl5}
 
-# ipfs add -r -Q $PROJDIR/.brings/minimal/envrc.sh
+# ipms add -r -Q $PROJDIR/.brings/minimal/envrc.sh
 eval "$($IPMS_HOME/bin/ipms cat /ipfs/$envf)"
 
 if false; then

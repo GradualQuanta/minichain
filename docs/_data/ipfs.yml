@@ -1,4 +1,4 @@
---- # ipfs webui and gateway parameters
+--- # ipms webui and gateway parameters
 gwport: 8199
 apiport: 5122
 gateway: "http://127.0.0.1:8199"

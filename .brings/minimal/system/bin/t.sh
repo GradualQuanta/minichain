@@ -15,10 +15,10 @@ tic: 1575726861
 date: 12/07/19
 ...
 EOF
-pgm=$(ipfs add -Q keywords.pl)
+pgm=$(ipms add -Q keywords.pl)
 echo pgm: $pgm
-ipfs cat $pgm | perl /dev/stdin t.yml t.txt
-qm=$(ipfs add -Q -n t.txt)
+ipms cat $pgm | perl /dev/stdin t.yml t.txt
+qm=$(ipms add -Q -n t.txt)
 if [ "$qm" != 'QmPpktbTKs414Nedp7kujK7fBoFGVPKZvp88hn7iCqCPxu' ]; then
   echo "status: $$ # Error (qm: $qm) !" 1>&2
   exit $$

@@ -12,7 +12,7 @@ const status = resp => {
 }
 const error = err => { console.log(err); }
 
-// ipfs config Addresses.API
+// ipms config Addresses.API
 //const webui = 'http://127.0.0.1:5001';
 const webui = '{{site.data.ipfs.webui}}'
 const api_url = webui + '/api/v0/'

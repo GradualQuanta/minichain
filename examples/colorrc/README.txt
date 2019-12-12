@@ -31,10 +31,10 @@ fi
 ## INSTALLATION
 ```
 sudo apt-get dircolors
-# you must have an ipfs daemon running locally
-# ipfs daemon &
-ipfs get -o ~/.dircolors /ipfs/QmamDLXELgfHvPxGuM1mwn2XfaUhiv6ZbqrCc6ZRRzotvP/dircolors
-ipfs cat /ipfs/QmamDLXELgfHvPxGuM1mwn2XfaUhiv6ZbqrCc6ZRRzotvP/dircolorrc >> ~/.profiles
+# you must have an ipms daemon running locally
+# ipms daemon &
+ipms get -o ~/.dircolors /ipfs/QmamDLXELgfHvPxGuM1mwn2XfaUhiv6ZbqrCc6ZRRzotvP/dircolors
+ipms cat /ipfs/QmamDLXELgfHvPxGuM1mwn2XfaUhiv6ZbqrCc6ZRRzotvP/dircolorrc >> ~/.profiles
 ```
 
 --&nbsp;<br>

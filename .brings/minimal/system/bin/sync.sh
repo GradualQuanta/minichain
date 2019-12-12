@@ -8,9 +8,9 @@ dir=$(pwd)
 name=${dir##*/minimal/}
 echo name: $name
 
-qm=$(ipfs add -Q -r .)
-if pv=$(ipfs files stat --hash /.brings/$name); then
- ipfs files rm -r /.brings/$name
+qm=$(ipms add -Q -r .)
+if pv=$(ipms files stat --hash /.brings/$name); then
+ ipms files rm -r /.brings/$name
  ipms files cp /ipfs/$qm /.brings/$name
  ipms files cp /ipfs/$pv /.brings/$name/prev
 else

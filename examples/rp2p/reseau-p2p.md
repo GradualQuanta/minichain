@@ -127,7 +127,7 @@ il faut :
 
 -   une liste des hashs (c'est la blockchain-texte)
     -   chaque texte est repéré par son hash
-    -   un directory /some\_hash/ est créé sur ipfs dans lequel tous les
+    -   un directory /some\_hash/ est créé sur ipms dans lequel tous les
         couples (clé,note) sont ajoutés dans une blockchain
     -   pour un hash les clés qui l'ont noté doivent être toutes
         distinctes.

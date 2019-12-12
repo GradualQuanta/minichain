@@ -10,17 +10,17 @@ mfspath="${1:-/.brings/system/bin/status.pl}"
 if [ "x$1" != 'x' ]; then
   shift
 fi
-if qm=$(ipfs files stat --hash "$mfspath" 1>/dev/null 2>&1); then
-ipfs files read "$mfspath" | perl /dev/stdin ${*}
+if qm=$(ipms files stat --hash "$mfspath" 1>/dev/null 2>&1); then
+ipms files read "$mfspath" | perl /dev/stdin ${*}
 else
 #url=$raw/files${mfspath}
 url=$raw/.brings/minimal${mfspath#/.brings}
-qm=$(ipfs add -Q $url --progress=0)
+qm=$(ipms add -Q $url --progress=0)
 qm=${qm:-QmPNmsSvfdu7dKdX5JVTdCpL5QgFMtd9xnXTjzTNR1a9tv}
 registered=1
 # later: verify if qm is registered via a side channel ...
 if [ $registered -eq 1 ]; then
-ipfs cat /ipfs/$qm | perl /dev/stdin ${*}
+ipms cat /ipfs/$qm | perl /dev/stdin ${*}
 else
 echo "warning: $qm is not registered"
 fi
