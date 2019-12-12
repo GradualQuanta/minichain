@@ -191,9 +191,11 @@ post_brings()
 	echo "Entering in post_brings $*"
     fi
     
+    if [ "$0" != '/dev/stdin' ]; then
     bot=$(ipms add -Q $0) # adding self 
     if ipms files rm /.brings/${0##*/} 2>/dev/null; then true; fi
     ipms files cp /ipfs/$bot "/.brings/${0##*/}"
+    fi
 
     brkey=$(ipms files stat --hash /.brings)
     echo "brkey: $brkey"
