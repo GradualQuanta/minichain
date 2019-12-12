@@ -31,7 +31,6 @@ xurl=/.brings/minimal/bin/install.sh
 url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master${xurl}
 qm=$(ipms add -Q $url --progress=0)
 $IPMS_HOME/bin/ipms cat /ipfs/$qm | sh -xe /dev/stdin
-#curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.brings/minimal/bin/install.sh | sh /dev/stdin
 #$IPMS_HOME/bin/ipms cat /ipns/QmVQd43Y5DQutAbgqiQkZtKJNd8mJiZr9Eq8D7ac2PeSL1/bin/install.sh | sh -xe /dev/stdin
 eval "$($IPMS_HOME/bin/ipms files read /.brings/minimal/envrc.sh)"
 
