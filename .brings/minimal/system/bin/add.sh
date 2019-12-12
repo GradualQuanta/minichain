@@ -20,7 +20,7 @@ if ! ipms swarm addrs local | sed -e 's/^/info: /'; then
 fi
 # dependencies:
 if ! release=$(ipms files stat --hash /.brings/system/bin 2>/dev/null); then
-release='QmXgaVcK6sRqLUKrr3qdK6zeRDLEr2jpggeUfHpEkigVcb'
+release='QmQzt22HCUwHKhGZFR8PAyn2uni9TNqy9GZtkg5gpxjT6d'
 fi
 kwextract="/ipfs/$release/kwextract.pl"
 kwsubsti="/ipfs/$release/kwsubsti.pl"

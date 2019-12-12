@@ -17,6 +17,7 @@ else
  if ipms files mkdir -p /.brings/$name 1>/dev/null; then true; fi
  ipms files cp /ipfs/$qm /.brings/$name
 fi
+echo url: https://gateway.ipfs.io/ipfs/$(ipms files stat --hash /.brings/$name)
 
 exit $?;
 true; # $Source: /.brings/system/bin/sync.sh$

@@ -1,6 +1,9 @@
 #!/bin/sh
 
 # this script publish the hash of /.brings to the peerid
+# $Date: 12/12/19$
+# $tic: 1576165431$
+# $qm: z2kauxcKpPgNG2Y6Pit8kxGh2BjjQeSo1JQnxQWFniAw133$
 
 export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
 export PATH=$BRNG_HOME/bin:$PATH

@@ -14,17 +14,17 @@ my $file=$ARGV[0];
 
 local $/ = undef;
 my $buf = <>;
-$buf =~ s/\$qm: [^\$]**\s*\$$/\$qm: ~\$/;
+$buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: ~\$/m;
 my $qm = 'z'.&encode_base58(pack('H4','01551220').&hashr('SHA256',1,$buf));
-$buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: $qm\$/;
+$buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: $qm\$/m;
 
 
-$buf =~ s/\$tic: [^\$]*\s*\$$/\$tic: $^T\$/;
+$buf =~ s/\$tic: [^\$]*\s*\$$/\$tic: $^T\$/m;
 foreach my $kw (reverse sort keys %{$yml}) {
  #printf "%s: %s\n",$kw,$yml->{$kw};
  my $KW = $kw; $KW =~ s/.*/\u$&/;
  printf "%s: %s\n",$kw,$yml->{$kw};
- $buf =~ s/\$$KW: [^\$]*\s*\$$/\$$KW: $yml->{$kw}\$/g;
+ $buf =~ s/\$$KW: [^\$]*\s*\$$/\$$KW: $yml->{$kw}\$/gm;
 }
 
 print "buf: ",$buf if $dbug;
