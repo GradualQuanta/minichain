@@ -47,13 +47,13 @@ if (-e $file) {
    # if no mutable invent one !
    if (! defined $keywords->{mutable}) {
       if ($file =~ m{^/.*/([^/]+)/([^/]+)/?$}) {
-         my $mutable = $1.'/'.$2; $mutable =~ s,/_,/,g;
+         my $mutable = $1.'/'.$2.'.log'; $mutable =~ s,/_,/,g;
          $keywords->{mutable} = '/.brings/mutables/'.$mutable;
 
       } else {
          use Cwd qw(cwd);
          cwd() =~ m{/([^/]+)/?$};
-         my $mutable = $1.'/'.$file; $mutable =~ s,/_,/,g;
+         my $mutable = $1.'/'.$file.'.log'; $mutable =~ s,/_,/,g;
          $keywords->{mutable} = '/.brings/mutables/'.$mutable;
       }
    }

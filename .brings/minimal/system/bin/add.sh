@@ -14,8 +14,14 @@
 #
 # this script add a files to mfs ...
 
+
+if ! ipms swarm addrs local | sed -e 's/^/info: /'; then
+   echo ipfs not running
+fi
 # dependencies:
-release='QmQUBo1pderkz28hQKFwkZaNNp7JPKjJmfFoDdDT1MqUMb'
+if ! release=$(ipms files stat --hash /.brings/system/bin 2>/dev/null); then
+release='QmSFGjXcApoFmcXP8a8L7udo4sCn6Hig7u8wzgAQZkNRMQ'
+fi
 kwextract="/ipfs/$release/kwextract.pl"
 kwsubsti="/ipfs/$release/kwsubsti.pl"
 
@@ -23,9 +29,6 @@ gwhost=$(ipfs config Addresses.Gateway | cut -d'/' -f 3)
 gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
 peerid=$(ipfs config Identity.PeerID)
 
-if ! ipfs swarm addrs local | sed -e 's/^/info: /'; then
-   echo ipfs not running
-fi
 
 
 main(){
