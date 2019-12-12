@@ -20,7 +20,7 @@ if ipms key list | grep -q -w $symb; then
  key=$(ipms key list -l | grep -w $symb | cut -d' ' -f 1)
  echo key: $key
    sed -i -e "s/symb='.*'$/symb='$symb'/" \
-          -e "s/key='.*'$/key='$key'/" bootstrap.sh # $'s are important
+          -e "s/key='.*'$/key='$key'/" install.sh # $'s are important
 
    qm=$(ipms files stat --hash /.brings/$symb) # only . updated
    ipfs name publish --allow-offline --key=$symb /ipfs/$qm
@@ -28,7 +28,7 @@ else
  if test -d $rootdir; then
    qm=$(ipfs add -r -Q $rootdir)
    sed -i -e "s/qm='.*'$/qm='$qm'/" \
-          -e "s,ipath='/ipfs/.*'$,ipath='/ipfs/$qm'," bootstrap.sh
+          -e "s,ipath='/ipfs/.*'$,ipath='/ipfs/$qm'," install.sh
  fi
 fi
 echo $symb: $qm
