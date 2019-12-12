@@ -177,13 +177,14 @@ post_identity_to_root()
    fi
 
    if ! ipms files stat --hash /root/directory 1>/dev/null 2>&1; then
-      ipms files mkdir /root/directory
+      ipms files mkdir -p /root/directory
    else
       if ipms files rm -r "/root/directory/$email" 2>/dev/null; then true; fi
    fi
 
-   qm=$(ipms files stat --hash /my/identity)
+   if qm=$(ipms files stat --hash /my/identity); then
    ipms files cp /ipfs/$qm "/root/directory/$email"
+   fi
 }
 
 update_bootstrap_path() {
