@@ -41,12 +41,16 @@ Therefore the integrity of a document referenced with an immutable address is gu
 All blockRing have two disctinctive part : the [list of records][LoR] on one side which are immutable,
 and a [mutable record][mut] to store the "head" of the blockchain.
 all mutables are organized as a global mutable file system, where every participant have their own [name-space][files].
+all script and commands are specific for each blockring allowing infinite customization.
+In fact, it is like a generalization of smart contact, which can be **any** piece of code, that can safely
+run on any computers... if the code is stored on a "cas" system then the integrity of it is guaranteed and can
+easily verified before execution, for example the [pirl] script is executing remote perl from the IPFS network
 
 ### Block Ring commands (*smart contract*)
 
 * brget, brput
 * brpull (brfetch, brmerge, brreduce)
-* bradd
+* bradd, brlink, brpost
 * brpush, brirq
 
 ### Network discovery
@@ -102,9 +106,11 @@ B. running the script form the web (curl) :
 
 For the present, only \*nix is supported, however the script might run under *windows10's bash*.
 
-This installation is downloading the IPFS archive [v0.4.22][43] and
-also covers the perl's local modules using ([Local::lib][44]) and is calling 
-an [installation script][45] for the CPAN modules used in the front-end mutable system
+This installation is does the following
+
+* download the IPFS archive [v0.4.22][43] and *untar* it
+* download the perl's [Local::lib][44] module
+* and is install the required CPAN modules runnning an [installation script][45]
 
 
 [1]: https://github.com/Gradual-Quanta/minichain
@@ -120,5 +126,6 @@ an [installation script][45] for the CPAN modules used in the front-end mutable 
 [mut]: https://ipfs.io/ipfs/QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub/#/files/.brings/mutables
 [files]: https://ipfs.io/ipfs/QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub/#/files/
 [brng]: https://ipfs.io/ipfs/QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub/#/files/.brings
+[pirl]: https://github.com/Gradual-Quanta/minichain/tree/master/.brings/minimal/bin/pirl
 
 
