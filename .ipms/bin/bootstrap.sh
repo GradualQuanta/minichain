@@ -13,7 +13,7 @@ if test ! -d $IPMS_HOME/bin; then
 mkdir -p $IPMS_HOME/bin
 fi
 
-export PATH=$IPMS_HOME/bin:$PATH
+export PATH="$IPMS_HOME/bin:$PATH"
 # install go-ipfs ...
 if test ! -x $IPMS_HOME/bin/ipms; then
   if test ! -e $IPMS_HOME/go-ipfs_${ver}_linux-amd64.tar.gz; then
