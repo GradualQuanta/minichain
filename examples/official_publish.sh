@@ -8,7 +8,8 @@ red="[31m"
 nc="[0m"
 tic=$(date +%s)
 # set up local IPFS environment ...
-export IPFS_PATH=${IPFS_PATH:-$HOME/.ipms}
+export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
+export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
 
 main(){
 

@@ -15,10 +15,10 @@ fi
 
 if test -e ./envrc.sh; then
 PROJDIR=$(pwd)
-export IPFS_PATH=${IPFS_PATH:-$HOME/.brings/ipms}
+export IPFS_PATH=${IPFS_PATH:-$HOME/.brings/ipfs}
 export PERL5LIB=${PERL5LIB:-$HOME/.brings/perl5/lib/perl5}
 
-export PATH=$BRNG_HOME/bin:$IPFS_PATH/bin:$PATH
+export PATH="$BRNG_HOME/bin:$IPFS_PATH/bin:$PATH"
 
 sed -e "s|^PROJDIR=/.brings$|PROJDIR=$PROJDIR|" envrc.sh > $BRNG_HOME/envrc.sh
 fi

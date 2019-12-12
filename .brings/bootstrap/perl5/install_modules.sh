@@ -7,7 +7,7 @@ if test -e /etc/environment; then
 else
    export PATH=/usr/local/bin:/usr/bin:/bin; 
 fi
-export PATH=${rootdir}/bin:$PATH
+export PATH="${rootdir}/bin:$PATH"
 
 # perl's local lib
 eval $(perl -I$rootdir/perl5/lib/perl5 -Mlocal::lib=$rootdir/perl5)

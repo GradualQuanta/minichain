@@ -1,8 +1,10 @@
 #
 set -e
 
-export IPFS_PATH=${IPFS_PATH:-$HOME/.ipms}
-export PATH=$IPFS_PATH/bin:bin:$PATH
+export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
+export IPMS_HOME=${IPMS_HOME:-$HOME/.ipms}
+export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
+export PATH="$IPMS_HOME/bin:$BRNG_HOME/bin:$PATH"
 gateway=$(ipms --offline config Addresses.Gateway)
 gwport=$(echo $gateway | cut -d/ -f 5)
 gwhost=$(echo $gateway | cut -d/ -f 3)
