@@ -11,7 +11,7 @@ red="[31m"
 nc="[0m"
 tic=$(date +%s)
 # set up local IPFS environment ...
-export IPFS_PATH={IPFS_PATH:-$HOME/.brings/ipms}
+export IPFS_PATH=${IPFS_PATH:-$HOME/.brings/ipms}
 
 main(){
 
