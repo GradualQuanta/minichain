@@ -8,7 +8,7 @@ else
 url=$raw/.brings/minimal${script#/.brings}
 qm=$(ipfs add -Q $url --progress=0)
 qm=${qm:-Qmc9A6GrmiAUhy4EuNi6rPkHHYedU5jSYdZ9UxRbCC4gWs}
-ipfs cat /ipfs/$qm | sh /dev/stdin ${@}
+ipfs cat /ipfs/$qm | sh - /dev/stdin ${@}
 fi
 
 

@@ -3,6 +3,7 @@
 # this script publish the hash of /.brings to the peerid
 
 export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
+export PATH=$BRNG_HOME/bin:$PATH
 
 set -e
 yellow="[33m"
@@ -10,8 +11,7 @@ red="[31m"
 nc="[0m"
 tic=$(date +%s)
 # set up local IPFS environment ...
-export IPFS_PATH=$HOME/.brings/ipms
-export PATH=$BRNG_HOME/bin:$PATH
+export IPFS_PATH={IPFS_PATH:-$HOME/.brings/ipms}
 
 main(){
 

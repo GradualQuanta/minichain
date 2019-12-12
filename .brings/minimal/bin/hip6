@@ -1,9 +1,9 @@
 #
 
-# pirl /.brings/system/bin/hip6.pl $*
+pirl=/.brings/system/bin/${0##*/}.pl
 
 set -e
-url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.brings/minimal/system/bin/hip6.pl
+url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.brings/minimal${pirl#/.brings}
 qm=$(ipfs add -Q $url --progress=0)
 qm=${qm:-QmVpfzYi8di41J1AzTBZSpXKGqNXytAAJQDXdSkxHeXc2M}
 ipfs cat /ipfs/$qm | perl /dev/stdin $*
