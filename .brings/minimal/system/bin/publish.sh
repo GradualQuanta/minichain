@@ -98,6 +98,32 @@ check_perl_local_lib()
     echo DICT: $DICT
 }
 
+create_identity()
+{
+  peerid=$1;
+  eval $(hip6 -a 2>/dev/null | eyml)
+  eval "$(fullname -a $peerid 2>/dev/null | eyml)"
+  date=$(date +"%D")
+  check_exist_of_directory /my/identity/attr
+  type= $(echo "is an early adopter" | ipms add -Q -n --hash sha1 --cid-base base58btc)
+  status= $(echo "is alive" | ipms add -Q -n --hash sha1 --cid-base base58btc)
+  human= $(echo "is a robot" | ipms add -Q -n --hash sha1 --cid-base base58btc)
+  ipms files cp /ipfs/$type /my/identity/attr/type
+  ipms files cp /ipfs/$status /my/identity/attr/status
+  ipms files cp /ipfs/$human /my/identity/attr/botonot
+  attr=$(ipms files stat --hash /my/identity/attr)
+  ipms files write --create --truncate /my/identity/public.yml <<EOF
+--- # This is my blockRing™ Sovereign identity
+name: "$fullname"
+uniq: "$uniq"
+date: $date
+exp: never
+hip6: $hip6
+attr: $attr
+EOF
+
+}
+
 ipms_append_of_text_of_file()
 {
     text=$1;
@@ -141,7 +167,7 @@ writelog_of_mutable_of_logfile()
    else
       ipms files write --create --raw-leaves "${logfile}" <<EOF
 # log-file for ${mutable}
-# \$Source: ${logfile}\$
+# \$Source: ${logfile} \$
 $tic: ${qm}
 EOF
    fi
@@ -169,10 +195,10 @@ post_identity_to_root()
       echo "Entering in post_identity_to_root $*"
    fi
 
+   if [ "x$peerid" = 'x' ]; then
+     peerid=$(ipms --offline config Identity.PeerID)
+   fi
    if [ "x$email" = 'x' ]; then
-      if [ "x$peerid" = 'x' ]; then
-         peerid=$(ipms config Identity.PeerID)
-      fi
       eval "$(fullname -a $peerid | eyml)"
    fi
 
@@ -183,7 +209,9 @@ post_identity_to_root()
    fi
 
    if qm=$(ipms files stat --hash /my/identity); then
-   ipms files cp /ipfs/$qm "/root/directory/$email"
+     ipms files cp /ipfs/$qm "/root/directory/$email"
+   else
+     create_identity $peerid
    fi
 }
 

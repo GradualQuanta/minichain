@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 # $Name: kwsubsti.pl$
-# $Source: /my/perl/script/kwsubsti.pl$
+# $Source: /.brings/files/bin/kwsubsti.pl$
 
-# $Date: 12/10/19$
-# $tic: $
-# $qm: ~$
-# $Previous: QmX5xE7kFDauJRmhS8q8VqX8jLSq73oJuTVURbHZ7i15y8$
+# $Date: 12/12/19$
+# $tic: 1576163731$
+# $qm: z6t$
+# $Previous: QmUmeXP7TdYQGMnL7GddRUQRHyrYwkPvAHTDx7rFvaCCaN$
 #
 use YAML::Syck qw(LoadFile);
 my $yamlf=shift;
@@ -14,17 +14,17 @@ my $file=$ARGV[0];
 
 local $/ = undef;
 my $buf = <>;
-$buf =~ s/\$qm: .*\s*\$/\$qm: ~\$/;
-my $qm = 'z'.&encode_base58(pack('H4','01551220').&hashr('SHA256',$buf));
-$buf =~ s/\$qm: .*\s*\$/\$qm: $qm\$/;
+$buf =~ s/\$qm: [^\$]**\s*\$$/\$qm: ~\$/;
+my $qm = 'z'.&encode_base58(pack('H4','01551220').&hashr('SHA256',1,$buf));
+$buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: $qm\$/;
 
 
-$buf =~ s/\$tic: .*\s*\$/\$tic: $^T\$/;
+$buf =~ s/\$tic: [^\$]*\s*\$$/\$tic: $^T\$/;
 foreach my $kw (reverse sort keys %{$yml}) {
  #printf "%s: %s\n",$kw,$yml->{$kw};
  my $KW = $kw; $KW =~ s/.*/\u$&/;
  printf "%s: %s\n",$kw,$yml->{$kw};
- $buf =~ s/\$$KW: .*\s*\$/\$$KW: $yml->{$kw}\$/g;
+ $buf =~ s/\$$KW: [^\$]*\s*\$$/\$$KW: $yml->{$kw}\$/g;
 }
 
 print "buf: ",$buf if $dbug;

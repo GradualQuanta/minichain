@@ -1,14 +1,14 @@
 #
 # $Id: $
 
-# $Source: /.brings/system/bin/add.sh$
-# $Date: 12/07/19$
+# $Source: /.brings/files/bin/add.sh$
+# $Date: 12/12/19$
 # $Author: Michel G. Combes$
 #
-# $Previous: /ipfs/QmS7rNDrbkB9vTVERDi5C9Zm4iNqs9nGknnfCnvsNVC7c3$
+# $Previous: QmRkTN7omrUBS1YqTR1TBun8ykLJX5j72KqhjV1VxynR9U$
 # $Parent: /my/shell/dircolors/upload.sh$
 #
-# $tic: 2668474423$
+# $tic: 1576161686$
 # $spot: 2668474423$
 # $Signature: ~$
 #
@@ -20,7 +20,7 @@ if ! ipms swarm addrs local | sed -e 's/^/info: /'; then
 fi
 # dependencies:
 if ! release=$(ipms files stat --hash /.brings/system/bin 2>/dev/null); then
-release='QmSFGjXcApoFmcXP8a8L7udo4sCn6Hig7u8wzgAQZkNRMQ'
+release='QmXgaVcK6sRqLUKrr3qdK6zeRDLEr2jpggeUfHpEkigVcb'
 fi
 kwextract="/ipfs/$release/kwextract.pl"
 kwsubsti="/ipfs/$release/kwsubsti.pl"
@@ -107,8 +107,8 @@ ipfs_files_append(){
    else 
       ipfs files write --create --raw-leaves "${file}" <<EOF
 --- # blockRing for ${file##*/}
-# \$Source: $mutable\$
-# \$Previous: z6CfPsXofAAos6rq5HX3JHxc5DtZugCY2wBjDBNnSkiA\$
+# \$Source: /.brings/files/bin/add.sh$
+# \$Previous: QmRkTN7omrUBS1YqTR1TBun8ykLJX5j72KqhjV1VxynR9U$
 - $qm
 EOF
    fi

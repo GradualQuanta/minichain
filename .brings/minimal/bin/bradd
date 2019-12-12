@@ -1,4 +1,5 @@
 #
+set -e
 release=master
 raw="https://raw.githubusercontent.com/Gradual-Quanta/minichain/$release"
 script=/.brings/system/bin/add.sh
