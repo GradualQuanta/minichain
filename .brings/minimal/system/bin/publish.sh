@@ -38,24 +38,26 @@ check_ipms_running;
 gwhost=$(ipms config Addresses.Gateway | cut -d'/' -f 3)
 gwport=$(ipms config Addresses.Gateway | cut -d'/' -f 5)
 peerid=$(ipms config Identity.PeerID)
+create_identity_if_necessary $peerid
 # get fullname and emails associated with peerid
-eval "$(fullname -a $peerid | eyml)"
-
+#eval "$(fullname -a $peerid | eyml)"
 
 # key is harcoded in function...
 update_bootstrap_path /.brings/bootstrap 
 
+check_exist_of_directory "/root"
 post_identity_to_root;
 
 check_exist_of_directory "/.brings/logs"
 writelog_of_mutable_of_logfile /my/identity/public.yml /.brings/logs/identity.log
+if imps file stat --hash /public 1>/dev/null 2>&1; then
 writelog_of_mutable_of_logfile /public /.brings/logs/public.log
+fi
 
 writelog_of_mutable_of_logfile /root /.brings/logs/root.log
 writelog_of_mutable_of_logfile /my /.brings/logs/my.log
 
 post_brings;
-
 #ipms files read "/.brings/logs/brings.log"
 ipms files stat /.brings/logs/brings.log
 echo .
@@ -101,21 +103,27 @@ check_perl_local_lib()
     echo DICT: $DICT
 }
 
-create_identity()
+create_identity_if_necessary()
 {
-  peerid=$1;
-  eval $(hip6 -a 2>/dev/null | eyml)
-  eval "$(fullname -a $peerid 2>/dev/null | eyml)"
-  date=$(date +"%D")
-  check_exist_of_directory /my/identity/attr
-  type= $(echo "is an early adopter" | ipms add -Q -n --hash sha1 --cid-base base58btc)
-  status= $(echo "is alive" | ipms add -Q -n --hash sha1 --cid-base base58btc)
-  human= $(echo "is a robot" | ipms add -Q -n --hash sha1 --cid-base base58btc)
-  ipms files cp /ipfs/$type /my/identity/attr/type
-  ipms files cp /ipfs/$status /my/identity/attr/status
-  ipms files cp /ipfs/$human /my/identity/attr/botonot
-  attr=$(ipms files stat --hash /my/identity/attr)
-  ipms files write --create --truncate /my/identity/public.yml <<EOF
+   userid=$1;
+   eval $(hip6 -a 2>/dev/null | eyml)
+   eval "$(fullname -a $userid 2>/dev/null | eyml)"
+   uniq="${hipq:-cadavre exquis}"
+   date=$(date +"%D")
+   if ! ipms files stat --hash /my/identity/attr 1>/dev/null 2>&1; then
+     ipms files mkdir -p /my/identity/attr
+   tofu=$(echo "tofu: $date ($^T)" | ipms add -Q --pin=false --hash sha1 --cid-base base58btc)
+   type=$(echo "is an early adopter" | ipms add -Q --pin=false --hash sha1 --cid-base base58btc)
+   status=$(echo "is alive" | ipms add -Q --pin=false --hash sha1 --cid-base base58btc)
+   human=$(echo "is a robot" | ipms add -Q --pin=false --hash sha1 --cid-base base58btc)
+   ipms files cp /ipfs/$tofu /my/identity/attr/tofu
+   ipms files cp /ipfs/$type /my/identity/attr/type
+   ipms files cp /ipfs/$status /my/identity/attr/status
+   ipms files cp /ipfs/$human /my/identity/attr/botonot
+   fi
+   attr=$(ipms files stat --hash /my/identity/attr)
+   if ! ipms files stat --hash /my/identity/public.yml 1>/dev/null 2>&1; then
+      ipms files write --create --truncate /my/identity/public.yml <<EOF
 --- # This is my blockRing™ Sovereign identity
 name: "$fullname"
 uniq: "$uniq"
@@ -124,6 +132,7 @@ exp: never
 hip6: $hip6
 attr: $attr
 EOF
+   fi
 
 }
 
@@ -213,8 +222,6 @@ post_identity_to_root()
 
    if qm=$(ipms files stat --hash /my/identity); then
      ipms files cp /ipfs/$qm "/root/directory/$email"
-   else
-     create_identity $peerid
    fi
 }
 
