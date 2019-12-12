@@ -19,9 +19,9 @@ fi
 echo $IPMS_HOME/bin/bootstrap.sh
 curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.ipms/bin/bootstrap.sh | sh /dev/stdin
 
-sleep 3
 echo starting daemon
 curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/start.sh | sh /dev/stdin
+sleep 7
 
 # 2. SETTING BRNG ENVIRONMENT ...
 # --------------------------------
@@ -29,7 +29,7 @@ curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/start.
 # ipms add -r -Q $PROJDIR/.brings/bootstrap
 xurl=/.brings/minimal/bin/install.sh
 url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master${xurl}
-qm=$(ipms add -Q $url --progress=0)
+qm=$($IPMS_HOME/bin/ipms add -Q $url --progress=0)
 $IPMS_HOME/bin/ipms cat /ipfs/$qm | sh -xe /dev/stdin
 #$IPMS_HOME/bin/ipms cat /ipns/QmVQd43Y5DQutAbgqiQkZtKJNd8mJiZr9Eq8D7ac2PeSL1/bin/install.sh | sh -xe /dev/stdin
 eval "$($IPMS_HOME/bin/ipms files read /.brings/minimal/envrc.sh)"
