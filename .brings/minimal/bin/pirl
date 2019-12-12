@@ -17,7 +17,13 @@ else
 url=$raw/.brings/minimal${mfspath#/.brings}
 qm=$(ipfs add -Q $url --progress=0)
 qm=${qm:-QmPNmsSvfdu7dKdX5JVTdCpL5QgFMtd9xnXTjzTNR1a9tv}
+register=1
+# later: verify if qm is registered via a side channel ...
+if [ $registered -eq 1 ]; then
 ipfs cat /ipfs/$qm | perl /dev/stdin ${*}
+else
+echo "warning: $qm is not registered"
+fi
 fi
 
 if false; then
