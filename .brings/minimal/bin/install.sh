@@ -4,7 +4,7 @@ if [ "$0" = "/dev/stdin" ]; then
 # update $symb folder for others ... (Jose S. Furutani)
  symb='minimal'
  key='QmVQd43Y5DQutAbgqiQkZtKJNd8mJiZr9Eq8D7ac2PeSL1'
- qm=''
+ qm='QmfMxMtADykiNqozFxkNQjvxhH6n2J8Yfxn41eozz6Zt8P'
 if ipath=$(ipms --timeout 5s resolve /ipns/$key 2>/dev/null); then
  echo "$symb: $ipath # (global)"
 else
@@ -35,7 +35,15 @@ else
 fi
 # ---------------------------------------------------------------------
 else
- echo "no bootstrap allowed unless remotely ..."
+ echo "no bootstrap install allowed unless remotely ..."
+fi
+
+export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
+if ! test -d $BRNG_HOME/bin; then
+ipms get $ipath/bin -o $BRNG_HOME/bin
+fi
+if ! test -d $BRNG_HOME/etc; then
+ipms get $ipath/etc -o $BRNG_HOME/etc
 fi
 exit $?
 
