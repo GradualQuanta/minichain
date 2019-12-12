@@ -2,20 +2,44 @@
 
 # vim: sw=3
 
-$ENV{PATH} = '_ipfs/bin:'.$ENV{PATH};
 #$ENV{LC_TIME} = 'en_US.UTF-8';
 
 # HIPv6 ...
 #
+our $dbug=0;
+#--------------------------------
+# -- Options parsing ...
+#
+my $all = 0;
+while (@ARGV && $ARGV[0] =~ m/^-/)
+{
+  $_ = shift;
+  #/^-(l|r|i|s)(\d+)/ && (eval "\$$1 = \$2", next);
+  if (/^-v(?:erbose)?/) { $verbose= 1; }
+  elsif (/^-a(?:ll)?/) { $all= 1; }
+  elsif (/^-y(?:ml)?/) { $yml= 1; }
+  else                  { die "Unrecognized switch: $_\n"; }
+
+}
+#understand variable=value on the command line...
+eval "\$$1='$2'"while $ARGV[0] =~ /^(\w+)=(.*)/ && shift;
+#--------------------------------
+printf "--- # %s\n",$0 if $yml;
+
 # IPFS peerid
-my $peerid = `ipfs config Identity.PeerID`; chomp($peerid);
+$ENV{IPMS_HOME} = $ENV{HOME}.'/.ipms' unless exists $ENV{IPMS_HOME};
+$ENV{PATH} = $ENV{IPMS_HOME}.'/bin:'.$ENV{PATH};
+my $peerid = `ipfs --offline config Identity.PeerID`; chomp($peerid);
+printf "peerid: %s\n",$peerid if $all;
 
 
 my $hubin = &decode_base58($peerid);
 my $hipb = substr($hubin,6,16); # /6\ assumption on varint range !
-printf "hipb: %s\n",unpack'H*',$hipb;
 my $hipq = &hex2quint(unpack'H*',$hipb);
+if ($all) {
+printf "hipb: %s\n",unpack'H*',$hipb;
 printf "hipq: %s\n",$hipq;
+}
 
 my ($hiph,$hipl) = unpack'Q*',$hipb; # /!\ big endianness !
 $hiph = (0xfe80 << 48) | ($hiph & 0x003f_ffff_ffffffff);
@@ -25,10 +49,14 @@ my $hip = sprintf "%016x%08x",$hiph,($hipl>>32); $hip =~ s/(....)/\1:/g;
 my $hip6 = sprintf "%s%s",$hip,$hip4;
 my $quint = &u32quint($hipn);
 
-printf "hipn: %u\n",$hipn;
-printf "hip4: %s\n",$hip4;
-printf "hip6: %s\n",$hip6;
-printf "quint: %s\n",$quint;
+if ($yml || $all) {
+   printf "hipn: %u\n",$hipn;
+   printf "hip4: %s\n",$hip4;
+   printf "hip6: %s\n",$hip6;
+   printf "quint: %s\n",$quint;
+} else {
+   print $hip6;
+}
 
 exit $?;
 
