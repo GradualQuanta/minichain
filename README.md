@@ -36,8 +36,46 @@ Therefore the integrity of a document referenced with an immutable address is gu
 [10]: https://duckduckgo.com/?q=!g+Human+IP+address+ydentity
 [42]: https://duckduckgo.com/?q=!g+%22mychelium%22
 
-## INSTALLATION (2 methods)
+## MINICHAIN DEMO
 
+All blockRing have two disctinctive part : the [list of records][LoR] on one side which are immutable,
+and a [mutable record][mut] to store the "head" of the blockchain.
+all mutables are organized as a global mutable file system, where every participant have their own [name-space][files].
+
+### Block Ring commands (*smart contract*)
+
+* brget, brput
+* brpull (brfetch, brmerge, brreduce)
+* bradd
+* brpush, brirq
+
+### Network discovery
+
+* discover (hop from friends to friends)
+* resolver (turn a mutable is an immutable)
+* circle join, leave
+
+### identity reputation and web of trust
+
+* follow
+* invite
+* sign
+
+### Explorer &amp; Navigator
+
+* javascript based resolver
+
+### DATA ORGANIZATION [#/files/][files]
+
+* [/.brings](http://ipfs.io/webui/#/files/.brings) : where the software reside
+* [/root](http://ipfs.io/webui/#/files/root) : the /root for sharing files
+* [/public](http://ipfs.io/webui/#/files/public) : the your public files
+* [/my](http://ipfs.io/webui/#/files/my) : the your personal files
+* [/etc](http://ipfs.io/webui/#/files/etc) : miscelleaneous files
+
+The only required files are under [/.brings][brng]
+
+## INSTALLATION (2 methods)
 
 A. running a shell script :
 
@@ -67,22 +105,6 @@ For the present, only \*nix is supported, however the script might run under *wi
 This installation is downloading the IPFS archive [v0.4.22][43] and
 also covers the perl's local modules using ([Local::lib][44]) and is calling 
 an [installation script][45] for the CPAN modules used in the front-end mutable system
-
-## MINICHAIN DEMO
-
-All blockRing have two disctinctive part : the [list of records][LoR] on one side which are immutable,
-and a [mutable record][mut] to store the "head" of the blockchain.
-all mutables are organized as a global mutable file system, where every participant have their own [name-space][files].
-
-### DATA ORGANIZATION [#/files/][files]
-
-* [/.brings](http://ipfs.io/webui/#/files/.brings) : where the software reside
-* [/root](http://ipfs.io/webui/#/files/root) : the /root for sharing files
-* [/public](http://ipfs.io/webui/#/files/public) : the your public files
-* [/my](http://ipfs.io/webui/#/files/my) : the your personal files
-* [/etc](http://ipfs.io/webui/#/files/etc) : miscelleaneous files
-
-The only required files are under [/.brings][brng]
 
 
 [1]: https://github.com/Gradual-Quanta/minichain
