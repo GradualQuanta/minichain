@@ -3,7 +3,7 @@
 OPTION='--unrestricted-api --enable-namesys-pubsub'
 export IPMS_HOME=${IPMS_HOME:-$HOME/.ipms}
 export IPFS_PATH=${IPFS_PATH:-$HOME/.brings/ipfs}
-export PATH=$IPMS_HOME/bin:$PATH
+export PATH="$IPMS_HOME/bin:$PATH"
 
 gateway=$(ipms --offline config Addresses.Gateway)
 gwport=$(echo $gateway | cut -d/ -f 5)

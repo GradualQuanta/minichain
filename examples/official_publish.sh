@@ -7,9 +7,6 @@ yellow="[33m"
 red="[31m"
 nc="[0m"
 tic=$(date +%s)
-# set up local IPFS environment ...
-export IPFS_PATH=$(pwd)/_ipfs
-export PATH=_ipfs/bin:$(pwd)/bin:$PATH
 
 main(){
 

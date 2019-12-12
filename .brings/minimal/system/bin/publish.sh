@@ -6,7 +6,7 @@
 # $qm: z2kauxcKpPgNG2Y6Pit8kxGh2BjjQeSo1JQnxQWFniAw133$
 
 export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
-export PATH=$BRNG_HOME/bin:$PATH
+export PATH="$BRNG_HOME/bin:$PATH"
 
 set -e
 yellow="[33m"
