@@ -47,7 +47,7 @@ EOT
 
 echo installing ${PERL5LIB%/lib/perl}
 
-xurl=/.brings/boostrap/perl5/install-local-lib.sh
+xurl=/.brings/bootstrap/perl5/install-local-lib.sh
 echo running $xurl
 url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master${xurl}
 qm=$($IPMS_HOME/bin/ipms add -Q $url --progress=0)
