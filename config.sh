@@ -9,7 +9,7 @@ if test -e $BRNG_HOME/envrc.sh; then
 fi
 
 if [ "x$PROJDIR" = 'x' ]; then
-PROJDIR=/home/michelc/testing/blockchain
+PROJDIR=$(pwd)
 PATH="$PROJDIR/bin:$PATH"
 fi
 
