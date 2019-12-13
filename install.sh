@@ -26,13 +26,12 @@ sleep 7
 # 2. SETTING BRNG ENVIRONMENT ...
 # --------------------------------
 
-# ipms add -r -Q $PROJDIR/.brings/bootstrap
+# (assumed ipms is running)
 xurl=/.brings/minimal/bin/install.sh
 url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master${xurl}
 qm=$($IPMS_HOME/bin/ipms add -Q $url --progress=0)
 $IPMS_HOME/bin/ipms cat /ipfs/$qm | sh -xe /dev/stdin
-#$IPMS_HOME/bin/ipms cat /ipns/QmVQd43Y5DQutAbgqiQkZtKJNd8mJiZr9Eq8D7ac2PeSL1/bin/install.sh | sh -xe /dev/stdin
-eval "$($IPMS_HOME/bin/ipms files read /.brings/minimal/envrc.sh)"
+
 
 # 3. INSTALLING LOCAL PERL MODULES ...
 # ------------------------------------
@@ -50,3 +49,10 @@ ipms files read /.brings/bootstrap/perl5/install_modules.sh | sh /dev/stdin
 
 echo stopping daemon
 curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/stop.sh | sh /dev/stdin
+
+# 4. INSTALLING PROJECT RELATED ENVIRONMENT ...
+# ---------------------------------------------
+
+PROJDIR=$(pwd)
+sed -i -e "s|^PROJDIR=\$(pwd)$|PROJDIR=$PROJDIR|" config.sh
+
