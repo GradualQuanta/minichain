@@ -49,6 +49,7 @@ fi
 export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
 if ! test -d $BRNG_HOME/bin; then
 ipms get $ipath/bin -o $BRNG_HOME/bin
+chmod a+x $BRNG_HOME/bin/*
 fi
 if ! test -d $BRNG_HOME/etc; then
 ipms get $ipath/etc -o $BRNG_HOME/etc

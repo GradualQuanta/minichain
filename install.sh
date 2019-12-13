@@ -14,8 +14,10 @@ export BRNG_HOME=/tmp/.brings
 export IPFS_PATH=/tmp/.brings/repos
 fi
 
+debug='-xe'
+
 cat <<EOT
-${yellow}# 1. INSTALLING IPFS ...
+${yellow}# 1. INSTALLING IPMS ...
 # ----------------------${nc}
 EOT
 
@@ -35,7 +37,7 @@ EOT
 xurl=/.brings/minimal/bin/install.sh
 url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master${xurl}
 qm=$($IPMS_HOME/bin/ipms add -Q $url --progress=0)
-$IPMS_HOME/bin/ipms cat /ipfs/$qm | sh -xe /dev/stdin
+$IPMS_HOME/bin/ipms cat /ipfs/$qm | sh $debug /dev/stdin
 
 
 cat <<EOT
@@ -45,14 +47,17 @@ EOT
 
 echo installing ${PERL5LIB%/lib/perl}
 
-echo running /.brings/boostrap/perl5/install-local-lib.sh
-ipms files read /.brings/bootstrap/perl5/install-local-lib.sh | sh /dev/stdin
-#curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.brings/bootstrap/perl5/install-local-lib.sh | sh /dev/stdin
+xurl=/.brings/boostrap/perl5/install-local-lib.sh
+echo running $xurl
+url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master${xurl}
+qm=$($IPMS_HOME/bin/ipms add -Q $url --progress=0)
+$IPMS_HOME/ipms cat /ipfs/$qm | sh $debug /dev/stdin
 
-echo running /.brings/bootstrap/perl5/install_modules.sh
-ipms files read /.brings/bootstrap/perl5/install_modules.sh | sh /dev/stdin
-#curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.brings/bootstrap/perl5/install_modules.sh | sh /dev/stdin
-
+xurl=/.brings/bootstrap/perl5/install_modules.sh
+echo running $xurl
+url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master${xurl}
+qm=$($IPMS_HOME/bin/ipms add -Q $url --progress=0)
+$IPMS_HOME/ipms cat /ipfs/$qm | sh $debug /dev/stdin
 
 echo stopping daemon
 curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/stop.sh | sh /dev/stdin
