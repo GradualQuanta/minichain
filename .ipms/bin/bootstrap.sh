@@ -47,7 +47,7 @@ line=$(echo --------------------------------------------------------------------
 ipms cat $line
 echo test w/o daemon running
 t0=$(echo ready | ipms --offline add -Q --hash ID --cid-base=base64)
-t1=$(ipms cat /ipfs/QmW58ZW9dMkGs4oFcYkDJdYftmsoh4aR7j26b2sFBnVFFj)
+t1=$(ipms cat /ipfs/QmejvEPop4D7YUadeGqYWmZxHhLc4JBUCzJJHWMzdcMe2y)
 t2=$(ipms cat $t0)
 echo "${yellow}$t1 $t2${nc}"
 ipms cat $line
@@ -56,7 +56,7 @@ sleep 7
 ipms cat $line
 echo test w/ daemon running
 
-t3=$(curl -s http://127.0.0.1:$gwport/ipfs/QmejvEPop4D7YUadeGqYWmZxHhLc4JBUCzJJHWMzdcMe2y)
+t3=$(curl -s http://127.0.0.1:$gwport/ipfs/QmW58ZW9dMkGs4oFcYkDJdYftmsoh4aR7j26b2sFBnVFFj)
 t4=$(ipms --api=/ip4/127.0.0.1/tcp/$apiport cat $t0)
 echo "${green}$t3 $t4${nc}"
 
@@ -66,7 +66,7 @@ ipms shutdown
 
 sleep 7
 ipms --offline cat $line
-if [ "$t0" = 'mAVUABnJlYWR5Cg' -a "$t1" = 'ipms' -a "$t2" = 'ready' -a "$t3" = 'ipfs' -a "$t4" = 'ready' ]; then
+if [ "$t0" = 'mAVUABnJlYWR5Cg' -a "$t1" = 'ipfs' -a "$t2" = 'ready' -a "$t3" = 'ipms' -a "$t4" = 'ready' ]; then
   echo " ${green}Successful${nc} !"
 else
   echo " ${red}Failed${nc} !"
