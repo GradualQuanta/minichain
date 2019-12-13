@@ -12,3 +12,4 @@ if [ "x$PROJDIR" = 'x' ]; then
 PROJDIR=/home/michelc/testing/blockchain
 PATH="$PROJDIR/bin:$PATH"
 fi
+

@@ -1,13 +1,13 @@
 # This is my first block on the BlockRing
 <!--
 % $Source: /public/test/my-first-block.txt$
-% $Date: ~$
+% $Date: 12/13/19$
 %
 % $mutable: /public/mutables/my-first-blockring.yml$
 % 
 % note the previous version of file is at the following address:
-% $Previous: ~$
-% $tic: 0$
+% $Previous: QmPTSMoNoFFkGC6APTqp6RExjirpSsc1KHPbPDUcZAJN21$
+% $tic: 1576248078$
 -->
 
 ### Hello World !!
