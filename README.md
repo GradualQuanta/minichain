@@ -50,7 +50,7 @@ To run the demo :
 
 1. install the tools (see below INSTALLATION SECTION)
 2. source config.sh file
-3. bradd exemple.txt # to add file to the blockring
+3. bradd myfirstblock.md # to add file to the blockring
 4. xdg-open http://127.0.0.1:5122/webui/#/files/
 
 ### Block Ring commands (*smart contract*)
