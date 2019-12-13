@@ -22,7 +22,7 @@ ${yellow}# 1. INSTALLING IPMS ...
 EOT
 
 echo $IPMS_HOME/bin/bootstrap.sh
-curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.ipms/bin/bootstrap.sh | sh /dev/stdin
+curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.ipms/bin/bootstrap.sh | sh $debug /dev/stdin
 
 echo "${green}starting daemon${nc}"
 curl -s https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/start.sh | sh /dev/stdin
