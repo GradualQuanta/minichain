@@ -19,6 +19,7 @@ else
   ipath="/ipfs/$qm"
   echo "$symb: ${qm} # (default)"
 fi
+# copy resolved minimal folder to /.brings
 if ipms files stat --hash /.brings 1>/dev/null 2>&1; then
   if pv=$(ipms files stat --hash /.brings/$symb 2>/dev/null); then
     ipms files mv /.brings/$symb /.brings/${symb}~
@@ -52,5 +53,8 @@ fi
 if ! test -d $BRNG_HOME/etc; then
 ipms get $ipath/etc -o $BRNG_HOME/etc
 fi
+#ipfs cat $ipath/envrc.sh | sed -e "s|^PWD=/.brings$|PWD=$(pwd)|" > $BRNG_HOME/envrc.sh
+ipms get $ipath/envrc.sh -o $BRNG_HOME/envrc.sh
+
 exit $?
 
