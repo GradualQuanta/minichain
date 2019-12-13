@@ -22,12 +22,6 @@ fi
 if test -d $BRNG_HOME/etc; then
 export DICT="$BRNG_HOME/etc"
 fi
-
-PROJDIR="$(pwd)"
-echo PROJDIR: $PROJDIR
-if test -d $PROJDIR/bin; then
-PATH="$PROJDIR/bin:$IPFS_PATH/bin:$PATH"
-fi
 # ---------------------------------------------------------------------
 if test -d $BRNG_HOME/perl5/lib/perl5; then
 # perl's local lib

@@ -11,7 +11,7 @@ if [ "$0" = "/dev/stdin" ]; then
 # update $symb folder for others ... (Jose S. Furutani)
  symb='minimal'
  key='QmVQd43Y5DQutAbgqiQkZtKJNd8mJiZr9Eq8D7ac2PeSL1'
- qm='QmfMxMtADykiNqozFxkNQjvxhH6n2J8Yfxn41eozz6Zt8P'
+ qm='QmUTHZuhoEpRURQTiwaoiyzmCiYyjyV3re2RuWemTHEWKH'
 if ipath=$(ipms --timeout 5s resolve /ipns/$key 2>/dev/null); then
  echo "$symb: $ipath # (global)"
 else

@@ -46,6 +46,13 @@ In fact, it is like a generalization of smart contact, which can be **any** piec
 run on any computers... if the code is stored on a "cas" system then the integrity of it is guaranteed and can
 easily verified before execution, for example the [pirl] script is executing remote perl from the IPFS network
 
+To run the demo :
+
+1. install the tools (see below INSTALLATION SECTION)
+2. source config.sh file
+3. bradd exemple.txt # to add file to the blockring
+4. xdg-open http://127.0.0.1:5122/webui/#/files/
+
 ### Block Ring commands (*smart contract*)
 
 * brget, brput
@@ -110,7 +117,7 @@ This installation is does the following
 
 * download the IPFS archive [v0.4.22][43] and *untar* it
 * download the perl's [Local::lib][44] module
-* and is install the required CPAN modules runnning an [installation script][45]
+* and it installs the required CPAN modules runnning an perl [installation script][45]
 
 
 [1]: https://github.com/Gradual-Quanta/minichain
