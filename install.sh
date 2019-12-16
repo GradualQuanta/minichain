@@ -17,7 +17,7 @@ fi
 debug='-xe'
 
 cat <<EOT
-${yellow}# 1. INSTALLING IPMS ...
+${yellow}# 1. INSTALLING IPFS ...
 # ----------------------${nc}
 EOT
 
