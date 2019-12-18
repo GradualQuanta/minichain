@@ -82,7 +82,7 @@ sub fetch {
         # ------------------------------------------
         if (-f $script) { # execute shell script ...
           printf "sh %s\n",$script;
-          $recipe = sprintf('sh -e "%s"',$script);
+          $recipe = sprintf('sh -ex "%s"',$script);
         # ------------------------------------------
         } else { # execute command line
           printf "run: %s\n",$script;
