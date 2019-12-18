@@ -1,10 +1,21 @@
 #!/usr/bin/perl
 
+
+my $OPTION;
+if ($ARGV[0] eq '-x') {
+ shift;
+ $OPTION='-x';
+ printf "OPTION: %s\n",$OPTION;
+} else {
+ $OPTION='';
+}
+
 # example: perl ymake dots/IRP.yml minichain
 if (! defined $ARGV[1]) {
    print "usage: ${0} <deps.yml> <target>\n";
    exit -1;
 }
+
 
 my $cache = {};
 my $ymlf = shift;
@@ -82,7 +93,7 @@ sub fetch {
         # ------------------------------------------
         if (-f $script) { # execute shell script ...
           printf "sh %s\n",$script;
-          $recipe = sprintf('sh -ex "%s"',$script);
+          $recipe = sprintf('sh -e %s "%s"',$OPTION,$script);
         # ------------------------------------------
         } else { # execute command line
           printf "run: %s\n",$script;
