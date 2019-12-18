@@ -1,10 +1,18 @@
-
-# local browser
-url: http://127.0.0.1:8199/ipfs/QmYCLrfKC6tcBiT1NQDwMtQquAF68ztb84P8whoCzG4Thr
-# gateway:
-url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/ipfs/QmYCLrfKC6tcBiT1NQDwMtQquAF68ztb84P8whoCzG4Thr
-url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/explore/ipfs/QmYCLrfKC6tcBiT1NQDwMtQquAF68ztb84P8whoCzG4Thr
+# local browser view
+url: http://127.0.0.1:8199/ipfs/QmfF5AdgTyDcRZhA3ywL1BM1Mo7jMcsLaFALotQsdC79oS
+# gateway view
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/ipfs/QmfF5AdgTyDcRZhA3ywL1BM1Mo7jMcsLaFALotQsdC79oS
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/explore/ipfs/QmfF5AdgTyDcRZhA3ywL1BM1Mo7jMcsLaFALotQsdC79oS
+# public view
+url: http://dweb.link/ipfs/QmfF5AdgTyDcRZhA3ywL1BM1Mo7jMcsLaFALotQsdC79oS
+url: https://cloudflare-ipfs.com/ipfs/QmfF5AdgTyDcRZhA3ywL1BM1Mo7jMcsLaFALotQsdC79oS
+url: https://bafybeih3fdmm6tf7assp7pqydv6idgopctrs625nqieivb7q5mwiuchhyu.cf-ipfs.com/
 # command line
-cmd: ipms get QmYCLrfKC6tcBiT1NQDwMtQquAF68ztb84P8whoCzG4Thr -o blockchain; cd blockchain
-xdg-open http://127.0.0.1:8199/ipfs/QmYCLrfKC6tcBiT1NQDwMtQquAF68ztb84P8whoCzG4Thr
+cmd: |
+qm=QmfF5AdgTyDcRZhA3ywL1BM1Mo7jMcsLaFALotQsdC79oS
+ipms ping -n 1 Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV # OVH
+ipms ping -n 1 QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ # michelc
+ipms get $qm -o blockchain; cd blockchain
+xdg-open http://127.0.0.1:8199/ipfs/QmfF5AdgTyDcRZhA3ywL1BM1Mo7jMcsLaFALotQsdC79oS
+# previous: QmagBCkVFnU1cbG6JyhEUj1q3WfRcJpmSayeUHdypAx4YB
 #
