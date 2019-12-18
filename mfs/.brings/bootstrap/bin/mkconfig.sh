@@ -1,7 +1,8 @@
 #
 
 cat > config.sh <<EOF
-export IPMS_HOME=\$HOME/.ipms
+# config ($(date +'%D %T'))
+export IPMS_HOME=${IPMS_HOME:-$HOME/.ipms}
 export BRNG_HOME=\$HOME/.brings
 export IPFS_PATH=\${IPFS_PATH:-\$HOME/.brings/repo}
 export PERL5LIB=\$HOME/.brings/perl5/lib/perl5
@@ -17,4 +18,4 @@ PROJDIR=$(pwd)
 PATH="\$PROJDIR/bin:\$PATH"
 fi
 EOF
-
+echo "please source the $(pwd)/config.sh file"

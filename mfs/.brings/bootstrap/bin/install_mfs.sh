@@ -2,6 +2,7 @@
 
 MFS_SRC=${MFS_SRC:-$(pwd)/mfs}
 if [ -d $MFS_SRC ]; then
+echo mfs: $MFS_SRC
 qm=$(ipms add -Q -r $MFS_SRC/.brings)
 else
 qm='QmcSsSV9z16ynPWp4W7o4JTbztQV49hFVPU5Uktic9Swad'

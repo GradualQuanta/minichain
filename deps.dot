@@ -8,17 +8,17 @@ digraph IRP {
    DAG -> DAEMON
    SYSTEM -> SBIN 
 
-   { BIN, SBIN, ENV } -> { GITHUB, MFS }
+   { BIN, SBIN } -> { GITHUB, MFS }
    DOCS -> { MFS, NETLIFY }
-   { MFS, NETLIFY } -> GITHUB
+   NETLIFY -> GITHUB
 
    PERL -> { LOCAL_LIB, MODULES }
    LOCAL_LIB -> { CPAN, ENV }
    MODULES -> CPAN
 
-   DAEMON -> IPFS 
+   DAEMON -> { IPFS, ENV }
    { IPFS, IPNS }  -> { WEB, DIST }
-   { MFS } -> { DIST, DAEMON }
+   { MFS } -> { GITHUB, DIST }
 
    ENV -> { CONFIG, ENVRC }
 
