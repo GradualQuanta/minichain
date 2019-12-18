@@ -1,4 +1,7 @@
 #
+# This script either
+# ... publish a brings folder (if it exits)
+#     and/or sync'd up the mfs version of it
 set -e
 if echo "$0" | grep -q '^/'; then
   rootdir="${0%/bin/*}"

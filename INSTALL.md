@@ -8,9 +8,11 @@ git pull
 # set env' variables
 . ./config.sh
 
+# installation of ipms
+sh mfs/.ipms/bin/bootstrap.sh
 # installation des modules perl
-sh .brings/bootstrap/perl5/install-local-lib.sh
-sh .brings/bootstrap/perl5/install_modules.sh
+sh mfs/.brings/bootstrap/perl5/install-local-lib.sh
+sh mfs/.brings/bootstrap/perl5/install_modules.sh
 
 sh start.sh
 

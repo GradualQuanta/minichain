@@ -12,6 +12,8 @@ fi
 export IPMS_HOME=${IPMS_HOME:-$HOME/.brings/ipms}
 if test ! -d $IPMS_HOME/bin; then
 mkdir -p $IPMS_HOME/bin
+else
+$IPMS_HOME/bin/ipms shutdown
 fi
 
 export PATH="$IPMS_HOME/bin:$PATH"
