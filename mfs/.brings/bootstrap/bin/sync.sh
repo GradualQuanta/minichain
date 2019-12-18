@@ -19,7 +19,6 @@ if echo $symb | grep -q '^\.'; then
 symb=$(echo $symb | sed -e 's/\.//')
 fi
 echo symb: $symb
-exit
 # --------------------------------------------------------------
 if ipms key list | grep -q -w $symb; then
  key=$(ipms key list -l | grep -w $symb | cut -d' ' -f 1)
