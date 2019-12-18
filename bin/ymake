@@ -29,11 +29,11 @@ if (-e $cachef) {
 my $recipesf = "$target-recipes.yml";
 my $recipes = LoadFile($recipesf);
 
-if (! -d "build") {
-   mkdir 'build' unless -d 'build';
-}
+#if (! -d "build") {
+#   mkdir 'build' unless -d 'build';
+#}
+#chdir 'build';
 
-chdir 'build';
 $qm = &provide('main',$target);
 
 

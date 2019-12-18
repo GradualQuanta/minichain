@@ -14,7 +14,7 @@ if test ! -d $IPMS_HOME/bin; then
 mkdir -p $IPMS_HOME/bin
 else
 if test -e $IPFS_PATH/api; then
- if $IPMS_HOME/bin/ipms shutdown; then true; fi
+ if $IPMS_HOME/bin/ipms --timeout 5s shutdown; then true; fi
 fi
 fi
 
