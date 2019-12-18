@@ -54,12 +54,15 @@ sub provide {
  my $what = shift;
  my @parts = ();
  if (exists $yml->{$what}) { # has dependencies ...
- my @deps = @{ $yml->{$what} };
- foreach $d (@deps) {
-   push @parts, &provide($what,$d);
- }
+   my @deps = @{ $yml->{$what} };
+   # do a provide for all @deps (save results in @parts)
+   foreach $d (@deps) {
+     push @parts, &provide($what,$d);
+   }
+   # once we have all @deps do a build ..
    $result = &build($caller,$what,@parts);
  } else {
+   # if no dep : no provide => do a fetch directly
    $result = &fetch($caller,$what);
  }
  printf "result: %s=%s\n",$what,$result;

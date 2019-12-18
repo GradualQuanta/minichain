@@ -16,7 +16,7 @@ digraph IRP {
    LOCAL_LIB -> { CPAN, ENV }
    MODULES -> CPAN
 
-   DAEMON -> { IPFS, ENV }
+   DAEMON -> { IPFS, ENV, PERL }
    { IPFS, IPNS }  -> { WEB, DIST }
    { MFS } -> { GITHUB, DIST }
 
