@@ -21,7 +21,10 @@ use YAML::Syck qw(LoadFile);
 my $yml = LoadFile($ymlf);
 
 my $cachef = "$target-cache.yml";
-my $cache = LoadFile($cachef);
+my $cache = {};
+if (-e $cachef) {
+  $cache = LoadFile($cachef);
+}
 
 my $recipesf = "$target-recipes.yml";
 my $recipes = LoadFile($recipesf);
@@ -133,14 +136,14 @@ sub ipfs_api {
   my $cmd = shift;
   my @arg = @_;
   my $hash = '';
-  printf "dbug: ipms %s -Q %s|\n",$cmd,join' ',@arg;
-  local *EXEC; open EXEC,sprintf('ipms %s -Q %s|',$cmd,join' ',@arg) or die $!;
+  printf "api: ipms %s -Q %s|\n",$cmd,join' ',@arg;
+  local *EXEC; open EXEC,sprintf('ipms --offline %s -Q %s|',$cmd,join' ',@arg) or warn $!;
   while (<EXEC>) {
     $hash = $1 if /^(\w+)$/;
   }
   close EXEC;
-  if ($?) { die $?; }
-  return $hash;
+  if ($?) { warn $?; }
+  return $hash || 'Qm123';
 }
 
 

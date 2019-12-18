@@ -13,7 +13,7 @@ export IPMS_HOME=${IPMS_HOME:-$HOME/.brings/ipms}
 if test ! -d $IPMS_HOME/bin; then
 mkdir -p $IPMS_HOME/bin
 else
-$IPMS_HOME/bin/ipms shutdown
+if $IPMS_HOME/bin/ipms shutdown; then true; fi
 fi
 
 export PATH="$IPMS_HOME/bin:$PATH"
@@ -27,6 +27,9 @@ if test ! -x $IPMS_HOME/bin/ipms; then
   mv $IPMS_HOME/bin/ipfs $IPMS_HOME/bin/ipms
   rmdir go-ipfs
 fi
+if test -e $IPFS_PATH/api; then
+rm $IPFS_PATH/api
+fi
 if test ! -e $IPFS_PATH/config; then
   # defined ipms ports
   apiport=5122
@@ -37,7 +40,7 @@ if test ! -e $IPFS_PATH/config; then
   ipms config profile apply randomports
 else
   apiport=$(ipms config Addresses.API | cut -d'/' -f 5)
-  gwport=$(ipms config Addresses.Gateway | cut -d'/' -f 5)
+  gwport=$(ipms  config Addresses.Gateway | cut -d'/' -f 5)
 fi
 ipms config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
 ipms bootstrap add /ip4/212.129.2.151/tcp/24001/ws/ipfs/Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV
