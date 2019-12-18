@@ -1,0 +1,22 @@
+
+¿·#
+release=master
+raw="https://raw.githubusercontent.com/Gradual-Quanta/minichain/$release"
+script=/.brings/system/bin/add.sh
+if qm=$(ipfs files stat --hash "$script" 1>/dev/null 2>&1); then
+ipfs files read $script | sh /dev/stdin ${@}
+else
+url=$raw/.brings/minimal${script#/.brings}
+qm=$(ipfs add -Q $url --progress=0)
+qm=${qm:-Qmc9A6GrmiAUhy4EuNi6rPkHHYedU5jSYdZ9UxRbCC4gWs}
+ipfs cat /ipfs/$qm | sh - /dev/stdin ${@}
+fi
+
+
+
+if false; then
+ sed -i -e "s/qm=\${qm:-.*}$/qm=\${qm:-$qm}/" -e 's/if [t]rue;/if false;/' $0
+fi
+true; # $Source: /my/shell/scripts/bradd.sh$
+#
+·

@@ -1,0 +1,6 @@
+
+xr#!/bin/cat /home/iggy/GITrepo/iglake/cssjs/motd.txt
+#!/usr/bin/env perl
+
+printf "testing: %s & %s\n",$0,__FILE__;
+r

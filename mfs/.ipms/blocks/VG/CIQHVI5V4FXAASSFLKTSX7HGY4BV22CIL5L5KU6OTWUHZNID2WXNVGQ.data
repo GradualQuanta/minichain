@@ -1,0 +1,7 @@
+
+”Œ--- # where files are ...
+
+GITHUB: "git pull"
+CONFIG: /.brings/bootstrap/config.sh
+LOCAL_LIB: /.brings/bootstrap/perl5/install-local-lib.sh
+Œ

@@ -1,0 +1,21 @@
+
+öî# blockchain (1576664138)
+# local browser view
+url: http://127.0.0.1:8199/ipfs/QmbspqmksjWBZgJLx32iCt2gXS5UE5x19o9d5QK6GD9cYe
+# gateway view
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/ipfs/QmbspqmksjWBZgJLx32iCt2gXS5UE5x19o9d5QK6GD9cYe
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/explore/ipfs/QmbspqmksjWBZgJLx32iCt2gXS5UE5x19o9d5QK6GD9cYe
+# public view
+url: http://dweb.link/ipfs/QmbspqmksjWBZgJLx32iCt2gXS5UE5x19o9d5QK6GD9cYe
+url: https://cloudflare-ipfs.com/ipfs/QmbspqmksjWBZgJLx32iCt2gXS5UE5x19o9d5QK6GD9cYe
+url: https://bafybeigjerseam5vz4ysrupetzr5qlt23zuog67xvctigl7l22lvrofqw4.cf-ipfs.com/
+# command line
+cmd: |
+qm=QmbspqmksjWBZgJLx32iCt2gXS5UE5x19o9d5QK6GD9cYe
+ipms ping -n 1 Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV # OVH
+ipms ping -n 1 QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ # michelc
+ipms get $qm -o blockchain; cd blockchain
+xdg-open http://127.0.0.1:8199/ipfs/QmbspqmksjWBZgJLx32iCt2gXS5UE5x19o9d5QK6GD9cYe
+# previous: QmTdA8UoLUgqF3DAXV72RKEmooT1VYPR2xXj8kRdYFLCCe
+#
+î

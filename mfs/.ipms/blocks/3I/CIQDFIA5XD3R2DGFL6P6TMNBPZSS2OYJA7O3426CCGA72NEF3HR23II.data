@@ -1,0 +1,22 @@
+
+×Ï#
+
+mfspath="$1"
+fname=${mfspath##*/}
+tmpf=/tmp/$fname
+pv=$(ipfs files stat --hash $mfspath)
+ipfs files read $mfspath > $tmpf
+vi $tmpf
+nv=$(ipfs add -Q -n $tmpf)
+if [ "x$nv" != "x$pv" ]; then
+  sed -i "s!\\\$\\(Previous\\): .*\\\$!\\\$\\1: $pv\\\$!" $tmpf
+  qm=$(ipfs add -Q $tmpf)
+  ipfs files rm $mfspath~ 2>/dev/null
+  ipfs files mv $mfspath $mfspath~
+  ipfs files cp /ipfs/$qm $mfspath
+fi
+ipfs files stat $mfspath
+
+exit $?; # $Source: /my/shell/scripts/brvi$
+
+Ï

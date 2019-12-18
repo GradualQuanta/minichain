@@ -1,0 +1,20 @@
+
+¿·#
+
+mfspath="$1"
+fname=${mfspath##*/}
+tmpf=/tmp/$fname
+pv=$(ipms files stat --hash $mfspath)
+ipms files read $mfspath > $tmpf
+gvim --servername MFS --remote-wait-tab-silent $tmpf
+sed -i "s!\\\$\\(Previous\\): .*\\\$!\\\$\\1: $pv\\\$!" $tmpf
+qm=$(ipms add -Q $tmpf)
+ipms files rm $mfspath~ 2>/dev/null
+ipms files mv $mfspath $mfspath~
+ipms files cp /ipfs/$qm $mfspath
+ipms files stat $mfspath
+
+
+exit $?; # $Source: /my/shell/scripts/vimfs$
+
+·

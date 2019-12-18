@@ -1,0 +1,23 @@
+
+ÿ÷#
+
+qm=$(ipms add -r -Q .)
+cat > LAST_HASH <<EOF
+
+# local browser
+url: http://127.0.0.1:8199/ipfs/$qm
+# gateway:
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/ipfs/$qm
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/explore/ipfs/$qm
+# command line
+cmd: ipms get $qm -o blockchain; cd blockchain
+xdg-open http://127.0.0.1:8199/ipfs/$qm
+#
+EOF
+git add LAST_HASH
+git commit -m "HASH: $qm; $(date +'%D %T')"
+git push
+
+git ping 1 Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV
+ssh blockring ipfs pin add $qm
+÷

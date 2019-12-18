@@ -1,0 +1,12 @@
+
+¼´#!/usr/bin/env sh 
+
+url="${1:-http://127.0.0.1:8080/ipfs/QmNT8UZvKZx4dQBrUkT5bc7iwgn2nDmAvNECfr9aKYMw3f}"
+if echo $url | grep -q -e '^Qm'; then
+  url=https://cloudflare-ipfs.com/ipfs/$url
+fi
+if [ "x$1" != 'x' ]; then shift; fi
+curl -s "$url" | sh /dev/stdin ${*}
+
+true; # $Source: /my/shell/scripts/xurl.sh$
+´

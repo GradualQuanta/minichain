@@ -1,0 +1,54 @@
+
+áÙ#!/usr/bin/perl
+
+use YAML::Syck qw(Load Dump);
+if (0) {
+   my $file = shift;
+   use YAML::Syck qw(LoadFile);
+   $yml = LoadFile($file);
+} else {
+   local $/ = undef;
+   my $buf = <STDIN>;
+   $yml = Load($buf);
+}
+
+#printf STDERR "yml: %s...\n",Dump($yml);
+if (@ARGV) {
+   foreach (@ARGV) {
+      if (ref($yml->{$_}) eq 'HASH') {
+         print Dump($yml->{$_}),"\n";
+      } else {
+         my $value = $yml->{$_};
+         if ($_ =~ m/\-/) {
+            $_ =~ s/^(.)/\u\1/;
+            $_ =~ s/-(.)/\u\1/g;
+         }
+         $value =~ s/'/\\x27/g;
+         $value =~ s/\`/\\x60/g; # /!\ make it safe
+         printf qq"%s='%s';\n",$_,$value;
+      }
+   }
+} else {
+   # output all keys
+   foreach (sort keys %$yml) {
+      my $value = $yml->{$_};
+      if ($_ =~ m/\-/) {
+        $_ =~ s/^(.)/\u\1/;
+        $_ =~ s/-(.)/\u\1/g;
+      }
+      $value =~ s/\`/\\x60/g; # /!\ make it safe
+      if ($value =~ m/\$/) {
+         $value =~ s/'/\\x27/g;
+         printf "%s='%s';\n",$_,$value;
+      } else {
+         $value =~ s/"/\\x22/g;
+         printf qq'%s="%s";\n',$_,$value;
+      }
+      
+   }
+
+}
+
+exit $?;
+1;
+Ù

@@ -1,0 +1,54 @@
+
+«£
+
+digraph {
+  node [style="rounded,filled",shape=box]
+  edge [dir="both"]
+
+  subgraph G {
+  node [color=red]
+  GA [label="GLU-ALA CYCLE"]
+  APM [label="ARG, PRO METAB"]
+  AM [label="ALA METAB"]
+  URE [label="UREA METAB"]
+  AR [label="AMMONIA RECYCLING"]
+  GM [label="GLU METAB"]
+
+  GA -> AM,AR,URE
+  APM -> URE
+  
+
+   URE -> CAC,AR,AM
+   AR -> CAC,GM
+  
+  }
+
+  subgraph A {
+  node [color=orange]
+  CAC [label="CITRIC ACID CYCLE"]
+  GLU [label="GLUCONEOGENESIS"]
+  INS [label="INSULIN SIG"]
+  MIT [label="MITOCHONDRIAL ETC"]
+  GLY [label="GLYCOLSYSIS"]
+
+  CAC -> GLU, MIT, INS
+  GLU -> MIT, GLY
+  MIT -> GLY
+
+  }
+ 
+  subgraph M {
+  node [color=aquamarine]
+  edge [dir="both"]
+  GST [label="GLY, SER, THR"]
+  MET [label="MET METAB"]
+  BET [label="BET METAB"]
+
+  GST -> MET -> BET
+  }
+
+
+}
+// [dir=both]
+  
+£

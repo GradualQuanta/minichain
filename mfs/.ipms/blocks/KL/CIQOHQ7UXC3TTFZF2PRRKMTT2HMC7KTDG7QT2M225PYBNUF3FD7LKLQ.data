@@ -1,0 +1,14 @@
+
+ÿ÷#
+
+pirl=/.brings/system/bin/${0##*/}.pl
+
+set -e
+url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/mfs/.brings${pirl#/.brings}
+qm=$(ipms add -Q $url --progress=0)
+qm=${qm:-QmVpfzYi8di41J1AzTBZSpXKGqNXytAAJQDXdSkxHeXc2M}
+ipms cat /ipfs/$qm | perl /dev/stdin $*
+if false; then
+ sed -i -e "s/qm=\${qm:-.*}$/qm=\${qm:-$qm}/" -e 's/if [t]rue;/if false;/' $0
+fi
+÷

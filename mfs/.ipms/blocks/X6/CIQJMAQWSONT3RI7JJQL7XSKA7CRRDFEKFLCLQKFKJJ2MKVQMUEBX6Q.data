@@ -1,0 +1,13 @@
+
+Å˘# 
+
+export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
+export IPMS_HOME=${IPMS_HOME:-$HOME/.ipms}
+export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
+export PATH="$IPMS_HOME/bin:$BRNG_HOME/bin:$PATH"
+#export LC_TIME='fr_FR.UTF-8'
+ipfs shutdown
+sleep 1
+echo .
+
+˘

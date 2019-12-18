@@ -1,0 +1,44 @@
+
+êà<!DOCTYPE html><html>
+
+<head><title> Mutables conversion </title>
+<meta charset="utf8"/>
+
+<!-- jekyll in development mode -->
+<link href="http://ocean:8088/GITrepo/iglake/cssjs/css/style.css" rel="stylesheet" type="text/css"/>
+<script src="https://ocean:8088/GITrepo/iglake/cssjs/js/src/favicon.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<input id=username name=user value='michelc' type="hidden"/>
+
+<div class=content>
+<h1 id="mutable-conversion">mutable conversion</h1>
+
+<p>This pages is a demo for converting the pathname passed as the URL#fragment
+into an immutable address (based on SHA256).</p>
+
+<p>The conversion is made by requesting the local ipfs node to resolve
+the addresses.</p>
+
+<p>exemple of conversion :</p>
+
+<ul>
+  <li><a href="http://webui.local/webui#/files/etc/motd">/etc/motd</a> -&gt; <a href="http://webui.local/webui#/files/etc/motd">/webui#/files/etc/motd</a></li>
+  <li><a href="http://webui.local/webui#/files/my/identity/public.yml">/my/identity/public.yml</a> -&gt; <a href="http://webui.local/webui#/files/my/identity/public.yml">/webui#/files/my/identity/public.yml</a></li>
+  <li><a href="https://duckduckgo.com/?q=mutable+naming+system+blockRing">/ipns</a><a href="http://gateway.local/ipns/%peerid%">/self</a> -&gt; <a href="http://gateway.local/ipns/self">/webui#/files/root/</a></li>
+</ul>
+
+<h3 id="more-info-about-this-mini-blockchain-">more info about this mini blockchain :</h3>
+
+<ul>
+  <li><a href=".">/minichain</a></li>
+</ul>
+
+
+</div>
+
+<script src=ipfs-mutables.js></script>
+</body>
+</html>
+à

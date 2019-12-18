@@ -1,0 +1,312 @@
+
+ãWÉW#!/usr/bin/perl
+
+binmode(STDOUT, "encoding(UTF-8)");
+
+
+my $dec;
+my $radix = 0;
+our $dbug=0;
+#--------------------------------
+# -- Options parsing ...
+#
+while (@ARGV && $ARGV[0] =~ m/^-/)
+{
+  $_ = shift;
+  #/^-(l|r|i|s)(\d+)/ && (eval "\$$1 = \$2", next);
+  if (/^-v(?:erbose)?/) { $verbose= 1; }
+  elsif (/^-a(?:ll)?/) { $all= 1; $radix = 95; }
+  elsif (/^-(\d+)/) { $radix= $1; }
+  elsif (/^-de?b(?:ug)?/) { $dbug= 1; }
+  elsif (/^-d(?:ec)?/) { $dec= 1; }
+  else                  { die "Unrecognized switch: $_\n"; }
+
+}
+#understand variable=value on the command line...
+eval "\$$1='$2'"while $ARGV[0] =~ /^(\w+)=(.*)/ && shift;
+#--------------------------------
+
+local $/ = undef;
+my $buf = <STDIN>;
+local $/ = "\n";
+chomp $buf;
+
+my $bin = '';
+if ($dec) {
+   if ($buf =~ m/^Qm/) {
+      $cidv = 0;
+      $mhash = &decode_base58($buf);
+      $bin = pack('H*','0170'). &decode_base58($buf);
+   } elsif ($buf =~ m/^z/) { # decode multiformat ...
+      $cidv = 1;
+      $bin = &decode_base58(substr($buf,1));
+      $mhash = substr($bin,2);
+   } elsif ($buf =~ m/^b/i) {
+      $bin = &decode_base32(substr($buf,1));
+      $cidv = unpack'C',substr($bin,0,1);
+      $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+   } elsif ($buf =~ m/^f/i) {
+      $bin = pack('H*',substr($buf,1));
+      $cidv = unpack'C',substr($bin,0,1);
+      $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+   } elsif ($buf =~ m/^([um])/i) {
+      $buf =~ tr{-_}{+/} if ($1 eq 'u');
+      $bin = &decode_base64m(substr($buf,1));
+      $cidv = unpack'C',substr($bin,0,1);
+      $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+   } else {
+      $bin = &decode_base58($buf);
+      $cidv = unpack'C',substr($bin,0,1);
+      $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+   }
+} else {
+   $bin = $buf;
+   $cidv = unpack'C',substr($bin,0,1);
+   $mhash = ($cidv == 1) ? substr($bin,2) : $bin;
+}
+my $qm = &encode_base58($mhash);
+my $quint = &hex2quint(unpack'H*',$mhash);
+my $b16 = unpack'H*',$bin;
+my $b10 = &encode_base10($bin);
+my $b32 = &encode_base32($bin);
+my $b32z = &encode_base32z($bin);
+my $b43 = &encode_basen($bin,43);
+my $b58 = &encode_base58($bin);
+my $b58f = &encode_base58f($bin);
+my $b63 = &encode_base63($bin);
+my $b64m = &encode_base64m($bin); $b64m =~ tr /=//d;
+my $b64u = &encode_base64u($bin); $b64u =~ tr /=//d;
+my $b64e = &encode_basen($bin,64);
+
+print "--- # other encoding for z.$qm\n";
+printf "qm: %s\n",$qm;
+printf "quint: %s\n",$quint;
+printf "b10: 9%s\n",$b10;
+printf "b16: f%s\n",$b16;
+printf "b32: B%s\n",$b32;
+printf "b32z: h%s\n",lc$b32z;
+printf "b39: *%s*\n",&encode_basen($bin,39);
+printf "b43: |%s|\n",$b43;
+printf "b58: z%s\n",$b58;
+printf "b58f: Z%s\n",$b58f;
+printf "b63l: l%s\n",$b63;
+printf "b64m: m%s\n",$b64m;
+printf "b64u: u%s\n",$b64u;
+printf "b64e: %s\n",$b64e;
+
+if ($all || $radix ) {
+print "---\n";
+for (2 .. $radix) {
+printf "m%d: %s%s\n",$_,&multif($_),&encode_basen($bin,$_);
+}
+}
+print "...\n";
+
+exit $?;
+
+#
+
+# -----------------------------------------------------------------------
+sub hex2quint {
+  return join '-', map { u16toq ( hex('0x'.$_) ) } $_[0] =~ m/(.{4})/g;
+}
+sub u16toq {
+   my $n = shift;
+   #printf "u2q(%04x) =\n",$n;
+   my $cons = [qw/ b d f g h j k l m n p r s t v z /]; # 16 consonants only -c -q -w -x
+   my $vow = [qw/ a i o u  /]; # 4 wovels only -e -y
+   my $s = '';
+      for my $i ( 1 .. 5 ) { # 5 letter words
+         if ($i & 1) { # consonant
+            $s .= $cons->[$n & 0xF];
+            $n >>= 4;
+            #printf " %d : %s\n",$i,$s;
+         } else { # vowel
+            $s .= $vow->[$n & 0x3];
+            $n >>= 2;
+            #printf " %d : %s\n",$i,$s;
+         }
+      }
+   #printf "%s.\n",$s;
+   return scalar reverse $s;
+}
+# -----------------------------------------------------
+
+# --------------------------------------------
+sub encode_base10 {
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $bin = join'',@_;
+  my $bint = Math::BigInt->from_bytes($bin);
+  return $bint;
+}
+# --------------------------------------------
+sub encode_base32z {
+  use MIME::Base32 qw();
+  my $z32 = uc MIME::Base32::encode($_[0]);
+  $z32 =~ y/A-Z2-7/ybndrfg8ejkmcpqxotluwisza345h769/;
+  return $z32;
+}
+sub decode_base32z {
+  use MIME::Base32 qw();
+  my $b32 = $_[0];
+  $b32 =~ y/ybndrfg8ejkmcpqxotluwisza345h769/A-Z2-7/;
+  my $bin = MIME::Base32::decode($b32);
+  return $bin;
+}
+# --------------------------------------------
+sub encode_base32 {
+  use MIME::Base32 qw();
+  my $mh32 = uc MIME::Base32::encode($_[0]);
+  return $mh32;
+}
+sub decode_base32 {
+  use MIME::Base32 qw();
+  my $bin = MIME::Base32::decode($_[0]);
+  return $bin;
+}
+# --------------------------------------------
+sub encode_base58f { # flickr
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $bin = join'',@_;
+  my $bint = Math::BigInt->from_bytes($bin);
+  my $h58 = Encode::Base58::BigInt::encode_base58($bint);
+  return $h58;
+}
+sub encode_base58 { # btc
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $bin = join'',@_;
+  my $bint = Math::BigInt->from_bytes($bin);
+  my $h58 = Encode::Base58::BigInt::encode_base58($bint);
+  $h58 =~ tr/a-km-zA-HJ-NP-Z/A-HJ-NP-Za-km-z/;
+  return $h58;
+}
+# ------------------
+sub decode_base58 {
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $s = $_[0];
+  # $e58 =~ tr/a-km-zA-HJ-NP-Z/A-HJ-NP-Za-km-z/;
+  $s =~ tr/A-HJ-NP-Za-km-z/a-km-zA-HJ-NP-Z/;
+  my $bint = Encode::Base58::BigInt::decode_base58($s);
+  my $bin = Math::BigInt->new($bint)->as_bytes();
+  return $bin;
+}
+# --------------------------------------------
+sub encode_base63 {
+  return &encode_basen($_[0],63);
+}
+sub decode_base63 {
+  return &decode_basen($_[0],63);
+}
+# --------------------------------------------
+sub encode_basen { # n < 94;
+  use Math::BigInt;
+  my ($data,$radix) = @_;
+  my $alphab = &alphab($radix);;
+  my $mod = Math::BigInt->new($radix);
+  #printf "mod: %s, lastc: %s\n",$mod,substr($alphab,$mod,1);
+  my $h = '0x'.unpack('H*',$data);
+  my $n = Math::BigInt->from_hex($h);
+  my $e = '';
+  while ($n->bcmp(0) == +1)  {
+    my $c = Math::BigInt->new();
+    ($n,$c) = $n->bdiv($mod);
+    $e .= substr($alphab,$c->numify,1);
+  }
+  return scalar reverse $e;
+}
+# --------------------------------------------
+sub decode_basen { # n < 94
+  use Math::BigInt;
+  my ($s,$radix) = @_;
+  my $alphab = &alphab($radix);;
+  die "alphab: %uc < %d\n",length($alphab) if (length($alphab) < $radix);
+  my $n = Math::BigInt->new(0);
+  my $j = Math::BigInt->new(1);
+  while($s ne '') {
+    my $c = substr($s,-1,1,''); # consume chr from the end !
+    my $i = index($alphab,$c);
+    return '' if ($i < 0);
+    my $w = $j->copy();
+    $w->bmul($i);
+    $n->badd($w);
+    $j->bmul($radix);
+  }
+  my $h = $n->as_hex();
+  # byte alignment ...
+  my $d = int( (length($h)+1-2)/2 ) * 2;
+  $h = substr('0' x $d . substr($h,2),-$d);
+  return pack('H*',$h);
+}
+# --------------------------------------------
+sub multif {
+  my $radix = shift;
+  my $ab = &alphab($radix);
+  my $ab = '00123456789'.'ABCDEFGHJKLMNPQRSTUVWXYZ'.
+                         'abcdefghijkmnopqrstuvwxyz'. 'IOl'.
+           q/_=.!-+@$%,~`';^[]{}()#&/.      '<>:"/\\|?*0';
+
+  my $m = substr($ab,$radix,1);
+  return $m;
+}
+sub alphab {
+  my $radix = shift;
+  my $alphab;
+  if ($radix < 12) {
+    $alphab = '0123456789-';
+  } elsif ($radix <= 16) {
+    $alphab = '0123456789ABCDEF';
+  } elsif ($radix <= 26) {
+    $alphab = 'ABCDEFGHiJKLMNoPQRSTUVWXYZ';
+  } elsif ($radix == 32) {
+    $alphab = '0123456789ABCDEFGHiJKLMNoPQRSTUV'; # Triacontakaidecimal
+    $alphab = join('',('A' .. 'Z', '2' .. '7')); # RFC 4648
+    $alphab = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; # Crockford≈õ ![ILOU] (U:accidental obscenity)
+    $alphab = 'ybndrfg8ejkmcpqxotluwisza345h769';  # z-base32 ![0lv2]
+
+  } elsif ($radix == 36) {
+    $alphab = 'ABCDEFGHiJKLMNoPQRSTUVWXYZ0123456789';
+  } elsif ($radix <= 38) {
+    $alphab = '0123456789ABCDEFGHiJKLMNoPQRSTUVWXYZ.-';
+  } elsif ($radix <= 40) {
+    $alphab = 'ABCDEFGHiJKLMNoPQRSTUVWXYZ0123456789-_.+';
+  } elsif ($radix <= 43) {
+    $alphab = 'ABCDEFGHiJKLMNoPQRSTUVWXYZ0123456789 -+.$%*';
+  } elsif ($radix == 58) {
+    $alphab = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+  } elsif ($radix == 62) {
+    $alphab = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  } elsif ($radix == 64) {
+    use Encode;
+    $alphab = decode_utf8 pack'H*','f09f8c80f09f8c82f09f8c85f09f8c88f09f8c99f09f8c9ef09f8c9ff09f8ca0f09f8cb0f09f8cb1f09f8cb2f09f8cb3f09f8cb4f09f8cb5f09f8cb7f09f8cb8f09f8cb9f09f8cbaf09f8cbbf09f8cbcf09f8cbdf09f8cbef09f8cbff09f8d80f09f8d81f09f8d82f09f8d83f09f8d84f09f8d85f09f8d86f09f8d87f09f8d88f09f8d89f09f8d8af09f8d8bf09f8d8cf09f8d8df09f8d8ef09f8d8ff09f8d90f09f8d91f09f8d92f09f8d93f09f8d94f09f8d95f09f8d96f09f8d97f09f8d98f09f8d9cf09f8d9df09f8d9ef09f8d9ff09f8da0f09f8da1f09f8da2f09f8da3f09f8da4f09f8da5f09f8da6f09f8da7f09f8da8f09f8da9f09f8daaf09f8dabf09f8dacf09f8dadf09f8daef09f8daff09f8db0f09f8db1f09f8db2f09f8db3f09f8db4f09f8db5f09f8db6f09f8db7f09f8db8f09f8db9f09f8dbaf09f8dbbf09f8dbcf09f8e80f09f8e81f09f8e82f09f8e83f09f8e84f09f8e85f09f8e88f09f8e89f09f8e8af09f8e8bf09f8e8cf09f8e8df09f8e8ef09f8e8ff09f8e92f09f8e93f09f8ea0f09f8ea1f09f8ea2f09f8ea3f09f8ea4f09f8ea5f09f8ea6f09f8ea7f09f8ea8f09f8ea9f09f8eaaf09f8eabf09f8eacf09f8eadf09f8eaef09f8eaff09f8eb0f09f8eb1f09f8eb2f09f8eb3f09f8eb4f09f8eb5f09f8eb7f09f8eb8f09f8eb9f09f8ebaf09f8ebbf09f8ebdf09f8ebef09f8ebff09f8f80f09f8f81f09f8f82f09f8f83f09f8f84f09f8f86f09f8f87f09f8f88f09f8f89f09f8f8af09f9080f09f9081f09f9082f09f9083f09f9084f09f9085f09f9086f09f9087f09f9088f09f9089f09f908af09f908bf09f908cf09f908df09f908ef09f908ff09f9090f09f9091f09f9092f09f9093f09f9094f09f9095f09f9096f09f9097f09f9098f09f9099f09f909af09f909bf09f909cf09f909df09f909ef09f909ff09f90a0f09f90a1f09f90a2f09f90a3f09f90a4f09f90a5f09f90a6f09f90a7f09f90a8f09f90a9f09f90aaf09f90abf09f90acf09f90adf09f90aef09f90aff09f90b0f09f90b1f09f90b2f09f90b3f09f90b4f09f90b5f09f90b6f09f90b7f09f90b8f09f90b9f09f90baf09f90bbf09f90bcf09f90bdf09f90bef09f9180f09f9182f09f9183f09f9184f09f9185f09f9186f09f9187f09f9188f09f9189f09f918af09f918bf09f918cf09f918df09f918ef09f918ff09f9190f09f9191f09f9192f09f9193f09f9194f09f9195f09f9196f09f9197f09f9198f09f9199f09f919af09f919bf09f919cf09f919df09f919ef09f919ff09f91a0f09f91a1f09f91a2f09f91a3f09f91a4f09f91a5f09f91a6f09f91a7f09f91a8f09f91a9f09f91aaf09f91aef09f91aff09f91baf09f91bbf09f91bcf09f91bdf09f91bef09f91bff09f9280f09f9281f09f9282f09f9283f09f9284f09f9285';
+    #printf "alphab:%s\n",$alphab;
+  } else { # n < 94
+    $alphab = '-0123456789'. 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.
+                             'abcdefghijklmnopqrstuwvxyz'.
+             q/+.@$%_,~`'=;!^[]{}()#&/.      '<>:"/\\|?*'; #
+  }
+  # printf "// alphabet: %s (%uc)\n",$alphab,length($alphab);
+  return $alphab;
+}
+# --------------------------------------------
+sub encode_base64m {
+  use MIME::Base64 qw();
+  my $m64 = MIME::Base64::encode_base64($_[0],'');
+  return $m64;
+}
+sub decode_base64m {
+  use MIME::Base64 qw();
+  my $bin = MIME::Base64::decode_base64($_[0]);
+  return $bin;
+}
+sub encode_base64u {
+  use MIME::Base64 qw();
+  my $u64 = MIME::Base64::encode_base64($_[0],'');
+  $u64 =~ y,+/,-_,;
+  return $u64;
+}
+# --------------------------------------------
+ÉW

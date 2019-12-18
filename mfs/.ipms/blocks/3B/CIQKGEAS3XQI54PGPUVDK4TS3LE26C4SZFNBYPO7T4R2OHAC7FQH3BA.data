@@ -1,0 +1,60 @@
+
+®¦#
+
+list="mutable.log README.md dircolors dircolorrc test.sh"
+
+gwhost=$(ipfs config Addresses.Gateway | cut -d'/' -f 3)
+gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
+peerid=$(ipfs config Identity.PeerID)
+if ! ipfs swarm addrs local | sed -e 's/^/info: /'; then
+   die
+fi
+
+tic=$(date +%s)
+qm=$(ipfs add -Q -w $list)
+echo $tic: $qm
+perl -npi -e "s,Qm[^/]+,$qm,g; s,\\\$tic: \w+\\\$,\\\$tic: $tic\\\$," README.md
+pandoc README.md -o README.html
+
+echo $tic: $qm >> mutable.log
+qm=$(ipfs add -Q -w $list "$0" README.html)
+url=http://$gwhost:$gwport/ipfs/$qm
+sed -i -e "s,date: .*$,date: $(date +%d)," \
+       -e "s,url: .*$,url: $url$," mutable.log
+
+for file in $list; do
+  mfspath=$(perl mfspath.pl $file)
+  mfspath=${mfspath##*:}
+  echo mfs: $mfspath
+  bdir=${mfspath%/*}
+  if test "x$bdir" != 'x' && ! ipfs files stat --hash $bdir 1>/dev/null 2>&1 ; then
+     echo "info: !-e $bdir"
+     ipfs files mkdir -p $bdir
+  fi  
+  if pv=$(ipfs files stat --hash $mfspath 2>/dev/null); then
+     if echo $mfspath | grep -q '/$'; then
+	  ipfs files rm -r $mfspath
+       else
+	  ipfs files rm $mfspath
+       fi
+  else
+    pv=$(ipfs add -Q $file)
+  fi
+  if echo $mfspath | grep -q '/$'; then
+     cwd=$(pwd)
+     bdir=${mfspath%/*}
+     qm=$(ipfs add -Q -r $cwd)
+  echo ips files cp /ipfs/$qm $bdir
+  ipfs files cp /ipfs/$qm $bdir
+  ipfs files cp /ipfs/$pv $bdir/prev
+  else
+  sed -i -e "s,\\\$Previous: .*\\\$,\\\$Previous: /ipfs/$pv\\\$,g" \
+         -e "s,\\\$tic: .*\\\$,\\\$tic: $tic\\\$," $file
+  qm=$(ipfs add -Q $file)
+  ipfs files cp /ipfs/$qm $mfspath
+  fi
+
+done
+
+
+¦

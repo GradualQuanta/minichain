@@ -1,0 +1,39 @@
+
+’Š#
+
+set -e
+blockring=Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV
+
+green="[32m"
+yellow="[33m"
+red="[31m"
+nc="[0m"
+
+bindir=${0%/*}
+export PATH=$bindir:$PATH
+echo BRNG_HOME: $BRNG_HOME
+IPFS_PATH=${IPFS_PATH:-$HOME/.ipfs}
+echo IPFS_PATH: $IPFS_PATH
+
+peerid=$(ipms config Identity.PeerID)
+name=$(fullname $peerid)
+pp=$(cat $IPFS_PATH/config | xjson Addresses.Gateway | cut -d'/' -f 5)
+
+if ipfs ping $blockring -n 3 2>/dev/null; then
+  echo "${green}ipms daemon is running${nc}"
+  gwhost=$(ipms config Addresses.Gateway | cut -d'/' -f 3)
+  gwport=$(ipms config Addresses.Gateway | cut -d'/' -f 5)
+  echo "url: http://$gwhost:$gwport/ipns/$peerid"
+
+  apihost=$(ipms config Addresses.API | cut -d'/' -f 3)
+  apiport=$(ipms config Addresses.API | cut -d'/' -f 5)
+  echo "url: http://$apihost:$apiport/webui"
+
+
+else
+  echo "${red}ipfs is not running${nc}"
+fi
+  echo "ipms: 'daemon:$pp ($IPFS_PATH) ~ $name'"
+
+
+Š

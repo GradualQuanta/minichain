@@ -1,0 +1,17 @@
+
+Š‚This is a proof of concept for pow-addressable-content (hash length=18)
+
+with k=18504502 (elapsed: 16757s)
+
+file stored w/ command:
+ipfs add --raw-leave --hash shake-256 vcode18504502-z*[mM][0-9]GC[0-9]+$*.txt --cid-base base58btc
+
+previous collision: [18504502](https://gateway.ipfs.io/ipfs/z5kcxMXdoGU9UHBEykR8iahMM6GC6)
+
+---
+col: 3
+vanity: [mM]\dGC\d+$
+pcode: dVlC
+...
+$code: s1nPB$
+‚

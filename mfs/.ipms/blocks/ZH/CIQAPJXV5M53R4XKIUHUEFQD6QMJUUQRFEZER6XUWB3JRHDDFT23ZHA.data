@@ -1,0 +1,13 @@
+
+ÜÔ#
+
+bpath=/tmp/blockchaindemo
+bafy=$(ipfs add toc.yml)
+if ipfs files stat $bpath --hash 1>/dev/null 2>&1; then
+ipfs files mkdir -p $bpath
+fi
+ipfs files rm $bpath/toc.yml
+ipfs files cp /ipfs/$bafy $bpath/toc.yml
+
+
+Ô

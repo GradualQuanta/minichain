@@ -1,0 +1,15 @@
+
+ùï# Le Mot du Jour des Gilets Jaune
+<style>
+.gjc {
+  border-color: purple;
+  border-size: 0;
+  border: none;
+  width: 380px;
+  height: 520px;
+  padding: 0px;
+}
+</style>
+<br><iframe src=https://www.giletsjaunes-coordination.fr/news.html?embed&idactualite=67i class=gjc></iframe>
+
+ï

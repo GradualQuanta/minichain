@@ -1,0 +1,20 @@
+
+…ý#
+
+list="$(ls -1 wcode*.txt)" 
+echo "IPFS_PATH: $IPFS_PATH"
+for f in $list; do
+ b=${f%.*}
+ mhash=$(echo $b | cut -d'-' -f 2)
+ eval $(qminfo $mhash | grep file: | eyml)
+ if echo "$file" | grep -q '\$'; then
+	 eval "file=$file"
+ fi
+ #echo "file: $file"
+ dir=${file%/*}
+ #echo "dir: $dir"
+ if [ ! -d $dir ]; then mkdir $dir; fi
+ cp -p $f $file
+ echo ipfs files stat /ipfs/$mhash
+done
+ý

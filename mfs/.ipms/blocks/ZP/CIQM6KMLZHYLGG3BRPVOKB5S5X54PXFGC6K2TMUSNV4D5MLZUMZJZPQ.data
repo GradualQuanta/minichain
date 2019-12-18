@@ -1,0 +1,40 @@
+
+ÑÉ#
+
+
+# vim: sw=3 et ts=2
+
+cwd=$(pwd)
+
+if test -e /etc/environment; then
+   . /etc/environment
+else
+   export PATH=/usr/local/bin:/usr/bin:/bin; 
+fi
+
+export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
+export IPMS_HOME=${IPMS_HOME:-$HOME/.ipms}
+export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
+export PATH="$IPMS_HOME/bin:$BRNG_HOME/bin:$PATH"
+#export LC_TIME='fr_FR.UTF-8'
+
+if test -d $cwd/_perl5/lib/perl5; then
+# perl's local lib
+eval $(perl -I$cwd/_perl5/lib/perl5 -Mlocal::lib=$cwd/_perl5)
+fi
+
+if test -d $cwd/etc; then
+export DICT=${cwd}/etc
+fi
+
+unset LC_MEASUREMENT
+unset LC_PAPER
+unset LC_MONETARY
+unset LC_NAME
+unset LC_ADDRESS
+unset LC_NUMERIC
+unset LC_TELEPHONE
+unset LC_IDENTIFICATION
+unset LC_TIME
+unset LC_ALL
+É

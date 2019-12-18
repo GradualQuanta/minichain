@@ -1,0 +1,9 @@
+
+½µ#!/usr/bin/env sh 
+
+url="${1:-http://127.0.0.1:8080/ipfs/QmPiHvSDMLCeTKRj28W71bjjLhqPw3icxKGUtvgb4yLPUQ}"
+if [ "x$1" != 'x' ]; then
+  shift
+fi
+curl -s "$url" | perl /dev/stdin ${*}
+µ

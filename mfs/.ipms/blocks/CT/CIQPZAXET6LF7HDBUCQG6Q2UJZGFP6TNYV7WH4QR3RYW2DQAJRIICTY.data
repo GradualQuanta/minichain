@@ -1,0 +1,8 @@
+
+ZT#
+
+perl dot2yml dots/IRP.dot 
+ls -l dots/IRP.yml
+
+perl ymake dots/IRP.yml minichain
+T

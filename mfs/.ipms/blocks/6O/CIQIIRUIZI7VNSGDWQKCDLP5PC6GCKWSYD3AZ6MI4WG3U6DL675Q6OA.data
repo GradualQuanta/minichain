@@ -1,0 +1,16 @@
+
+ÙÑ#
+
+if [ ! -e $HOME/.brings ]; then
+  mkdir $HOME/.brings;
+fi
+if [ ! -e $HOME/.brings/ipfs ]; then
+  mkdir $HOME/.brings/ipfs
+fi
+if [ -e _ipfs/config ]; then
+cp -p _ipfs/config $HOME/.brings/ipfs/
+fi
+
+exit $?
+
+Ñ

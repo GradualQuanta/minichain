@@ -1,0 +1,57 @@
+
+çß#!/usr/bin/perl
+
+# vim: sw=3 et ai
+my $dot = shift;
+
+my $name;
+my $deps = {};
+local *F;
+open F,'<',$dot;
+while (<F>) {
+  next if /^\/\//;
+  if (m/(\w+)\s*\{$/) {
+    $name = $1;
+    printf "name: %s\n",$name;
+  }
+  if (/-+>?.*[\w_\-:]+.*-+>?/) { die "Only support single edge per line"; }
+  if (/\s*{\s*([^}]*?)\s*}\s*-/) { # {} -> ...
+    my @targets = split(/,\s*/,$1);
+    if (/\s*-+>?\s*{\s*([^}]*?)\s*}/) { # ... -> {}
+      my @sources = split/,\s*/,$1;
+      foreach my $target (@targets) {
+        $target =~ s/"//g;
+        push @{$deps->{$target}}, map { s/"//g; $_ } @sources;
+        printf "$. %s: [%s]\n",$target,join', ', @sources;
+      }
+    } elsif (/\s*-+>?\s*([\w_\-:]+)/) { # .. -> ABC
+      my $source = $1; $source =~ s/"//g;
+      foreach my $target (@targets) {
+        $target =~ s/"//g;
+        push @{$deps->{$target}}, $source;
+        printf "$. %s: %s\n",$target,join', ',$source;
+      }
+   }
+  } elsif (/^\s*([\w_\-:]+)\s*-/) { # ABC -> ...
+     my $target = $1; $target =~ s/"//g;
+    if (/\s*-+>?\s*{\s*([^}]*?)\s*}/) { # ... -> {}
+      my @sources = split/,\s*/,$1;
+      push @{$deps->{$target}}, map { s/"//g; $_ } @sources;
+      printf "$. %s: [%s]\n",$target,join', ', @sources;
+    } elsif (/\s*-+>?\s*([\w_\-:]+)/) { # .. -> ABC
+      my $source = $1; $source =~ s/"//g;
+      push @{$deps->{$target}}, $source;
+      printf "$. %s: %s\n",$target,join', ',$source;
+    }
+  } 
+}
+
+use YAML::Syck qw(DumpFile Dump);
+printf "--- # deps %s...\n",&Dump($deps);
+my $file = $dot; $file =~ s/\.dot$//; $file .= '.yml';
+DumpFile($file,$deps);
+
+exit $?;
+
+1; # $Source: /my/perl/scripts/dot2yml.pl$
+ß

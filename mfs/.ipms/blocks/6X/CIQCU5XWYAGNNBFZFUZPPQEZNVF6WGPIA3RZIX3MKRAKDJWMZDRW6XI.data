@@ -1,0 +1,19 @@
+
+æÞ--- # blockchain demo
+name: demo
+owner: QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ
+peers:
+ - QmRLZbRZcqdrM6L3rTFYFuz56vBoS1Z5dsu4V4X5yboZc1
+ - QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
+mutable: /files//tmp/blockchaindemo/toc.yml
+irqn: /tmp/blockchaindemo/preq.yml
+prev: QmZNebwqErFZZn6MCzyGVtnsRkYAnoqbv9N1rpHZxYB7HE/toc.yml
+cur: QmdEToyJ9AP17m7sEvrrPkAWYed4TRCHbbuRaBrv5nNqmS/toc.yml
+date: 11/27/19
+spot: ~
+log:
+ - QmeoFTqWYE6JgzpQ3NDaCwpSi7xGJ7tXcRfKP5imZQitCQ # block 0
+ - QmXWznG3goyzQ9EgFo3y5t5ADBHJisuwgNjtAXMV1Bqo6b # block 1
+ - QmW8ggftrJzzyYTvqejtQ1iFPRuoshyLdYE68EhcJTJHQo # block 2
+...
+Þ

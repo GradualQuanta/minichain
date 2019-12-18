@@ -1,0 +1,12 @@
+
+Å˘
+# local browser
+url: http://127.0.0.1:8199/ipfs/QmVvDPGEnXwsnHARka9tje4t5R6FQyuMETknVRGhMknami
+# gateway:
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/ipfs/QmVvDPGEnXwsnHARka9tje4t5R6FQyuMETknVRGhMknami
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/explore/ipfs/QmVvDPGEnXwsnHARka9tje4t5R6FQyuMETknVRGhMknami
+# command line
+cmd: ipms get QmVvDPGEnXwsnHARka9tje4t5R6FQyuMETknVRGhMknami -o blockchain; cd blockchain
+xdg-open http://127.0.0.1:8199/ipfs/QmVvDPGEnXwsnHARka9tje4t5R6FQyuMETknVRGhMknami
+#
+˘

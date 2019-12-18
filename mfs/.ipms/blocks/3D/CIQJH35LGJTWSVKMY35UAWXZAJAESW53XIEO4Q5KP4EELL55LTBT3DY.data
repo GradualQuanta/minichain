@@ -1,0 +1,93 @@
+
+ûó#
+
+set -e
+if [ "x$1" = 'x' ]; then # usage:
+echo "this script link 2 files with a cryptografique secure hash"
+echo "usage: ${0##*/} {parent} {file} [...]"
+exit $$
+fi
+
+parent="$1"
+shift;
+file="$*"
+
+pv=$(ipfs add -Q $parent)
+eval "$(cat $parent | eyml)"
+tic=$(date +%s)
+n=$(expr $block + 1)
+sed -i -e "s/^tic: .*/tic: $tic/" -e "s/^block: .*/block: $n/" -e "s/prevhash: .*/prevhash: $pv/" "$1"
+
+qm=$(ipfs add -Q $file)
+fname="${file##*/}"
+nname="$(echo $fname | sed -e 's/\d+\./n./')"
+echo name: $nname;
+date=$(date +%D)
+# get ipfs instance parameters
+peerid=$(ipfs config Identity.PeerID)
+gateway=$(ipfs config Addresses.Gateway)
+gwport=$(echo $gateway | cut -d/ -f 5)
+gwhost=$(echo $gateway | cut -d/ -f 3)
+
+# --------------------------------------
+if ipfs files stat --hash $bpath 1>/dev/null 2>&1; then
+#eval "$(ipfs files read $bpath/toc.yml | eyml)"
+qmbr=$(ipfs files stat --hash  $bpath)
+qmtoc=$(ipfs files stat --hash  $bpath/toc.yml)
+
+# save blockchain previous state:
+  if ipfs files rm -r $bpath.tmp 2>/dev/null; then true; fi # if to mask error
+  ipfs files mv $bpath $bpath.tmp
+  ipfs files mkdir -p $bpath
+  ipfs files mv $bpath.tmp $bpath/...
+# --------------------------------------
+else
+  # create bpath & first toc file
+  ipfs files mkdir -p $bpath --cid-ver=0
+  qmbr=$(ipfs files stat --hash $bpath)
+  echo "Creating $bpath/toc.yml"
+  ipfs files write --create --truncate $bpath/toc.yml <<EOF
+--- # blockRingâ„¢ $bpath
+name: $bname
+owner: $peerid
+peers:
+ - QmYTaZN6rxtmZ32fB5s9fLaBHzbimNfPw9EMMJ8u4P6Auy
+ - QmRLZbRZcqdrM6L3rTFYFuz56vBoS1Z5dsu4V4X5yboZc1
+ - QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
+mutable: $bpath/toc.yml
+irqn: $bpath/preq.yml
+prev: ~
+cur: ~ # Genesis
+date: $date
+spot: ~
+log:
+...
+EOF
+  qmtoc=$(ipfs files stat --hash $bpath/toc.yml)
+fi
+# --------------------------------------
+eval "$(ipfs cat $qmtoc | eyml)"
+peers="$(ipfs cat $qmtoc | xyml peers | tail +2 | cut -d' ' -f 2)"
+n="$(ipfs cat $qmtoc | xyml log | tail +2 | wc -l)"
+
+# adding file
+ipfs files cp /ipfs/$qm $bpath/$fname
+
+ipfs cat $qmtoc | sed -e "s,date: .*,date: $date," \
+       -e "s/owner: .*/owner: $peerid/" \
+       -e "s,mutable: /ipns/[^/]*,mutable: /ipns/$peerid," \
+       -e "s,prev: .*,prev: $qmbr/toc.yml," \
+       -e "s/cur: .*/cur: ~ # $qmtoc/" \
+       -e "s/\.\.\./ - $qm # block $n/" | ipfs files write --create --truncate $bpath/toc.yml
+# append w/ "..."
+offset=$(ipfs files stat --format "<size>" $bpath/toc.yml)
+echo "..." | ipfs files write --create --offset $offset $bpath/toc.yml
+
+ipfs files read $bpath/toc.yml
+
+
+
+
+
+
+ó

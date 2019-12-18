@@ -1,0 +1,10 @@
+
+zt// partir de ce que l'on veut au lieu de ce que l'on a !
+
+digraph Map {
+
+   Healthium -> { SHQB, Nutrium, DEP }
+
+}
+
+t

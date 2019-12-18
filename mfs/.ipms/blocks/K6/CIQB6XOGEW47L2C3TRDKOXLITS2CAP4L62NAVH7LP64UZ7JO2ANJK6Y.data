@@ -1,0 +1,24 @@
+
+¯§--- # blockchain demo
+name: demo
+creator: QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
+peers:
+ - QmRLZbRZcqdrM6L3rTFYFuz56vBoS1Z5dsu4V4X5yboZc1
+ - QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ
+mutable: /public/demo/blockchaindemo/toc.yml
+irqn: /tmp/blockchaindemo/preq.yml
+origin: ~
+merge: QmcrhnjvwB7JeTAnQcDjL15FmaPLJdtFy13cKcJtpYPVKc/merge.pl
+prev: QmcrhnjvwB7JeTAnQcDjL15FmaPLJdtFy13cKcJtpYPVKc/toc.yml
+cur: ~
+date: 11/21/19
+spot: ~
+log:
+ - QmczRXSLzEXuhf69mEFk5yRJyBii3uHCU6sUoPaMXuZrfN # block 0
+ - QmTZcxw61vLp47wHedcwySE35dLizjDxY6S7ox2C4GG1Zo # block 1
+# - QmP1RMcAzdtPLrQhrvqnHXsuVgTmfjcKXhQHZRmpFiwR5p # block 2
+ - QmQGBrZKBEcgQbGv9eeoLkhAtzUNHW6HipWUGpkY5MysDy # block 3
+ - QmVoNhNSmwRkptGhdiWsBrSXiD3XvZ8WC6VnSXNnqu8axi # block 4
+ - QmZuDBryUvPycZ1DGay1enkvdWaYTjjmKd2sFERJDqKKYn # block 5
+
+§

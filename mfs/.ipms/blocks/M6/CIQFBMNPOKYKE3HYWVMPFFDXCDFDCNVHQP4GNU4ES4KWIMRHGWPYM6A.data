@@ -1,0 +1,58 @@
+
+¤œ#
+
+cwd=$(pwd)
+name=${cwd##*/}
+tic=$(date +%s)
+qm=$(ipms add -r -Q .)
+bafy=$(ipms cid base32 $qm)
+pv=$(tail -1 $name.log | cut -d' ' -f 2) 
+ipms pin rm $pv
+echo "$tic: $qm" >> $name.log
+echo $tic: $qm
+cat > LAST_HASH <<EOF
+# $name ($tic)
+# local browser view
+url: http://127.0.0.1:8199/ipfs/$qm
+# gateway view
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/ipfs/$qm
+url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/explore/ipfs/$qm
+# public view
+url: http://dweb.link/ipfs/$qm
+url: https://cloudflare-ipfs.com/ipfs/$qm
+url: https://$bafy.cf-ipfs.com/
+# command line
+cmd: |
+qm=$qm
+ipms ping -n 1 Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV # OVH
+ipms ping -n 1 QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ # michelc
+ipms get \$qm -o blockchain; cd blockchain
+xdg-open http://127.0.0.1:8199/ipfs/$qm
+# previous: $pv
+#
+EOF
+# --------------------------------------------
+if [ "x$1" != 'x-n' ]; then
+qm=$(ipms add -r -Q .)
+git add LAST_HASH
+git commit -m "HASH: $qm; $(date +'%D %T')"
+git push
+fi
+# --------------------------------------------
+ipms ping -n 1 Qmd2iHMauVknbzZ7HFer7yNfStR4gLY1DSiih8kjquPzWV
+cat | ssh blockring <<EOT
+ps ux | grep ipfs
+ipfs pin rm $pv
+ipfs pin add $qm
+ipfs files mkdir -p /repos
+ipfs files rm -r /repos/$name
+ipfs files cp /ipfs/$qm /repos/$name
+EOT
+xdg-open https://ipfs.blockringtm.ml/ipfs/$qm
+# --------------------------------------------
+
+
+
+exit $?
+true; # $Source: /my/shell/scripts/push_to_ipfs.sh$
+œ

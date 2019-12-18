@@ -1,0 +1,248 @@
+
+�a�`<!DOCTYPE=html><head>
+<!--
+<meta http-equiv="Location" content="https://clic-ric.org/ric/">
+<meta http-equiv="Refresh" content="1;URL=http://clic-ric.org/ric/">
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="style.css" rel="stylesheet" type="text/css" media="screen">
+<title>RICE™: Referendum d'initiatibe citoyenne en toutes matières (RIC électronique)</title>
+<meta name="google-site-verification" content="BlxCYvtLvDQjHHS0XpIgGDZjDYRcR35X6O0mVuZvAoE" />
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="309f6e08-5724-4a91-9ffe-f76e7d066a93" type="text/javascript" async></script>
+</head>
+<body>
+<img id=QRC align=right style="padding:0;" alt="RICE™" src=https://chart.googleapis.com/chart?cht=qr&choe=UTF-8&chld=H&chs=210&chl=http://ricetm.gq>
+<div id=header>
+<img src="GJpp.png" align=left id=logo alt=logo height="108" >
+<h1>Pour déveloper un RIC électronique,<br>mais surtout rassembler nos forces .</h1>
+</div>
+<br>
+<div class="content" id="first">
+<a href="https://www.facebook.com/photo.php?fbid=10214792093009490&amp;set=g.747920235573143">
+<img alt="OUI au RIC" src="http://gateway.ipfs.io/ipfs/z8bviyWZD2oDRhQSwjtBbiGqWsChCAYbe/OuiRICetm.png" width="120" align=right></a>
+
+Ce site <a href=http://RICE™.gq>RICe™.gq</a> a pour but de présenter notre projet pour un RIC électronique,
+en effet nous pensons qu'il est nécessaire pour des raisons de logistique, de coût, et de temps d'avoir
+un RIC sur un plateforme numérique facile d'utilisation, nous travaillons avec
+<a href=http://ipgj.fr>IPGJ</a> et l'<a href=http://duckduckgo.com/?q=Assemblée+des+Assemblées>AdA</a>
+afin d'avoir une "feuille"
+de route commune ...
+
+<p> Notre "Proof-of-Concept" est le site <a href=http://jaune.io/propositions>http://jaune.io</a>.
+et nous travaillons pour le décentraliser sur une blockchaine (afin d'avoir une transparence et la sécurité
+nécessaire au <a href=http://ricetm.tk/vote.htm>vote électronique</a>).
+<p> Des plus nous hébergeons le <a href=cgi-bin/RICord.pl>Calendrier des Gilets</a> pour le RIC, afin que nous puissions nous tenir au courant de
+ce qui ce passe (partout) !
+</div><br>
+
+<div class="content" id="motd"><iframe width=100% src=motd.htm>
+Aussi nous avons notre <a href="monnaie.html">monnaie locale</a>... <b>boycottons l'€uro !</b>
+<a href=monnaie.html><img alt=#JRICE10 src=http://ipfs.io/ipfs/QmVhZwzekAjkpy6hQuYUc4z54r1XzSWFYPyPVMJJJFix9i/JRICE10.png></a>
+</iframe>
+</div><br>
+
+<div class=content>
+Le RIC c'est d'abord une <a href=http://culture-ric.fr>Culture</a>: celle du l'être humain prenant
+conciense de sa souveraineté et sa part dans la vie politique de sa communauté et de son pays.
+
+C'est donc une façon de travailler et vivre ensemble, et pour nous aider
+et faciliter la communication via le "<a href=http://discordapp.com>réseau</a> des réseaux"
+nous avons 3 outils :
+<ol>
+<li>L' <a href=cgi-bin/RICord.pl>agenda des agendas</a>
+<li>Un <a href=forum.html>forum</a>
+<li>Une <a href=wiki.html>bibliothèque</a> wiki
+</ol>
+
+</div><br>
+<div class=content>
+Et si nous faisions ensemble le RIC comment le feriez vous ?
+
+<p>
+J'ai pris un petit moment pour en faire une <a href=spec.htm>spécification</a>,
+je voudrais maintenant la faire évoluer avec vous
+<a href=#ici>ici</a>, merci.<br>
+<img alt="[RICE™]" src=http://ipfs.io/ipfs/z8bviyKuhan5FuYK7Pj4nnu8ZkZj9iZZf/RICEtm-gq.png>"
+</div><br>
+
+<div class="content" id="IDN">
+<p>Afin de rendre un RIC accessible à tous, il nous faudra avoir chacun(e) une <a href=http://ricorg.gq/JauneID.html>identité numérique</a>, et nous avons choisi <a href=http://idn.laposte.fr>la Poste</a> pour
+la vérification de nos identités, car nous faisons confiance à nos facteurs et factrices.
+Et bien sur nous avons pensé aux personnes qui n'ont pas de présence sur l'internet, elles seront représentées par un copain "connecté"
+choisi par les personnes elles-mêmes (petits enfants etc.). 
+<p>
+Dépêchez vous de la demande car elle est encore gratuite aujourd'hui toutefois si 10 Millions de Gilets Jaunes,
+la demande en même temps cela risque de coincer un peu !
+</div><br>
+
+<div class=content>
+<iframe src=https://www.giletsjaunes-coordination.fr/carte.html?embed width=100%>
+<a href=https://www.giletsjaunes-coordination.fr/carte.html>la carte des GJs</a>
+</iframe>
+</div><br>
+
+<div class=content>
+<h3>Les outils</h3>
+En attendant la solution finale, il y a les outils suivant pour l'aide à la décision de groupe :
+<ul><li>
+le vote par <a href=https://jugementmajoritaire.net/vote/370b65d46c22b30a59c950ddd0d07e1ae44b25dc15a>jugement majoritaire</a>.
+<li>
+loomio (<a href=http://framavox.org>framavox</a>)
+<li> formulaire Gilets Jaune : <a href=http://gjcomptage.tk>http://gjcomptage.tk</a> (un espece de change.org)
+<li>
+<a href=https://www.france-referendum.fr/>référendum</a>
+</ul>
+
+<!--
+pour l'instant j'en ai l'accès en édition,
+je vais essayer plus tard de rendre cette page éditable par tous (à la wiki !)
+-->
+</div><br>
+
+<div class="content" id="docs">
+<iframe src=https://www.giletsjaunes-coordination.fr/divers-documents-17.html?embed width=100%>
+<a href=https://www.giletsjaunes-coordination.fr/divers-documents-17.html>les docs</a>
+<a href=</iframe>
+</div><br>
+
+<div class="content" id="IDN">
+<h3>Faites Circuler ...</h3>
+<br>Partager le <a href=/>lien</a> (<a href=http://ricetm.gq>http://RICetm.gq</a>) de ce site,
+au besoin vous pouvez copier le <a href=https://chart.googleapis.com/chart?cht=qr&choe=UTF-8&chld=H&chs=210&chl=http://ricetm.gq>QRCode</a>
+au dessus pour vos flyers, autocollant etc.. il pointe sur ce site.
+<p>
+Combien sommes nous de Gilets par ici ?<br>
+<a href="https://www.easycounter.com/"><img src="https://www.easycounter.com/counter.php?ricetm" border="0" alt="Gilets Counters"></a>
+<br> si nous voulons nous compter, nous pouvons par exemple <a href=http://gjcomptage.tk/cgi-bin/presence.pl>faire l'appel</a>, lors de nos manif.
+</div>
+
+<br>
+<div class=content id="nabblelink">
+<a href="http://gilets-jaunes.94873.n8.nabble.com/">le Forum des Gilets Jaunes</a>
+</div>
+<br>
+<div class=content>
+<a href=http://gateway.ipfs.io/ipfs/z8bvizES73dNZqZL46MKWFLsaeRRJiLxA/flyer.jpg><img src=http://cloudflare-ipfs.com/ipfs/z8bviyRbybvJip6wKADT1mBXhQ5sRum1z/flyer-p.jpg alt=flyer width=30% align=right></a>
+<h2><a name=comment>Comment</a> s'y retrouver ?</h2>
+<ul>
+<li> la <a href=https://culture-ric.fr/>Culture RIC</a>, Oui !
+<li> le <a href=https://clic-ric.org/ric/>RIC</a>: quoi et comment ?
+<li> le <a href=https://ric-france.fr/>RIC France</a> que faisons nous ?
+<li> les <a href=http://www.giletsjaunes-coordination.fr/>Gilets Jaunes</a> qui sommes nous ?
+<li> le <a href=https://pouvoir-au-peuple.fr/>Pouvoir au Peuple</a>, bien sur !
+</ul>
+
+Nous procedons à une <a href=central.html>centralisation</a> distribuées des documents importants du mouvement,
+donc n'hésitez pas à soumettre vos docs. <a href=#ici>ici</a>
+
+</div>
+<br>
+
+
+<!-- =================================================================================================== -->
+<script type="text/javascript">
+
+   nabble_ignore_scroll = true;
+   nabble_scroll_top = false;
+   nabble_ignore_title = true;
+   link=document.getElementById("nabblelink");
+if (link != null) {
+  link.style.display="none";
+	document.write("<div class='content' id='nabbleforum' style='width:100%'><div style='height:700px'><img src='http://gilets-jaunes.94873.n8.nabble.com/images/loading.png' width='94' height='33' alt='Loading...'></div></div>");
+  var e = document.createElement("script");
+  e.src = 'http://gilets-jaunes.94873.n8.nabble.com/embed/JsEmbed.jtp?site=94873&node=1&url=' + encodeURIComponent(location.href);
+  //e.src = 'http://gilets-jaunes.94873.n8.nabble.com/embed/JsEmbed.jtp?site=94873&node=1&url=http://gilets-jaunes.94873.n8.nabble.com/';
+            e.type="text/javascript";
+  document.getElementsByTagName("head")[0].appendChild(e);
+}
+</script>
+<!-- =================================================================================================== -->
+
+<br><div class=content>
+<h4>Note importante</h4>
+
+<p>Il est fondamental que nous agissons à l'unisson, de manière cohérente,<br>
+<i>et cela n'est vraiment pas facile entre nous les humains.</i>
+<p>Le fait de communiquer en ligne ne facilite pas les choses,
+le taux d'adoption et d'engagement des gens sera toujours plus faible que ce que nous désirons;
+même si nous sommes 2 Millions de gilets jaunes,
+il est très difficile d'avoir une participation supérieure à 70.000 sur le net,
+cela peut prendre des années.
+
+<p>il faut donc mettre de coté nos égos et préférences personnelles, nos étiquettes...
+et portons nous en soutien de cette cause commune, totale hors des schémas politiques conventionnel.
+<h2>Agissons Ensemble</h2>
+
+<p>plus d'info sur <a href=http://gj-c.fr>Gilets Jaunes Coordination</a>.
+<br>
+C'est important que les personnes intéressées nous rejoigne, cela ira plus vite !
+<ul>
+<li>nous sommes sur <a href=http://ipgj.fr>IPGJ</a> via <a href=https://discordapp.com>discord</a> tous les <a href=>mardi soir 21:00</a> et les <a href=>vendredi</a>
+<li>nous sommes sur CLIC via <a href=https://wiki.mumble.info/wiki/Main_Page>mumble</a> les <a href=mumble://94.177.227.185/Groupes%20de%20travail/Gilets%20Jaunes/Equipe%20web%20dev%20tech/?title=Initiative%20Citoyenne%20sur%20la%20Bloc-Chaine&version=1.2.0>mercredis soir 19:30</a>,
+<li>nous sommes sur <a href=https://zoom.us>zoom</a> le <a href=http://zoom.us/j/508-154-8440>samedi 11:30am</a> .
+<li>Nos amis qui ne sont pas sur les réseaux ou sans internet peuvent nous rejoindre via telephone 
+<li>et le reste du temps nous sommes joignable sur <a href=https://t.me/joinchat/G3CAbxXK8e9v9YWZQXZKZA>telegram</a>
+ou <a href=http://safersm.ml/cgi-bin/bounce.pl?sh58=5rLZZ1Dp1eRpTrtMGi4TR1>discord</a>
+</ul>
+
+<p>Attention nous ne cherchons pas à faire du fric ou une notoriété,
+nous ne lançons pas une nouvelle économie pour faire de la spéculation.
+Nous mettons en place un système humaniste de <a href=
+https://discordapp.com/channels/401917987541745675/548083103567183873/567864509830660127
+>gouvernance autonome</a>
+pour le peuple français.
+
+Pourquoi ? car nous croyons en l'organisme Humain et l'émergence de notre intelligence collective, pour
+simplement vivre MIEUX.
+
+<p>Nous développons des outils selon les 3 points :
+
+<ul>
+<li> <a href=http://duckduckgo.com/?q=cahier+de+doléances>cahier de doléances</a> et espace de travail pour citoyen constituant : <a href=http://duckduckgo.com/?q=citoyen+constituant+le+grand+livre+de+la+france>le grand livre de la France</a>
+<li> plateforme de <a href=http://gjcomptage.tk>collection</a> de signatures (pour déclencher un référendum par exemple)
+<li> plateforme <a href=http://duckduckgo.com/?q=!g+la+plateform+du+RIC+site:jaune.io>RIC electronique</a>
+</ul>
+
+
+<a href=https://www.facebook.com/photo.php?fbid=10214791693959514&set=pcb.754727748225725&type=3&theater><img src=http://cloudflare-ipfs.com/ipfs/QmXaMUr33Gno73FtdRSTVueBKqVY1raZr4md3pzVbFMyQw/OuiGJ.png width="40%"</a>
+
+<!-- see also [1](https://www.facebook.com/groups/357767044781992/) -->
+
+
+
+<!-- https://www.helloasso.com/comment-ca-marche -->
+
+
+<p>Plus d'info sur la page : <a href=http://culture-ric.fr/>RIC en toutes matières</a>
+</div><br>
+
+<div class-content>
+<iframe src=https://www.giletsjaunes-coordination.fr/revolte.html?embed width=100%>
+<a href=https://www.giletsjaunes-coordination.fr/revolte.html>la revolte</a>
+</iframe>
+</div><br>
+
+<div class=content>
+<!-- #include "outils.htm" -->
+<h2 id="nos-outils-de-partage">Nos outils de partage</h2>
+<ul>
+<li>documents partagés : <a href="https://ipfscloud.store/app/ipfsdocs">IPFSdoc</a>
+(équivalent a googledoc mais non centralisé)
+<li>hebergement site-web en 30 secondes : <a href="https://ipfscloud.store/app/hosts">IPFShost</a>
+(équivalent a WiX)
+<li>forum : <a href="http://gilets-jaunes.94873.n8.nabble.com/Initiative-Citoyenne-sur-la-bloc-chaine-f45.html">Nabble des Gilets Jaunes
+</a>
+</ul>
+
+</div><br><div class=content>
+<h4>CLIC</h4>
+lien vers <a href=http://clic-ric.org/ric/>clic-ric.org</a> pour une proposition de RIC en toutes matières,<br>
+<a href="https://www.easycounter.com/"><img src="https://www.easycounter.com/counter.php?togather,redirect" border="0" alt="Hit Counters"></a>
+</div>
+<!--
+<script>
+  window.location.href = "http://gj-c.fr";
+</script>
+-->
+</body>
+�`

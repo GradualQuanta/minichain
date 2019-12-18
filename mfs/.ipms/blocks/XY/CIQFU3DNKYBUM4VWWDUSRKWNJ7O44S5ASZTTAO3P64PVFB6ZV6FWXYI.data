@@ -1,0 +1,10 @@
+
+¢š// partir de ce que l'on veut au lieu de ce que l'on a !
+
+digraph Map {
+
+   SEC -> { Text, Notes, Participant }
+   { RICetm, dcide, eVote } -> RICord
+} 
+
+š

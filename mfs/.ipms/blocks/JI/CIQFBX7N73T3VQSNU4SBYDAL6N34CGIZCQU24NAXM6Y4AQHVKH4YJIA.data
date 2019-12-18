@@ -1,0 +1,22 @@
+
+À¸#
+set -e
+
+script=/.brings/bin/fullname.pl
+
+if ! qm=$(ipms files stat --hash $script 2>/dev/null); then
+url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/mfs/.brings/${script#/.brings}
+qm=$(ipms add -Q $url --progress=0)
+qm=${qm:-QmPNmsSvfdu7dKdX5JVTdCpL5QgFMtd9xnXTjzTNR1a9tv}
+fi
+if [ "x$1"  = 'x' ]; then
+  peerid=$(ipms --offline config Identity.PeerID)
+  ipms cat /ipfs/$qm | perl /dev/stdin $peerid
+else
+ipms cat /ipfs/$qm | perl /dev/stdin $*
+fi
+
+if false; then
+ sed -i -e "s/qm=\${qm:-.*}$/qm=\${qm:-$qm}/" -e 's/if [t]rue;/if false;/' $0
+fi
+¸

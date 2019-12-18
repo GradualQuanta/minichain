@@ -1,0 +1,151 @@
+
+íå#!/usr/bin/perl
+
+# example: perl ymake dots/IRP.yml minichain
+if (! defined $ARGV[1]) {
+   print "usage: ${0} <deps.yml> <target>\n";
+   exit -1;
+}
+
+my $cache = {};
+my $ymlf = shift;
+my $target = shift;
+
+my $MFS = 'mfs'; # location of mfs files
+   $MFS = '.'; # location of mfs files
+
+use YAML::Syck qw(LoadFile);
+my $yml = LoadFile($ymlf);
+
+my $cachef = "$target-cache.yml";
+my $cache = LoadFile($cachef);
+
+my $recipesf = "$target-recipes.yml";
+my $recipes = LoadFile($recipesf);
+
+if (! -d "build") {
+   mkdir 'build' unless -d 'build';
+}
+use Cwd qw(cwd);
+my $pwd = cwd();
+printf "info: pwd=%s\n",$pwd;
+$ENV{PROJDIR} = $pwd;
+
+
+chdir 'build';
+$qm = &provide('main',$target);
+
+
+# -------------------------------------------------------
+sub provide {
+ my $caller = shift;
+ my $what = shift;
+ my @parts = ();
+ if (exists $yml->{$what}) { # has dependencies ...
+ my @deps = @{ $yml->{$what} };
+ foreach $d (@deps) {
+   push @parts, &provide($what,$d);
+ }
+   $result = &build($caller,$what,@parts);
+ } else {
+   $result = &fetch($caller,$what);
+ }
+ printf "result: %s=%s\n",$what,$result;
+ return $result;
+}
+# -------------------------------------------------------
+sub build {
+ my $caller = shift;
+ my $what = shift;
+ my @parts = @_;
+ printf "info: building %s w/ %s (caller: %s)\n",$what,join(',',@parts),$caller;
+ # &{"build_".$what}
+ my $qm = &get_qm($what);
+ return $qm;
+}
+# -------------------------------------------------------
+
+sub fetch {
+   my $caller = shift;
+   my $what = shift;
+   if (exists $cache->{$what}) {
+      my $qm = $cache->{$what};
+      printf "cached: %s=%s\n",$what,$qm;
+      return "$what:$qm:1";
+   } else {
+      printf "info: fetching %s (caller: %s)\n",$what,$caller;
+      my $recipe;
+      if (exists $recipes->{$what}) {
+        my $script = $recipes->{$what};
+        $script = "$MFS$script" if $script =~ m,^/,;
+        # ------------------------------------------
+        if (-f $script) { # execute shell script ...
+          printf "sh %s\n",$script;
+          $recipe = sprintf('sh -e "%s"',$script);
+        # ------------------------------------------
+        } else { # execute command line
+          printf "run: %s\n",$script;
+          $recipe = sprintf('sh -e -c "%s"',$script);
+        }
+        # ------------------------------------------
+      } else {
+         printf "run: nop for %s\n",$what;
+         my $norecipe = 'bafkqaclon4qhezldnfygk';
+         $recipe = sprintf('sh -e -c "echo status: %s"',$norecipe);
+      }
+      my $qm = &recipe_exec($what,$recipe);
+      return $qm;
+   }
+}
+
+
+sub recipe_exec {
+   my $what = shift;
+   my $recipe = shift;
+   my $status = 0;
+   my $qm = 'z6cYNbecZSFzLjbSimKuibtdpGt7DAUMMt46aKQNdwfs';
+   #mkdir "$pwd/build/$what" unless -e "$pwd/build/$what";
+   #chdir "$pwd/build/$what";
+   local *EXEC; open EXEC,$recipe.'|' or die $!;
+   while (<EXEC>) {
+      print "dbug: $_";
+      $status = $1 if (m/^status: (\w+)/);
+   }
+   close EXEC;
+   $status = $?;
+   #chdir "$pwd";
+   if ($?) {
+      die $?;
+   } else { # add to cache
+   # save result ... 
+   # $qm = &ipfs_api('add','-r',"$pwd/build/$what");
+     $qm = &ipfs_api('add','-r','.');
+     $cache->{$what} = $qm;
+   }
+   return "$what:$qm:$status";
+}
+
+sub get_qm {
+ my $f = shift;
+ my $dbug = 'bafkqabdemj2wo';
+ my $qm = 'z6CfPsNrajGLLoNHWshz5fm6JwY2HBYLAyTARUUwwhWe';
+ return "qm($f)";
+}
+sub ipfs_api {
+  my $cmd = shift;
+  my @arg = @_;
+  my $hash = '';
+  printf "dbug: ipms %s -Q %s|\n",$cmd,join' ',@arg;
+  local *EXEC; open EXEC,sprintf('ipms %s -Q %s|',$cmd,join' ',@arg) or die $!;
+  while (<EXEC>) {
+    $hash = $1 if /^(\w+)$/;
+  }
+  close EXEC;
+  if ($?) { die $?; }
+  return $hash;
+}
+
+
+
+1; # $Source: /my/perl/scripts/ymake.pl$
+å

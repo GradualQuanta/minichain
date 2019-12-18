@@ -1,0 +1,22 @@
+
+­¥#
+
+root="${1:-/}"
+gwhost=$(ipfs config Addresses.Gateway | cut -d'/' -f 3)
+gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
+peerid=$(ipfs config Identity.PeerID)
+
+echo root: $root
+if rootkey=$(ipfs files stat --hash $root) 2>/dev/null; then
+ if key=$(ipfs key list -l | grep -w rootkey | cut -d' ' -f 1); then
+ echo key: $key
+ echo rootkey: $rootkey
+ ipfs --offline name publish --key=files --allow-offline /ipfs/$ww 1>/dev/null 2>&1 
+ echo url: http://gateway.ipfs.io/ipns/$key
+ echo url: http://$gwhost:$gwport/ipfs/$rootkey
+ time ssh serv01 ipfs name publish --key=rootkey --allow-offline /ipfs/$rootkey 2>/dev/null | sed -e 's/^/info: /'
+ fi
+else
+ echo no $root
+fi
+¥

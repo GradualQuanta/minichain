@@ -1,0 +1,48 @@
+
+±©// partir de ce que l'on veut au lieu de ce que l'on a !
+
+digraph IRP {
+
+   Mychelium -> { blockRing, minichain, HuRing }
+   { blockRing, minichain, HuRing } -> PERL [style="dotted"]
+
+   minichain -> { DAG0, IPNS, API, DOCS }
+   blockRing -> { BRNG, DAG1 } 
+   HuRing -> { ydentity, DAG1, CxRDT }
+
+   API -> { BIN, SYSTEM, ENV }
+   DAG0 -> IPFS
+   DAG1 -> { IPMS, IPFS }
+   SYSTEM -> SBIN 
+
+   IPMS -> { MHASH, IDEN20 }
+   { MHASH, IDEN20 } -> GITHUB
+
+
+   { BIN, SBIN, ENV } -> { GITHUB, MFS }
+   DOCS -> { MFS, NETLIFY }
+   { MFS, NETLIFY } -> GITHUB
+
+   PERL -> { LOCAL_LIB, MODULES }
+   LOCAL_LIB -> { CPAN, ENV }
+   MODULES -> CPAN
+   { IPFS, IPNS }  -> { WEB, DIST }
+   { MFS } -> DIST
+
+   ENV -> { CONFIG, ENVRC }
+
+  DIST [label="IPFS repos"]
+  DAG0 [label="DAG"]
+  DAG1 [label="DAG"]
+
+  { rank=same; minichain, blockRing, HuRing }
+  { rank=same; CPAN, GITHUB, WEB, DIST }
+
+}
+
+// CACHE {
+// IPFS: Qm!#%^@$^
+// BRNG: Qm!36236
+// }
+
+©

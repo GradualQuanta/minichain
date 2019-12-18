@@ -1,0 +1,17 @@
+
+Ç¿This is a proof of concept for pow-addressable-content
+
+with k=141949 (elapsed: 47s)
+
+file stored w/ command:
+ipfs add --raw-leave --hash shake-256 code141949-z*M[0-9]GC*.txt --cid-base base58btc
+
+previous collision: [141949](https://gateway.ipfs.io/ipfs/zDviKJxbn9g)
+
+---
+col: 1
+vanity: M\dGC
+pcode: ~
+...
+$code: f5k$
+¿

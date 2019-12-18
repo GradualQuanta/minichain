@@ -1,0 +1,11 @@
+
+|v# 
+
+list="IRP Map muchain"
+
+for f in *.dot; do
+ d=${f%.*}
+ echo d: $d
+ dot -Tpng $d.dot -o $d.png; # eog $d.png&
+done
+v

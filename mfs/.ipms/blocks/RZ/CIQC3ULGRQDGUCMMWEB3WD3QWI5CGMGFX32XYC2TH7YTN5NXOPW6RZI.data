@@ -1,0 +1,11 @@
+
+Ž†--- # pull request parameters
+envelop: /files{{page.bpath}}/PR/to-{{page.named}}.txt
+payload: /files{{page.bpath}}/PR/block.txt
+signature: /files/{{page.bpath}}h/PR/block.sig
+code: {{site.data.state.PR.IRQL}}
+seq: {{site.data.state.PR.seq}}
+...
+pubkey: ~
+sig: ~
+†

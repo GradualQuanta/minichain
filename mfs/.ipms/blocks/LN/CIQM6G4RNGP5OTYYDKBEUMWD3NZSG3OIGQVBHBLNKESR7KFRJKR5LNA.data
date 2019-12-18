@@ -1,0 +1,22 @@
+
+ÒÊ## Proof of Good Intent ...
+
+This is a proof of concept for pow-addressable-content (hash length=16)
+
+if a bad actor try to hack the system something will be off with this file
+(i.e. signed peerid might be wrong etc.)
+
+with k=0 (elapsed: 0s)
+
+file stored w/ command:
+ipfs add --raw-leave --hash shake-256 vcode0-z*.txt --cid-base base58btc
+
+previous collision: [0](https://gateway.ipfs.io/ipfs/z*%patf%)
+
+---
+col: 0
+pattern: ^..PoW\d+
+pcode: ~
+...
+$code: ~$
+Ê

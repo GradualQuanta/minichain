@@ -1,0 +1,220 @@
+
+Õ)Í)#!/bin/sh
+
+# this script publish the hash of /.brings to the peerid
+
+set -e
+yellow="[33m"
+red="[31m"
+nc="[0m"
+tic=$(date +%s)
+# set up local IPFS environment ...
+export IPFS_PATH=$(pwd)/_ipfs
+export PATH=_ipfs/bin:$(pwd)/bin:$PATH
+
+main(){
+
+debug=0
+verbose=0
+trace=0
+for i in "$@"; do
+case $i in
+    -o|--offline) offline='--offline' ;;
+    -d|--debug) debug=1 ;;
+    -v|--verbose) verbose=1 ;;
+    -t|--trace) trace=1 ;;
+    *) # unknown option ;;
+esac
+done
+
+check_perl_local_lib;
+check_ipfs_running;
+
+# get ipfs config parameters ...
+gwhost=$(ipfs config Addresses.Gateway | cut -d'/' -f 3)
+gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
+peerid=$(ipfs config Identity.PeerID)
+# get fullname and emails associated with peerid
+eval "$(fullname -a $peerid | eyml)"
+
+
+# key is harcoded in function...
+update_bootstrap_path /.brings/bootstrap 
+
+post_identity_to_root;
+
+check_exist_of_directory "/.brings/logs"
+writelog_of_mutable_of_logfile /my/identity/public.yml /.brings/logs/identity.log
+writelog_of_mutable_of_logfile /public /.brings/logs/public.log
+
+writelog_of_mutable_of_logfile /root /.brings/logs/root.log
+writelog_of_mutable_of_logfile /my /.brings/logs/my.log
+
+post_brings;
+
+#ipfs files read "/.brings/logs/brings.log"
+ipfs files stat /.brings/logs/brings.log
+echo .
+brkey=$(ipfs files stat --hash /.brings)
+ipfs --offline name publish --allow-offline $brkey 1>/dev/null 2>&1
+echo "url: https://gateway.ipfs.io/ipfs/$brkey"
+echo "url: http://$gwhost:$gwport/ipns/$peerid"
+
+# -----------------------------------------------------------------------
+# PUBLISH /.brings to self (peerid)
+ipfs $offline name publish --allow-offline $brkey | sed -e 's/^/info: /';
+# -----------------------------------------------------------------------
+
+}
+
+check_exist_of_directory()
+{
+    if ! ipfs files stat --hash "$1" 1>/dev/null 2>&1; then
+	    ipfs files mkdir -p "$1"
+    fi
+}
+
+check_ipfs_running()
+{
+   #if ! ipfs cat mAVUACHJ1bm5pbmcK 1>/dev/null 2>&1; then false; fi
+   if ! ipfs swarm addrs local | sed -e 's/^/info: /'; then
+      echo " ${yellow}WARNING no ipfs daemon running${nc}"
+      echo " ${yellow}INFO running start.sh${nc}"
+      ./start.sh
+      sleep 2
+   fi
+}
+
+check_perl_local_lib()
+{
+    if ! perl -Mlocal::lib=$(pwd)/_perl5 -e 1 2>/dev/null; then
+	if [ $debug -eq 1 ]; then
+  	echo " WARNING perl: local::lib not found"
+	echo " running . rc.sh"
+        fi
+	. ./rc.sh
+    fi
+    echo DICT: $DICT
+}
+
+ipfs_append_of_text_of_file()
+{
+    text=$1;
+    file=$2;
+    fname=$(basename $2)
+
+    echo "ipfs_append_of_file : $file"
+    
+    ipfs files read "${file}" > /tmp/${fname}
+    echo "$text" >> /tmp/${fname}
+    ipfs files write --create  --truncate "${file}" < /tmp/${fname}
+    rm -f /tmp/${fname}
+}
+
+writelog_of_mutable_of_logfile()
+{
+   mutable=$1
+   logfile=$2
+   here=writelog_of_mutable_of_logfile
+
+   tic=$(date +%s)
+
+   if [ $debug -eq 1 ]; then
+      echo "Entering in $here $*"
+   fi
+
+   if [ $# -ne 2 ]
+   then
+      echo "Input parameters : $*"
+      echo "ERROR"
+      echo "Usage: $here <mutable> <logfile>"
+      exit $$
+   else 
+     echo logfile: $logfile
+   fi
+   qm=$(ipfs files stat --hash ${mutable})
+
+   if sz=$(ipfs files stat --format="<size>" ${logfile} 2>/dev/null)
+   then
+      ipfs_append_of_text_of_file "$tic: ${qm}" ${logfile}
+   else
+      ipfs files write --create --raw-leaves "${logfile}" <<EOF
+# log-file for ${mutable}
+# \$Source: ${logfile}\$
+$tic: ${qm}
+EOF
+   fi
+}
+
+post_brings()
+{
+    if [ $debug -eq 1 ]; then
+	echo "Entering in post_brings $*"
+    fi
+    
+    bot=$(ipfs add -Q $0) # adding self 
+    if ipfs files rm /.brings/${0##*/} 2>/dev/null; then true; fi
+    ipfs files cp /ipfs/$bot "/.brings/${0##*/}"
+
+    brkey=$(ipfs files stat --hash /.brings)
+    echo "brkey: $brkey"
+
+    writelog_of_mutable_of_logfile /.brings /.brings/logs/brings.log
+}
+
+post_identity_to_root()
+{
+   if [ $debug -eq 1 ]; then
+      echo "Entering in post_identity_to_root $*"
+   fi
+
+   if [ "x$email" = 'x' ]; then
+      if [ "x$peerid" = 'x' ]; then
+         peerid=$(ipfs config Identity.PeerID)
+      fi
+      eval "$(fullname -a $peerid | eyml)"
+   fi
+
+   if ! ipfs files stat --hash /root/directory 1>/dev/null 2>&1; then
+      ipfs files mkdir /root/directory
+   else
+      if ipfs files rm -r "/root/directory/$email" 2>/dev/null; then true; fi
+   fi
+
+   qm=$(ipfs files stat --hash /my/identity)
+   ipfs files cp /ipfs/$qm "/root/directory/$email"
+}
+
+update_bootstrap_path() {
+  # usage: update_bootstrap_path /.brings/bootstrap
+  echo update: bootstrap
+
+   key="QmVdu2zd1B8VLn3R8xTMoD2yBVScQ1w9UMbW7CR1EJTVYw"
+   mfspath="$1"
+
+   if [ $debug -eq 1 ]; then
+      echo "Entering in update_bootstrap_path $*"
+   fi
+
+   if ! ipfs files stat --hash ${mfspath%/*} 1>/dev/null 2>&1; then
+      ipfs files mkdir -p ${mfspath%/*}
+   fi
+   if ipath=$(ipfs --timeout 10s name resolve ${key} 2>/dev/null); then
+      if ipfs files rm -r ${mfspath} 2>/dev/null; then true; fi
+      if ipfs files cp ${ipath} ${mfspath}; then true; fi
+   else
+      echo "${yellow}warning: ${key} not resolved${nc}"
+   fi
+
+   # republish bootstrap if key present ...
+   if ipfs key list | grep -q -w bootstrap; then
+     qm=$(ipfs files stat --hash ${mfspath}) 
+     ipfs $offline name publish --allow-offline --key=bootstrap /ipfs/$qm | sed -e 's/^/info: /'
+   fi
+  
+}
+
+main $@ ;
+
+exit 0
+Í)

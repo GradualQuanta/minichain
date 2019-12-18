@@ -1,0 +1,9 @@
+
+½µ---
+# $mutable: /root/tmp/minichain/blockn.txt$
+block: 8
+tic: 1575434310
+prevhash: QmWTq7qDAoVFmMc6fieCr6jC4UjUjk95FMGvyeFV9o7fpu
+payload: the block 8 was created w/ mkblock.sh
+...
+µ

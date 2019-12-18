@@ -1,0 +1,12 @@
+
+öî--- # where scripts are ...
+
+CLONE: "git clone https://github.com/gradual-quanta/minichain.git ."
+GITHUB: "git pull"
+CONFIG: /.brings/bootstrap/bin/mkconfig.sh
+LOCAL_LIB: /.brings/bootstrap/perl5/install-local-lib.sh
+IPFS: /.ipms/bin/bootstrap.sh
+MFS: /.brings/bootstrap/bin/install_mfs.sh
+BIN: /.brings/bootstrap/bin/install_binetc.sh
+DAEMON: /.brings/bin/ipmsd.sh
+î

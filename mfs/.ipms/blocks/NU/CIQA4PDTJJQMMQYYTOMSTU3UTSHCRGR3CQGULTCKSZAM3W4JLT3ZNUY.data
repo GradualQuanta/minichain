@@ -1,0 +1,36 @@
+
+–Ž#!/usr/bin/perl
+# $Name: $
+# $Source: /my/perl/script/keywords.pl$
+
+# $Date: $
+# $tic: $
+# $Previous: $
+#
+use YAML::Syck qw(LoadFile);
+my $yamlf=shift;
+my $yml = LoadFile($yamlf);
+my $file=$ARGV[0];
+
+local $/ = undef;
+my $buf = <>;
+
+
+foreach my $kw (reverse sort keys %{$yml}) {
+ #printf "%s: %s\n",$kw,$yml->{$kw};
+ my $KW = $kw; $KW =~ s/(.*)/\U\1/;
+ printf "%s: %s\n",$KW,$yml->{$kw};
+ $buf =~ s/\$$kw: .*\s*\$/\$$kw: $yml->{$kw}\$/g;
+}
+
+print "buf: ",$buf if $dbug;
+
+local *F;
+open F,'>',$file;
+print F $buf;
+close F;
+
+
+
+
+Ž

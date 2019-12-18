@@ -1,0 +1,25 @@
+
+‹ƒ#
+if echo "$0" | grep -q '^/'; then
+  rootdir="${0%/bin/*}"
+else
+  rootdir="$(pwd)"; rootdir="${rootdir%/bin}"
+fi
+symb="${rootdir##*/}"
+qm=$(ipms add -r -Q .)
+if ipms files stat --hash /.brings/$symb/bin 1>/dev/null; then
+ ipms files rm -r /.brings/$symb/bin
+else
+  ipms files mkdir -p /.brings/$symb
+fi
+ipms files cp /ipfs/$qm /.brings/$symb/bin
+echo -n 'bin: '
+ipms files stat /.brings/$symb/bin
+qm=$(ipms files stat --hash /.brings/$symb)
+sed -i -e "s/qm='.*'$/qm='$qm'/" bootstrap.sh
+echo $symb: $qm
+exit $?
+
+
+
+ƒ

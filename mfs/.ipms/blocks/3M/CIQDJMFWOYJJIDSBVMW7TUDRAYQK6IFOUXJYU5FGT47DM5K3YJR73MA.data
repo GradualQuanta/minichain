@@ -1,0 +1,47 @@
+
+ýõ#
+
+# script for retrieving new_publish (it places a copy at new_publish_michel.sh)
+# $qm: ~$
+
+# if the script doesn't work the new_publish is still at:
+# https://gateway.ipfs.io/ipfs/QmXabG6hoLPgm9F4kcQnAVWdvk4yKYb1hSAngHw3Peh86w
+# or http://127.0.0.1:8199/ipfs/QmXabG6hoLPgm9F4kcQnAVWdvk4yKYb1hSAngHw3Peh86w
+
+
+# this script is at QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ@ipfs:/my/misc/shell/scripts/provide_new_publish.sh$
+
+main(){
+ set -e
+ provide_new_publish;
+}
+
+provide_new_publish() {
+ addr=$(get_ipfs_addr)
+ fetch_from_ipfs $addr new_publish_michel.sh
+}
+
+get_ipfs_addr(){
+  michel_brings=$(get_michel_addr)
+  echo $(resolve_path $michel_brings/new_publish.sh)
+}
+get_michel_addr(){
+  michel_id='QmZV2jsMziXwrsZx5fJ6LFXDLCSyP7oUdfjXdHSLbLXxKJ'
+  echo $(resolve_peerid $michel_id)
+}
+
+fetch_from_ipfs(){
+  ipfs get "$1" -o "$2"
+}
+
+resolve_peerid(){
+  echo $(ipfs name resolve "$1")
+}
+resolve_path(){
+  echo $(ipfs resolve "$1")
+}
+
+
+main;
+exit $?; # $Source: /my/misc/shell/scripts/provide_new_publish.sh$
+õ

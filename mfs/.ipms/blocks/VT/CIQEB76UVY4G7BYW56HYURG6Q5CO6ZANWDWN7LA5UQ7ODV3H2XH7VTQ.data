@@ -1,0 +1,79 @@
+
+ÕÍ#
+
+
+set -e
+addr="$1"
+if echo $addr | grep -q '^/'; then
+hash=${addr#/ip*s/}; hash=${hash%%/*}
+ipath=$addr
+else
+hash=$addr; hash=${hash%%/*}
+ipath=/ipfs/$addr
+fi
+mpath=${ipath#/ipfs/$hash}
+if echo $addr | grep -q '/ipns'; then ipfs=0; else ipfs=1; fi
+
+WEBUI1=QmQLXHs7K98JNQdWrBB2cQLJahPhmupbDjRuH1b9ibmwVa
+WEBUI2=QmfQkD8pBSBCBxWEwFSu4XaDVSWK6bjnNuaWZjMyQbyDub
+WEBUI3=Qmexhq2sBHnXQbvyP2GfUdbnY7HCagH2Mw5vUNSBn2nxip
+
+
+apihost=$(ipms config Addresses.API | cut -d'/' -f 3)
+apiport=$(ipms config Addresses.API | cut -d'/' -f 5)
+gwhost=$(ipms config Addresses.Gateway | cut -d'/' -f 3)
+gwport=$(ipms config Addresses.Gateway | cut -d'/' -f 5)
+gwhost=$(ipms config Addresses.Gateway | cut -d'/' -f 3)
+gwport=$(ipms config Addresses.Gateway | cut -d'/' -f 5)
+peerid=$(ipms config Identity.PeerID)
+
+
+echo hash: $hash
+echo peerid: http://$gwhost:$gwport/ipns/$peerid
+echo peerid: http://$apihost:$apiport/ipns/webui.ipfs.io/#/ipns/$peerid
+if [ $ipfs -eq 1 ]; then
+echo ipfs: http://ipfs.io/ipfs/$hash
+fi
+echo "qrcode: https://chart.googleapis.com/chart?cht=qr&chs=320x320&chld=H&chl=http://ipfs.io$ipath"
+echo save: https://web.archive.org/save/https://ipfs.io$ipath
+echo wback: https://web.archive.org/web/*/https://ipfs.io$ipath
+echo ''
+
+echo  url: http://$gwhost:$gwport$ipath
+echo  url: https://gateway.ipfs.io$ipath
+echo  url: http://ipfs.blockringâ„¢.ml$ipath
+echo ''
+echo  url: http://dweb.link$ipath
+echo  url: https://cloudflare-ipfs.com$ipath
+echo  url: https://hardbin.com$ipath
+echo  url: https://siderus.io$ipath
+echo  url: https://ipfs.eternum.io$ipath
+if [ $ipfs -eq 1 ]; then
+echo  url: http://ipns.co/$hash
+else
+echo  url: http://ipns.co$ipath
+fi
+
+echo ''
+echo  url: https://cdn.statically.io/img/gateway.ipfs.io$ipath
+#echo  url: https://cdn.statically.io/gh/gradual-quanta/minichain/*
+#echo  url: https://cdn.statically.io/favicons/*
+#echo  url: https://www.jsdelivr.com/package/gh/michel47/*
+#echo  url: https://cdn.jsdelivr.net/gh/iglake/js@1.8/dist/inc.js
+echo  url: http://yoogle.com:$gwport$ipath
+echo  url: http://127.0.0.1:$gwport$ipath
+echo ''
+if [ $ipfs -eq 1 ]; then
+echo  url: http://$apihost:$apiport/webui/#/explore/$hash
+echo ''
+echo  url: http://$apihost:$apiport/ipfs/$WEBUI1/#/files/explore/$hash
+echo  url: http://$apihost:$apiport/ipfs/$WEBUI1/#/files/preview/$hash
+echo  url: http://$apihost:$apiport/ipfs/$WEBUI2/#/object$ipath
+echo  url: http://$apihost:$apiport/ipfs/$WEBUI3/#/files/explore/$hash
+fi
+echo  url: http://$apihost:$apiport/ipns/webui.ipfs.io/#/files$mpath
+echo  url: http://$apihost:$apiport/ipns/webui.ipfs.io/#/explore$ipath
+echo  url: http://$apihost:$apiport/ipns/webui.ipfs.io/#$ipath
+
+
+Í

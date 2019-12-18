@@ -1,0 +1,12 @@
+
+”Œ#
+
+peerid=$(ipfs config Identity.PeerID)
+if ipfs ping $peerid 2>/dev/null; then
+  echo ipfs is running
+else
+  echo ipfs is not running
+fi
+
+
+Œ

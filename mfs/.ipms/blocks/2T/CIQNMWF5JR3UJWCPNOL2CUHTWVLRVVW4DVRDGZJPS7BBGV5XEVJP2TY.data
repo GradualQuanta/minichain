@@ -1,0 +1,35 @@
+
+ÍÅ#
+
+if [ "x$1" = 'x-h' ]; then
+  echo "usage: ${0##*/} [rootdir]"
+  exit $$
+fi
+rootdir="${1:-/root}"
+gwhost=$(ipfs config Addresses.Gateway | cut -d'/' -f 3)
+gwport=$(ipfs config Addresses.Gateway | cut -d'/' -f 5)
+peerid=$(ipfs config Identity.PeerID)
+
+echo rootdir: $rootdir
+if qmroot=$(ipfs files stat --hash $rootdir) 2>/dev/null; then
+ if ipfs key list -l | grep -q -w root; then
+   key=$(ipfs key list -l | grep -w root | cut -d' ' -f 1)
+ else
+  key=$(ipfs key gen -t rsa -s 3072 root)
+ fi
+ echo key: $key
+ echo qmroot: $qmroot
+ echo url: http://gateway.ipfs.io/ipns/$key
+ echo url: http://$gwhost:$gwport/ipfs/$qmroot
+ if [ "x$(ssh blockring id -un 2>/dev/null)" = 'xmichelc' ]; then
+   ipfs --offline name publish --key=root --allow-offline /ipfs/$qmroot 1>/dev/null 2>&1 
+   echo info: publishing on blockring
+   time ssh blockring ipfs name publish --key=root --allow-offline /ipfs/$qmroot 2>/dev/null | sed -e 's/^/info: /'
+ else
+   echo info: publishing to ipns
+   time ipfs name publish --key=root --allow-offline /ipfs/$qmroot | sed -e 's/^/info: /'
+ fi
+else
+ echo no $rootdir
+fi
+Å
