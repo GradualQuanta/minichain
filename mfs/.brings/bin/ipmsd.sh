@@ -17,7 +17,7 @@ fi
 #qm=$(echo "IPFS is active" | ipms add --offline -Q) && echo "qm: $qm"
 which ipms
 
-export IPFS_PATH=${IPFS_PATH:=$HOME/.ipfs}
+export IPFS_PATH=${IPFS_PATH:=$BRNG_HOME/ipfs}
 if ! ipms swarm addrs local 2>/dev/null; then
   echo "${red}WARNING no ipms daemon running${nc}, starting one !"
   OPTIONS="--unrestricted-api --enable-namesys-pubsub"

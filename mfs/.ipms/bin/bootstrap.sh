@@ -4,11 +4,11 @@ set -e
 # INSTALLING IPFS ...
 # -------------------
 ver='v0.4.22';
-
-export IPFS_PATH=${IPFS_PATH:-$HOME/.ipms}
+export IPFS_PATH=${IPFS_PATH:-$HOME/.brings/ipfs}
 if test ! -d $IPFS_PATH; then
 mkdir -p $IPFS_PATH
 fi
+
 export IPMS_HOME=${IPMS_HOME:-$HOME/.brings/ipms}
 if test ! -d $IPMS_HOME/bin; then
 mkdir -p $IPMS_HOME/bin

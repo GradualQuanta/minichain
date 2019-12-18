@@ -2,7 +2,7 @@
 
 export BRNG_HOME=${BRNG_HOME:=$HOME/.brings}
 export IPMS_HOME=${IPMS_HOME:=$HOME/.ipms}
-export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/repos}
+export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
 
 # vim: sw=3 et ts=2
 if test -e /etc/environment; then

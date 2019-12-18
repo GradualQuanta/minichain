@@ -11,7 +11,7 @@ nc="[0m"
 bindir=${0%/*}
 export PATH=$bindir:$PATH
 echo BRNG_HOME: $BRNG_HOME
-IPFS_PATH=${IPFS_PATH:-$HOME/.ipfs}
+IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
 echo IPFS_PATH: $IPFS_PATH
 
 peerid=$(ipms config Identity.PeerID)
