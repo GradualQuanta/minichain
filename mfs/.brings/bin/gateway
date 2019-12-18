@@ -3,7 +3,8 @@
 xurl=/.brings/system/bin/${0##*/}.sh
 
 set -e
-url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.brings/minimal${xurl#/.brings}
+# pull github version on ipfs side and execute it from ipfs
+url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/mfs/.brings/${xurl#/.brings}
 if qm=$(ipms add -Q $url --progress=0); then true; fi
 qm=${qm:-QmQiqSsb8utZQc2hPjQUoNkfEkk3V4Z8hMoF3ZuiRURn5w}
 ipms cat /ipfs/$qm | sh - /dev/stdin $*

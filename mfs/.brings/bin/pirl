@@ -14,7 +14,7 @@ if qm=$(ipms files stat --hash "$mfspath" 1>/dev/null 2>&1); then
 ipms files read "$mfspath" | perl /dev/stdin ${*}
 else
 #url=$raw/files${mfspath}
-url=$raw/.brings/minimal${mfspath#/.brings}
+url=$raw/mfs/${mfspath#/}
 qm=$(ipms add -Q $url --progress=0)
 qm=${qm:-QmPNmsSvfdu7dKdX5JVTdCpL5QgFMtd9xnXTjzTNR1a9tv}
 registered=1

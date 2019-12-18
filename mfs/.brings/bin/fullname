@@ -4,7 +4,7 @@ set -e
 script=/.brings/bin/fullname.pl
 
 peerid=$(ipms --offline config Identity.PeerID)
-url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/.brings/minimal${script#/.brings}
+url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/mfs/.brings/${script#/.brings}
 qm=$(ipms add -Q $url --progress=0)
 qm=${qm:-QmPNmsSvfdu7dKdX5JVTdCpL5QgFMtd9xnXTjzTNR1a9tv}
 ipms cat /ipfs/$qm | perl /dev/stdin $*
