@@ -1,6 +1,6 @@
 #
 
-export PROJDIR=$HOME/minichain/mfs/.ipms
+export PROJDIR=$(pwd); # $HOME/minichain
 export BRNG_HOME="${BRNG_HOME:-$HOME/.brings}"
 
 sh mfs/.brings/bootstrap/perl5/install-local-lib.sh
@@ -12,9 +12,12 @@ sh mfs/.brings/bootstrap/bin/install_binetc.sh
 export PATH="$BRNG_HOME/bin:$PATH"
 export DICT="$BRNG_HOME/etc"
 
-export IPMS_HOME="${IPMS_HOME:-$HOME/.ipms}"
+#export IPMS_HOME="${IPMS_HOME:-$HOME/.ipms}"
+export IPMS_HOME="${IPMS_HOME:-$PROJDIR/mfs/.ipms}"
 export PATH="$IPMS_HOME/bin:$PATH"
 export IPFS_PATH="${IPFS_PATH:-$PROJDIR/mfs/.ipms}"
+
+echo pwd: $(pwd)
 sh mfs/.ipms/bin/bootstrap.sh
 
 sh mfs/.brings/bootstrap/bin/install_system.sh

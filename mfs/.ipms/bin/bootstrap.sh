@@ -4,10 +4,12 @@ set -e
 # INSTALLING IPFS ...
 # -------------------
 ver='v0.4.22';
+echo "${0##*/}: installing IPFS $ver"
 export IPFS_PATH=${IPFS_PATH:-$HOME/.brings/ipfs}
 if test ! -d $IPFS_PATH; then
 mkdir -p $IPFS_PATH
 fi
+echo IPFS_PATH: ${IPFS_PATH}
 
 export IPMS_HOME=${IPMS_HOME:-$HOME/.brings/ipms}
 if test ! -d $IPMS_HOME/bin; then
@@ -66,6 +68,7 @@ ipms cat $line
 echo /ip4/127.0.0.1/tcp/$apiport > $IPFS_PATH/api
 echo test w/ daemon running
 
+set -x
 t3=$(curl -s http://127.0.0.1:$gwport/ipfs/QmW58ZW9dMkGs4oFcYkDJdYftmsoh4aR7j26b2sFBnVFFj)
 t4=$(ipms --api=/ip4/127.0.0.1/tcp/$apiport cat $t0)
 echo "${green}$t3 $t4${nc}"
