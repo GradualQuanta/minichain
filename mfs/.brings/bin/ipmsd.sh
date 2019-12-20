@@ -41,7 +41,11 @@ if ! ipms swarm addrs local 2>/dev/null; then
     if which xterm 1>/dev/null; then
       xterm -geometry 128x18 -bg black -fg orange -name IPFS -n "$pp" -title "ipms daemon:$pp (${IPFS_PATH:-~/.ipfs}) ~ $name" -e ipms daemon $OPTIONS &
     else
-      gnome-terminal --title "ipms daemon:$pp ($IPFS_PATH) ~ $name" -- ipms daemon $OPTIONS &
+      if which xterm 1>/dev/null; then
+        gnome-terminal --title "ipms daemon:$pp ($IPFS_PATH) ~ $name" -- ipms daemon $OPTIONS &
+      else
+        ipms daemon $OPTIONS &
+      fi
     fi
   fi
 
