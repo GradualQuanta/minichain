@@ -17,4 +17,5 @@ perl -MCPAN -Mlocal::lib=$rootdir/perl5 -e 'CPAN::install(MIME::Base32)'
 perl -MCPAN -Mlocal::lib=$rootdir/perl5 -e 'CPAN::install(Math::BigInt)'
 perl -MCPAN -Mlocal::lib=$rootdir/perl5 -e 'CPAN::install(Encode::Base58::BigInt)'
 perl -MCPAN -Mlocal::lib=$rootdir/perl5 -e 'CPAN::install(JSON)'
+perl -MCPAN -Mlocal::lib=$rootdir/perl5 -e 'CPAN::install(Crypt::Digest)'
 

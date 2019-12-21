@@ -25,5 +25,15 @@ if [ "x\$PROJDIR" = 'x' ]; then
 PROJDIR=$(pwd)
 PATH="\$PROJDIR/bin:\$PATH"
 fi
+
+if ! ipms swarm addrs local 1>/dev/null 2>&1; then
+  echo "WARNING: no ipms daemon running !"
+  ipms.sh
+else
+  echo "ipms already running"
+fi
+
 EOF
 echo "please source the $(pwd)/config.sh file"
+
+
