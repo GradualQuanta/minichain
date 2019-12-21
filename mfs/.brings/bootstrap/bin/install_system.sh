@@ -14,10 +14,12 @@ rsync -auv $SRC/system $BRNG_HOME
 
 #key='QmVQd43Y5DQutAbgqiQkZtKJNd8mJiZr9Eq8D7ac2PeSL1' # minimal's key
 # ipms name publish --key=minimal $(ipms add -r -Q $PROJDIR/.brings/minimal)
+qm=$(ipms add -r -Q "$SRC/system")
+ipms files cp $qm /.brings/system
+
 #ipath=$(ipms resolve $key/system)
 #qm='QmbXjzH9LzbxP7pCstKVEQZdXyLDkP2jAZFstzbfe9ju4W';
 #ipms get $qm -o $BRNG_HOME/system --progress=0
-
 #chmod a+x $BRNG_HOME/system/bin/*
 if [ ! -e $BRNG_HOME/system/bin/add.sh ]; then
    echo "$BRNG_HOME/system/bradd is missing" ; exit $$

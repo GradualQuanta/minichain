@@ -24,7 +24,7 @@ which ipms
 
 #export IPFS_PATH=${IPFS_PATH:=$BRNG_HOME/ipfs}
 if ! ipms swarm addrs local 2>/dev/null; then
-  echo "${red}WARNING no ipms daemon running${nc}, starting one !"
+  echo "${yellow}Starting ipms daemon${nc}"
   OPTIONS="--unrestricted-api --enable-namesys-pubsub"
   if [ "x$IPFS_PATH" != 'x' ]; then
     pp=$(cat $IPFS_PATH/config | xjson Addresses.Gateway | cut -d'/' -f 5)
