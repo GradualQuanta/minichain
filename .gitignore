@@ -1,4 +1,6 @@
 mfs/.ipms/blocks
+mfs/.ipms/config
+mfs/.ipms/bin/ipms
 config.sh
 *.sw*
 .jekyll-cache

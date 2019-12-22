@@ -15,8 +15,10 @@ export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
 export IPFS_PATH=\${IPFS_PATH:-\$HOME/.brings/ipfs}
 export PERL5LIB=\$HOME/.brings/perl5/lib/perl5
 
-if ! test -e $IPFS_PATH/config; then                                                                   echo "$IPFS_PATH: not proprely set."
-  exit $$                                                                                            fi
+if ! test -e $IPFS_PATH/config; then
+  echo "IPFS_PATH: not proprely set ($IPFS_PATH)."
+  return $$
+fi
 
 if test -e \$BRNG_HOME/envrc.sh; then
 . \$BRNG_HOME/envrc.sh

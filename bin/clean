@@ -1,0 +1,4 @@
+#
+
+rm -f $(git status --porcelain -uall | grep '^??' | cut -d' ' -f 2 | grep -v 'config$')
+git status --porcelain -uall | grep -e '^??'
