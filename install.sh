@@ -14,6 +14,7 @@ export DICT="$BRNG_HOME/etc"
 
 #export IPMS_HOME="${IPMS_HOME:-$HOME/.ipms}"
 if [ "x$USER" = 'xmichelc' ] && uname -r | grep -q 'Microsoft' ; then
+git remote set-url origin git@michel47.github.com:Gradual-Quanta/minichain.git
 export IPMS_HOME="${PROJDIR}/mfs/.ipms"
 export IPFS_PATH="${IPFS_PATH:-$PROJDIR/mfs/.ipms}"
 else
