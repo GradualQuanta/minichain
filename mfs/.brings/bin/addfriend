@@ -1,15 +1,18 @@
 #
 main (){
 peer="$1";
+if ! ipms files stat --hash /my/friends 1>/dev/null 2>&1; then
+  ipms files mkdir -p /my/friends
+fi
 myqm=$(ipms files stat --hash /my)
 echo self@ipfs: /my=/ipfs/$myqm
 if ipms files stat --hash /my/friends/peerids.yml 1>/dev/null 2>&1; then
  append_file "- $peer" /my/friends/peerids.yml
 else
- peerid=$(ipfs --offline config Identity.PeerID)
- cat | ipfs files write --create --truncate /my/friends/peerids.yml <<EOF
+ peerid=$(ipms --offline config Identity.PeerID)
+ cat | ipms files write --create --truncate /my/friends/peerids.yml <<EOF
 --- # friends
-# $PeerID: $peerid$
+# \$PeerID: $peerid\$
 - $peer
 EOF
 fi
@@ -21,18 +24,18 @@ append_file(){
    text=$1;
    file=$2;
    fname=${file##*/}
-   if ipfs files stat --hash ${file} 1>/dev/null 2>&1; then
-     ipfs files read "${file}" > /tmp/${fname}
+   if ipms files stat --hash ${file} 1>/dev/null 2>&1; then
+     ipms files read "${file}" > /tmp/${fname}
      echo "$text" >> /tmp/${fname}
-     ipfs files write --create  --truncate "${file}" < /tmp/${fname}
+     ipms files write --create  --truncate "${file}" < /tmp/${fname}
      rm -f /tmp/${fname}
    else 
-     echo "$text" |  ipfs files write --create  --truncate "${file}" 
+     echo "$text" |  ipms files write --create  --truncate "${file}" 
    fi
 }
 
 main $@;
 exit $?
-true; # $Source: /.brings/logs/publog.sh$
+true; # $Source: /.brings/files/bin/addfriend$
 
 
