@@ -33,7 +33,7 @@ fi
 
 if ! ipms swarm addrs local 1>/dev/null 2>&1; then
   echo "WARNING: no ipms daemon running !"
-  ipms.sh
+  ipmsd.sh
 else
   echo "ipms already running"
 fi
