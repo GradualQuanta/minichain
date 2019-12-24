@@ -10,7 +10,7 @@ if ipms files stat --hash /my/friends/peerids.yml 1>/dev/null 2>&1; then
  append_file "- $peer" /my/friends/peerids.yml
 else
  peerid=$(ipms --offline config Identity.PeerID)
- cat | ipms files write --create --truncate /my/friends/peerids.yml <<EOF
+ ipms files write --create --truncate /my/friends/peerids.yml <<EOF
 --- # friends
 # \$PeerID: $peerid\$
 - $peer

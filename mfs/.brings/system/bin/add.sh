@@ -2,26 +2,36 @@
 # $Id: $
 
 # $Source: /.brings/files/bin/add.sh$
-# $Date: 12/12/19$
+# $Date: 12/24/19$
 # $Author: Michel G. Combes$
 #
-# $Previous: QmRkTN7omrUBS1YqTR1TBun8ykLJX5j72KqhjV1VxynR9U$
+# $Previous: QmXihc28sxVvJzXXt6HwDCYtZe5v11wFA92DjdGR8BkryZ$
 # $Parent: /my/shell/dircolors/upload.sh$
 #
-# $tic: 1576161686$
+# $tic: 1577210295$
 # $spot: 2668474423$
 # $Signature: ~$
 #
 # this script add a files to mfs ...
-
 
 if ! ipms swarm addrs local | sed -e 's/^/info: /'; then
    echo ipms not running
 fi
 # dependencies:
 if ! release=$(ipms files stat --hash /.brings/system/bin 2>/dev/null); then
-#release='QmQzt22HCUwHKhGZFR8PAyn2uni9TNqy9GZtkg5gpxjT6d'
 release='QmcUvbFeD59zEgV2A8hhVn3gKndLP7Sanq2xGBqnPNgJEV'
+if ipms resolve /ipfs/$release; then
+  ipms pin add /ipfs/$release
+  if ipms files stat --hash /.brings/system/bin 1>/dev/null 2>&1; then
+     ipms files rm -r /.brings/system/bin
+  else
+     ipms files mkdir -p /.brings/system
+  fi
+  ipms files cp /ipfs/$release /.brings/system/bin 
+else
+   echo "error: release ($release) not found"
+   exit $$
+fi
 fi
 kwextract="/ipfs/$release/kwextract.pl"
 kwsubsti="/ipfs/$release/kwsubsti.pl"
@@ -56,16 +66,22 @@ for file in $list; do
   if pv=$(ipms files stat --hash $source 2>/dev/null); then
      if echo $source | grep -q '/$'; then
 	  ipms files rm -r $source
-       else
+     else
 	  ipms files rm $source
-       fi
+     fi
   else
     pv=$(ipms add -Q $file)
   fi
-  if echo $source | grep -q '/$'; then
-     cwd=$(pwd)
+  if echo $source | grep -q '/$'; then # source is a folder
      bdir=${source%/*}
-     qm=$(ipms add -Q -r $cwd)
+
+     parent=${file%/*}
+     if echo $parent | grep -q '^/'; then
+	     true;
+     else
+        parent=$(pwd)
+     fi
+     qm=$(ipms add -Q -r $parent)
      #echo info: ips files cp /ipfs/$qm $bdir
      ipms files cp /ipfs/$qm $bdir
      ipms files cp /ipfs/$pv $bdir/prev
@@ -106,10 +122,11 @@ ipfs_files_append(){
       echo "$string" >> $tmpf
       ipms files write --create  --truncate "${file}" < $tmpf
    else 
+      genesis=z83ajSANGx6FnQqFaaELyCGFFtrxZKM3C
       ipms files write --create --raw-leaves "${file}" <<EOF
 --- # blockRing for ${file##*/}
-# \$Source: /.brings/files/bin/add.sh$
-# \$Previous: QmRkTN7omrUBS1YqTR1TBun8ykLJX5j72KqhjV1VxynR9U$
+# \$Source: ${file}$
+# \$Previous: ${genesis}$
 - $qm
 EOF
    fi
