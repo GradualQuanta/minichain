@@ -7,10 +7,16 @@ if qm=$(ipms files stat --hash "$script" 1>/dev/null 2>&1); then
   ipms files read $script | sh /dev/stdin ${@}
 else
   # use github file otherwise ...
-  raw="https://raw.githubusercontent.com/Gradual-Quanta/minichain/$release"
-  url=$raw/mfs/.brings/${script#/.brings}
+  raw="https://raw.githubusercontent.com/gradual-quanta/minichain/$release"
+  url=$raw/mfs${script}
   qm=$(ipms add -Q $url --progress=0)
   qm=${qm:-Qmc9A6GrmiAUhy4EuNi6rPkHHYedU5jSYdZ9UxRbCC4gWs}
+  if ipms files stat --hash ${script%/*} 1>/dev/null 2>&1; then
+    if ipms files rm $script 2>/dev/null; then true; fi
+  else
+    ipms files mkdir -p ${script%/*}
+  fi
+  ipms files cp /ipfs/$qm $script || ipms pin add /ipfs/$qm
   ipms cat /ipfs/$qm | sh - /dev/stdin ${@}
 fi
 

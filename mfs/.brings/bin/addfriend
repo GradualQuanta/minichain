@@ -1,19 +1,22 @@
 #
 main (){
 peer="$1";
+nick="$2";
 if ! ipms files stat --hash /my/friends 1>/dev/null 2>&1; then
   ipms files mkdir -p /my/friends
 fi
 myqm=$(ipms files stat --hash /my)
 echo self@ipfs: /my=/ipfs/$myqm
 if ipms files stat --hash /my/friends/peerids.yml 1>/dev/null 2>&1; then
- append_file "- $peer" /my/friends/peerids.yml
+ append_file "$nick: $peer" /my/friends/peerids.yml
 else
  peerid=$(ipms --offline config Identity.PeerID)
+ eval $(fullname -a $peerid | eyml)
  ipms files write --create --truncate /my/friends/peerids.yml <<EOF
 --- # friends
+# \$User: $user\$
 # \$PeerID: $peerid\$
-- $peer
+$nick: $peer
 EOF
 fi
 echo info: $peer added to /ipfs/$myqm/friends/peerids.yml

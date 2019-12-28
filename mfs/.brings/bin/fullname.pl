@@ -69,6 +69,8 @@ printf "// DICT=%s\n",$DICT if $dbug;
 my $sha16 = unpack('H*',$bindata);
 my $id7 = substr($sha16,0,7);
 printf "id7: %s\n",$id7 if $all;
+my $build = &word(unpack'n',$bindata);
+printf "build: %s\n",$build if $all;
 
 my $fnamelist = &load_wlist('fnames');
 my $lnamelist = &load_wlist('lnames');
@@ -128,6 +130,34 @@ sub fullname {
   my @last = map { $llist->[$_] } &encode_baser($luniq,88799);
  
   return (@first,'.',@last);
+}
+# -----------------------------------------------------------------------
+sub word { # 20^4 * 6^3 words (25bit worth of data ... 3.4bit per letter)
+   use integer;
+   my $n = $_[0];
+   printf "n: %s\n",$n if $dbug;
+   my $vo = [qw ( a e i o u y )]; # 6
+   my $cs = [qw ( b c d f g h j k l m n p q r s t v w x z )]; # 20
+   my $str = '';
+   if (1 && $n < 26) {
+      $str = chr(ord('a') +$n%26);
+   } else {
+      $n -= 6;
+      while ($n >= 20) {
+         my $c = $n % 20;
+         $n /= 20;
+         $str .= $cs->[$c];
+         #print "cs: $n -> $c -> $str\n" if $dbug;
+         my $c = $n % 6;
+         $n /= 6;
+         $str .= $vo->[$c];
+         #print "vo: $n -> $c -> $str\n" if $dbug;
+      }
+      if ($n > 0) {
+         $str .= $cs->[$n];
+      }
+   }
+   return $str;
 }
 # -----------------------------------------------------------------------
 sub encode_base58 {

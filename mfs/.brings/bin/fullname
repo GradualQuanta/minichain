@@ -1,18 +1,29 @@
 #
 set -e
 
+bindir=${0%/*}
 script=/.brings/bin/fullname.pl
 
+if [ "x$1" = 'x' ]; then # if no arg use peerid
+  peerid=$(ipms --offline config Identity.PeerID)
+  arg=$peerid
+else
+  arg=$*
+fi
+# check if script is local
+if [ -e $bindir/${script##*/} ]; then
+ script="$bindir/${script##*/}"
+ qm=$(ipms add -Q $script --progress=0)
+ perl $script $arg
+else
+# check if script is in mfs 
 if ! qm=$(ipms files stat --hash $script 2>/dev/null); then
-url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/mfs/.brings/${script#/.brings}
+# get the hash from the github script (official one)...
+url=https://raw.githubusercontent.com/gradual-quanta/minichain/master/mfs${script}
 qm=$(ipms add -Q $url --progress=0)
 qm=${qm:-QmPNmsSvfdu7dKdX5JVTdCpL5QgFMtd9xnXTjzTNR1a9tv}
 fi
-if [ "x$1"  = 'x' ]; then
-  peerid=$(ipms --offline config Identity.PeerID)
-  ipms cat /ipfs/$qm | perl /dev/stdin $peerid
-else
-ipms cat /ipfs/$qm | perl /dev/stdin $*
+ipms cat /ipfs/$qm | perl /dev/stdin $arg
 fi
 
 if false; then

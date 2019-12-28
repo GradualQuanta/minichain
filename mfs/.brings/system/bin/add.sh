@@ -5,8 +5,9 @@
 # $Date: 12/24/19$
 # $Author: Michel G. Combes$
 #
-# $Previous: QmXihc28sxVvJzXXt6HwDCYtZe5v11wFA92DjdGR8BkryZ$
 # $Parent: /my/shell/dircolors/upload.sh$
+# $Previous: QmXihc28sxVvJzXXt6HwDCYtZe5v11wFA92DjdGR8BkryZ$
+# $Next: ~$
 #
 # $tic: 1577210295$
 # $spot: 2668474423$
@@ -14,7 +15,7 @@
 #
 # this script add a files to mfs ...
 
-if ! ipms swarm addrs local | sed -e 's/^/info: /'; then
+if ! ipms swarm addrs local 1>/dev/null; then
    echo ipms not running
 fi
 # dependencies:
@@ -52,7 +53,6 @@ for file in $list; do
   bname=${file##*/}
   mutable=$(ipms cat $kwextract | perl /dev/stdin -k mutable $file)
   echo "mutable: $mutable # for $bname"
-
   #source=$(curl -s "http://$gwhost:$gwport$kwextract" | perl /dev/stdin $file)
   #source=$(ipms files read /.brings/system/bin/source.pl | perl /dev/stdin $file)
   source=$(ipms cat $kwextract | perl /dev/stdin -k source $file)
@@ -87,6 +87,8 @@ for file in $list; do
      ipms files cp /ipfs/$pv $bdir/prev
      echo -n 'qm: '
      ipms files stat $bdir
+     qm=$(ipms files stat --hash $bdir)
+     echo url: http://$gwhost:$gwport/ipfs/$qm
   else
      cat > /tmp/$bname.yml <<EOT
 name: $bname
@@ -102,6 +104,7 @@ EOT
      ipms files cp /ipfs/$qm $source
      echo -n 'qm: '
      ipms files stat $source
+     echo url: http://$gwhost:$gwport/ipfs/$qm
   fi
   rm -f /tmp/$bname.yml
 
@@ -126,6 +129,7 @@ ipfs_files_append(){
       ipms files write --create --raw-leaves "${file}" <<EOF
 --- # blockRing for ${file##*/}
 # \$Source: ${file}$
+# \$Author: ${peerid}$
 # \$Previous: ${genesis}$
 - $qm
 EOF

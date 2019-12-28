@@ -14,7 +14,7 @@ red="[31m"
 nc="[0m"
 tic=$(date +%s)
 # set up local IPFS environment ...
-export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
+# export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
 
 main(){
 
@@ -63,8 +63,10 @@ ipms files stat /.brings/logs/brings.log
 echo .
 brkey=$(ipms files stat --hash /.brings)
 ipms --offline name publish --allow-offline $brkey 1>/dev/null 2>&1
-echo "url: https://gateway.ipfs.io/ipfs/$brkey"
 echo "url: http://$gwhost:$gwport/ipns/$peerid"
+echo "url: http://$gwhost:$gwport/ipfs/$brkey"
+echo "url: https://gateway.ipfs.io/ipfs/$brkey"
+echo "url: https://cloudflare-ipfs.com/ipfs/$brkey"
 
 # -----------------------------------------------------------------------
 # PUBLISH /.brings to self (peerid)
@@ -171,7 +173,9 @@ writelog_of_mutable_of_logfile()
    else 
      echo logfile: $logfile
    fi
-   qm=$(ipms files stat --hash ${mutable})
+   if ! qm=$(ipms files stat --hash ${mutable}); then
+      qm='QmbFMke1KXqnYyBBWxB74N4c5SBnJMVAiMNRcGu6x1AwQH'
+   fi
 
    if sz=$(ipms files stat --format="<size>" ${logfile} 2>/dev/null)
    then

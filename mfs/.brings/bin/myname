@@ -1,6 +1,6 @@
 #
 
 set -e
-peerid=$(ipfs config Identity.PeerID)
+peerid=$(ipms config Identity.PeerID)
 qm=QmPNmsSvfdu7dKdX5JVTdCpL5QgFMtd9xnXTjzTNR1a9tv
-ipfs cat /ipfs/$qm | perl /dev/stdin $peerid
+ipms cat /ipfs/$qm | perl /dev/stdin $peerid
