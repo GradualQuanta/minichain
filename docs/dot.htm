@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<h2>This is a dot file</h2>
+
+<p>The script below allows you to view a dot file directly online ...
+Just edit, the digraph portion of this <a href="#" onClick="viewSource()">file</a>
+and load it back in your browser;<br>
+an alternative method is to 
+execute the script below and copy paste the generated url in the address bar
+of your browser.
+<img id=doti src=dot.png align="right"/>
+<div id=dotcode><pre><code id=digraph>#
+echo -n 'url: '
+tr -d "\n " &lt;&lt;EOT
+https://image-charts.com/chart
+?cht=gv:dot
+&chl=digraph+G {
+  main -> parse -> execute;
+  main -> init;
+  main -> cleanup;
+  execute -> make_string;
+  execute -> printf;
+  init -> make_string;
+  main -> printf;
+  execute -> compare;
+}
+EOT
+echo ''
+</code></pre></div>
+<script>
+  digraph = document.getElementById('digraph').innerHTML
+  start = digraph.indexOf('EOT')
+  end = digraph.lastIndexOf('EOT')
+  url = digraph.substring(start+3,end).replace(/\s+/g,'');
+  url = url.replace(/&amp;/g,'&');
+  url = url.replace(/&gt;/g,'>');
+  console.log('url: '+url)
+  document.getElementById('doti').src=url
+
+function viewSource() {
+   window.location = "view-source:" + window.location.href.replace('\w+:///?','')
+}
+function viewCode() {
+   console.log('viewsource');
+   body = document.getElementsByTagName('body')[0]
+   body.textContent = body.innerHTML
+}
+</script>
