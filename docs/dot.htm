@@ -14,14 +14,20 @@ tr -d "\n " &lt;&lt;EOT
 https://image-charts.com/chart
 ?cht=gv:dot
 &chl=digraph+G {
-  main -> parse -> execute;
-  main -> init;
-  main -> cleanup;
-  execute -> make_string;
-  execute -> printf;
-  init -> make_string;
-  main -> printf;
-  execute -> compare;
+
+user1 [ shape=box ]
+user2 [ shape=box ]
+user3 [ shape=box ]
+
+genesis -> v0 -> v1 -> v2 -> myfile -> user1;
+
+ v1 -> "v2.a" -> yourfile -> user2;
+
+ myfile -> "v3.b" -> "someone-else-file" -> user3;
+
+myfile -> new_merged_version;
+yourfile -> new_merged_version;
+"someone-else-file" -> new_merged_version;
 }
 EOT
 echo ''

@@ -167,7 +167,11 @@ Error message and password prompt
 
 <li>author</li>
 
-<li>block_hash</li>
+<li>block:hash</li>
+
+<li>Draft of 'merge_n'</li>
+
+<li>Draft of 'pseudo code pour brfetch'</li>
 
 <li>mut_resolve</li>
 
@@ -9394,16 +9398,16 @@ Error message and password prompt
 <div created="20191228142249741" modified="20191228142249741" title="$:/state/editpreviewtype">
 <pre>$:/core/ui/EditTemplate/body/preview/output</pre>
 </div>
-<div created="20191228142255918" modified="20191228142255918" title="$:/state/showeditpreview">
+<div created="20191228142255918" modified="20191229161557526" title="$:/state/showeditpreview">
 <pre>yes</pre>
 </div>
-<div created="20191228142302754" modified="20191229155832348" title="$:/state/sidebar">
+<div created="20191228142302754" modified="20191229163333516" title="$:/state/sidebar">
 <pre>yes</pre>
 </div>
-<div created="20191228141842327" modified="20191228141852191" title="$:/state/tab/sidebar--595412856">
-<pre>$:/core/ui/SideBar/Recent</pre>
+<div created="20191228141842327" modified="20191229160914788" title="$:/state/tab/sidebar--595412856">
+<pre>$:/core/ui/SideBar/Open</pre>
 </div>
-<div list="[[pseudo code pour brfetch]]" title="$:/StoryList">
+<div created="20191229160740789" list="[[orphan block]] block:hash mutable [[Draft of 'pseudo code pour brfetch']] [[Draft of 'merge_n']] peerids.yml mut_resolve" modified="20191229160939152" title="$:/StoryList">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -9576,7 +9580,7 @@ Error message and password prompt
 <div created="20191228144951710" modified="20191228145056086" title="author">
 <pre>is a nickname (generated from peerid (hash of public key) of the physical person)</pre>
 </div>
-<div created="20191228143420566" modified="20191228151118160" title="block_hash">
+<div created="20191228143420566" modified="20191229160806655" title="block:hash">
 <pre>Exemple de block
 
 &lt;pre&gt;&lt;code&gt;% $Title: Ceci est un block $
@@ -9591,6 +9595,121 @@ Every blockchain has a [[mutable]] which contain a source location and and [[aut
 $Previous: [[QmImmutableHash123]] $ (mandatory)
 $Source: /my/blockchain/data/block0.txt $
 &lt;/code&gt;&lt;/pre&gt;</pre>
+</div>
+<div created="20191229161013003" draft.of="merge_n" draft.title="merge_n" modified="20191229161712420" title="Draft of 'merge_n'">
+<pre>Example of 3 way merge :
+
+user1:
+
+genesis -&gt; v0 -&gt; v1 -&gt; v2 -&gt; myfile
+
+user2:
+v1 -&gt; v2.a -&gt; yourfile
+
+user3:
+
+myfile -&gt; v3.b -&gt; someone-else-file
+
+&lt;pre&gt;&lt;code&gt;
+merge_n(myfile,yourfile,some-else-file) =
+
+  merge2(merge2(myfile,yourfile),some-else-file);
+
+  merge2(a,b) = merge3(a,b,x=ancestor_commun(a,b));
+
+[[[ yourfile [+3215 -3214 =&gt; rk: 12345]
+  xa = merge3(a,b,z) = apply_patch(diff2(b,z),a)
+  xb = merge3(b,a,z) = apply_patch(diff2(a,z),b)
+==== someone-else-file [+215 -421] =&gt; rk: 14]
+  xa = merge3(a,b,y) = apply_patch(diff2(b,y),a)
+  xb = merge3(b,a,y) = apply_patch(diff2(a,y),b)
+==== myfile [+4125 -6574 =&gt; rk: 32532]
+  xa = merge3(a,b,x) = apply_patch(diff2(b,x),a)
+  xb = merge3(b,a,x) = apply_patch(diff2(a,x),b)
+==== your new proposition ...
+  // decide how to merge the 3 versions
+  [...]
+]]]
+
+  -- note : xa = xb if a,b of CxRDT type
+  ab = vote(xa,xb)
+&lt;/code&gt;&lt;/pre&gt;
+</pre>
+</div>
+<div created="20191228141857634" draft.of="pseudo code pour brfetch" draft.title="pseudo code pour brfetch" modified="20191229160935248" tags="" title="Draft of 'pseudo code pour brfetch'">
+<pre>&lt;pre&gt;&lt;code&gt;
+[[block:hash]] = mhash(&quot;$1&quot;) 
+-- note: hashes hold content as well (i.e. they are push to ipms !)
+sandbox:hash = create_sandbox(/tmp/fetch)
+status:bool = check_if_ipms_is_running()
+friends:hash = [[mut_resolve]](self@mfs:/my/friends/[[peerids.yml]])
+friends:hash = addfriend(friends:hash,nickname,friendid:key)
+
+ kword:hash = extract_keywords(block:hash)
+ mutable:key = extract_yml(kword:hash,'mutable')
+ head:hash = mut_resolve(&quot;self@mfs:$mutable:key&quot;)
+
+ new_head_h:hash = fetch(head_h:hash):hash
+
+function fetch(head:hash) {
+      meta:yml = extract_keywords(head:hash)
+	 peers:array[:key] = extract_yml(meta:yml)
+
+	 foreach peer:key (peers:array[:key]) {
+	    ping peer:key
+	       connect peer:key
+	       head_hashes[peer] = mut_resolve(&quot;$peer@mfs:$mutable&quot;)
+
+	 }
+      return merged:hash = [[merge_n]](head_hashes:array[:hash])
+}
+
+mutable:hash = mut_update(mutable:key, new_head:hash)
+mut_publish(mutable:key,mutable:hash)
+
+
+function merge_n(hashes:array[:hash]):hash {
+ n = hashes.size
+ current_hash = hashes[0]
+ -- TBD: plan for 2 passes:
+ --  merge w/o conflicts and then merge w/ conflicts resolution
+ for i (1 .. n) {
+  current:hash = merge2(current_hash,hashes[i])
+ }
+ return current:hash
+}
+
+function merge2(a:hash,b:hash):hash {
+   merge3(a,b,x=common_ancestor(a,b));
+}
+
+function common_ancestor(a:hash,b:hash):hash {
+  ha = get_history(a);
+  hb = get_history(b);
+  for x (reverse ha) { // anti-chronological
+    for y (reverse hb) {
+      last if (x = y)
+    }
+  }  
+  return x
+}
+
+function merge3(a,b,x):hash {
+   xa = apply_patch(diff2(b,x),a) 
+   xb = apply_patch(diff2(a,x),b) 
+   if (xa = xb) {
+      return xa
+   } else {
+      return resolve_conflict(xa,xb)
+   }
+}
+
+function resolve_conflict(a,b):hash {
+  print &quot;ask for help !&quot;
+  return null:hash
+}
+&lt;/code&gt;&lt;/pre&gt;
+</pre>
 </div>
 <div created="20191228151801924" modified="20191228152546601" title="mut_resolve">
 <pre>resolve an //global //address of the following format (ssh/rsync) and return an immutable hash
