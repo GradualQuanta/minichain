@@ -1,8 +1,0 @@
-
-¹±--- # where scripts are ...
-
-#GITHUB: "git clone ...; cd ..."
-GITHUB: "git pull"
-CONFIG: /.brings/bootstrap/mkconfig.sh
-LOCAL_LIB: /.brings/bootstrap/perl5/install-local-lib.sh
-±

@@ -1,8 +1,0 @@
-
-ÕÍ--- # install scripts, command line
-pk: QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
-date: Wed Dec 11 22:08:29 CET 2019
-pv: QmcsRGP4tJtYyQsEV1XTQEKCM4LbvdtuoJa3Ga9b1FidKM
-qm: QmXdHUZcW2ATzcwTduTxaGbbLVnHb6fKCaBkJjHeSmyJ6u
-cmd: "curl https://ipfs.blockringâ„¢.ml/ipfs/QmXdHUZcW2ATzcwTduTxaGbbLVnHb6fKCaBkJjHeSmyJ6u | sh /dev/stdin"
-Í

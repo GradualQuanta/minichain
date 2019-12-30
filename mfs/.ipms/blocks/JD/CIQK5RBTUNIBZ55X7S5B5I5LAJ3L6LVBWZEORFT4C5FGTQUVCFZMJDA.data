@@ -1,7 +1,0 @@
-
-ÑÉ
-qm: QmY3NDcXYWCFL83M3srHVefkMLdkPJgTNzRDGEWpprhtrY
-url: http://127.0.0.1:8199/ipfs/QmY3NDcXYWCFL83M3srHVefkMLdkPJgTNzRDGEWpprhtrY
-url: http://127.0.0.1:5122/ipns/webui.ipfs.io/#/explore/ipfs/QmY3NDcXYWCFL83M3srHVefkMLdkPJgTNzRDGEWpprhtrY
-cmd: ipms get QmY3NDcXYWCFL83M3srHVefkMLdkPJgTNzRDGEWpprhtrY -o blockchain; cd blockchain
-É

@@ -1,8 +1,0 @@
-
-âÚ--- # where scripts are ...
-
-GITHUB: "git pull"
-GITHUB: "git clone https://github.com/gradual-quanta/minichain.git build"
-CONFIG: /.brings/bootstrap/mkconfig.sh
-LOCAL_LIB: /.brings/bootstrap/perl5/install-local-lib.sh
-Ú

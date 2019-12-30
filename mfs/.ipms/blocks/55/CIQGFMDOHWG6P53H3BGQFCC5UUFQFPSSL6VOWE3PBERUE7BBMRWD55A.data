@@ -1,9 +1,0 @@
-
-ß×#
-file="$1"
-name="${1%.*}"
-pandoc -f mediawiki -t markdown $name.md $file
-pandoc -f mediawiki -t html $name.html $file
-bafy=$(ipfs add -r -Q . --cid-version=0 --cid-base base32)
-echo url: https://$bafy.cf-ipfs.com/
-×
