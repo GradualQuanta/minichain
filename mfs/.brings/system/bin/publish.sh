@@ -90,7 +90,7 @@ check_exist_of_directory()
 check_ipms_running()
 {
    #if ! ipms cat mAVUACHJ1bm5pbmcK 1>/dev/null 2>&1; then false; fi
-   if ! ipms swarm addrs local | sed -e 's/^/info: /'; then
+   if ! ipms swarm addrs local 1>/dev/null; then
       echo " ${yellow}WARNING no ipms daemon running${nc}"
       echo " ${yellow}INFO running start.sh${nc}"
       ipfsd.sh
@@ -244,6 +244,7 @@ update_bootstrap_path() {
   echo update: bootstrap
 
    key="QmVdu2zd1B8VLn3R8xTMoD2yBVScQ1w9UMbW7CR1EJTVYw"
+   key="QmYUJadBPHYf2JfLTbuTgfTWJbHuh75Jp6n2UJFdbR3T9g"
    mfspath="$1"
 
    if [ $debug -eq 1 ]; then
