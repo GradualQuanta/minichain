@@ -1,0 +1,3 @@
+[submodule "mfs/.ipms"]
+	path = mfs/.ipms
+	url = https://github.com/michel47/ipms
