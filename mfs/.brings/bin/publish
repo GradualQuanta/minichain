@@ -19,11 +19,12 @@ main() {
       url=$raw/mfs${script}
       qm=$(ipms add -Q $url --progress=0)
       qm=${qm:-QmX99dhdqsaNUnt8gr1ae3mrUziA67aACJmgbM33ndHxEv}
-      ipms cat /ipfs/$qm | sh - /dev/stdin $*
+      ipms cat /ipfs/$qm | sh - /dev/stdin $qm $*
    fi
 }
 # ----------------------------------------------------------------------
 update() {
+   # ipms key list -l | grep -w system
    key='QmV2TqhdDGw41mnzYZCSBXKcyyqJ1qKfpoHSXWooYm1yNi'
    echo "update from $(fullname $key)"
    if rel_ipath=$(ipms name resolve $key); then

@@ -1,9 +1,14 @@
 #!/bin/sh
 
 # this script publish the hash of /.brings to the peerid
+# $Source: /.brings/system/bin/publish.sh $
 # $Date: 12/12/19$
 # $tic: 1576165431$
 # $qm: z2kauxcKpPgNG2Y6Pit8kxGh2BjjQeSo1JQnxQWFniAw133$
+
+# ----------------------------------------------------------------------------------------
+zero=shift; # /!\ all smart contract need to have their own hash passed as 1st argument !
+# ----------------------------------------------------------------------------------------
 
 export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
 export PATH="$BRNG_HOME/bin:$PATH"
@@ -199,6 +204,9 @@ post_brings()
     bot=$(ipms add -Q $0) # adding self 
     if ipms files rm /.brings/${0##*/} 2>/dev/null; then true; fi
     ipms files cp /ipfs/$bot "/.brings/${0##*/}"
+    else
+    if ipms files rm /.brings/$zero 2>/dev/null; then true; fi
+    ipms files cp /ipfs/$zero "/.brings/zero/$zero"
     fi
 
     brkey=$(ipms files stat --hash /.brings)
@@ -258,6 +266,10 @@ update_bootstrap_path() {
      ipms $offline name publish --allow-offline --key=bootstrap /ipfs/$qm | sed -e 's/^/info: /'
    fi
   
+}
+
+dollar_zero() {
+  	
 }
 
 main $@ ;
