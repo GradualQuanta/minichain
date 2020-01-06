@@ -61,15 +61,21 @@ printf "sha2: f%s\n",unpack('H*',$bindata) if $dbug;
   printf "sha2(%s): %s\n",$key,unpack('H*',$bindata) if $dbug;
 }
 # ----------------------------------------------------------------
+my $sha16 = unpack('H*',$bindata);
+# ----------------------------------------------------------------
 our $wordlists;
 my $etcdir = __FILE__; $etcdir =~ s,/bin/\w+$,/etc,;
 my $DICT = (exists $ENV{DICT}) ? $ENV{DICT} : $etcdir; # '/usr/share/dict';
 printf "// DICT=%s\n",$DICT if $dbug;
 
-my $sha16 = unpack('H*',$bindata);
-my $id7 = substr($sha16,0,7);
+my $msg=sprintf"/ipns/%s",$key;
+my $ns=sprintf"blob %u\0",length($msg);
+my $git=&hashr('SHA1',1,$ns,$msg);
+my $git16 = unpack('H*',$git);
+
+my $id7 = substr($git16,0,7);
 printf "id7: %s\n",$id7 if $all;
-my $build = &word(unpack'n',$bindata);
+my $build = &word(unpack'n',$git);
 printf "build: %s\n",$build if $all;
 
 my $fnamelist = &load_wlist('fnames');
@@ -122,13 +128,14 @@ sub load_wlist {
 # -----------------------------------------------------------------------
 sub fullname {
   my $bin = shift;
-  my $funiq = substr($bin,1,6); # 6 char (except 1st)
-  my $luniq = substr($bin,7,4);  # 4 char 
-  my $flist = $wordlists->{fnames};
+  my $luniq = substr($bin,1,6);  # 6 char 
   my $llist = $wordlists->{lnames};
-  my @first = map { $flist->[$_] } &encode_baser($funiq,5494);
   my @last = map { $llist->[$_] } &encode_baser($luniq,88799);
- 
+  # hash input (to avoid collisions on 12 first char of bin)
+  my $hash = &hashr('SHA-256',1,$bin);
+  my $funiq = substr($hash,1,7); # 7 char (except 1st)
+  my $flist = $wordlists->{fnames};
+  my @first = map { $flist->[$_] } &encode_baser($funiq,5494);
   return (@first,'.',@last);
 }
 # -----------------------------------------------------------------------

@@ -2,9 +2,23 @@
 set -e
 release=master
 script=/.brings/system/bin/add.sh
+
+main() {
+
+if [ "x$1" = 'x-u' ]; then shift; update; fi
+# dependencies:
+if ! release=$(ipms files stat --hash /.brings/system 2>/dev/null); then
+  release='QmZDyWDBrb984zKCsVEdQuu6wuWkj4uN8z5wdHBf9qNwDp'
+fi
+# use released scripts if exists ...
+if ipath=$(ipms resolve "/ipfs/$release/${script##/.brings/system/}" 2>/dev/null); then
+  echo ipath: $ipath
+  qm=${ipath#/ipfs/}
+  ipms cat $ipath | sh /dev/stdin ${@}
+else
 # use local mfs file if exists ...
 if qm=$(ipms files stat --hash "$script" 1>/dev/null 2>&1); then
-  ipms files read $script | sh /dev/stdin ${@}
+    ipms files read $script | sh /dev/stdin ${@}
 else
   # use github file otherwise ...
   raw="https://raw.githubusercontent.com/gradual-quanta/minichain/$release"
@@ -19,11 +33,34 @@ else
   ipms files cp /ipfs/$qm $script || ipms pin add /ipfs/$qm
   ipms cat /ipfs/$qm | sh - /dev/stdin ${@}
 fi
+fi
 
-
-
+}
+# ----------------------------------------------------------------------------
+update() { # update release variable for /system/bin ...
+# ipms key list -l | grep -w system
+   key='QmV2TqhdDGw41mnzYZCSBXKcyyqJ1qKfpoHSXWooYm1yNi'
+   echo "update from $(fullname $key)"
+   # ipms name publish --key=system $(ipms add -Q -r $MFS_HOME/.brings/system)
+   if sys_ipath=$(ipms name resolve $key); then
+      echo "sys_ipath: $sys_ipath"
+      if ipms files rm -r /.brings/system/bin 2>/dev/null; then true; fi
+      ipms files cp $sys_ipath/bin /.brings/system/bin 2>/dev/null
+      sys_hash=$(ipms files stat --hash /.brings/system) # preserve other data beside bin
+      echo "sys_hash: $sys_hash"
+      sed -i -e "s,release='.*'$,release='${sys_hash#/ipfs/}'," $0
+      exit 0;
+   else
+      echo "error: can find key: $key"
+      exit $$;
+   fi
+}
+# ----------------------------------------------------------------------------
+main ${@};
 if false; then
   sed -i -e "s/qm=\${qm:-.*}$/qm=\${qm:-$qm}/" -e 's/if [t]rue;/if false;/' $0
 fi
+exit $?;
+# ----------------------------------------------------------------------------
 true; # $Source: /my/shell/scripts/bradd.sh$
-#
+

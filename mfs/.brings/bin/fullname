@@ -1,7 +1,11 @@
 #
 set -e
 
+if echo $0 | grep -q '/'; then 
 bindir=${0%/*}
+else
+bindir=.
+fi
 script=/.brings/bin/fullname.pl
 
 if [ "x$1" = 'x' ]; then # if no arg use peerid
@@ -13,7 +17,7 @@ fi
 # check if script is local
 if [ -e $bindir/${script##*/} ]; then
  script="$bindir/${script##*/}"
- qm=$(ipms add -Q $script --progress=0)
+ qm=$(ipms --timeout 2s add -Q $script --progress=0)
  perl $script $arg
 else
 # check if script is in mfs 
