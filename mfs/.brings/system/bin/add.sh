@@ -14,6 +14,9 @@
 # $Signature: ~$
 #
 # this script add a files to mfs ...
+# all script executed remotely have their hash as "$1"
+zero=shift
+zero=${zero:-~}
 
 if ! ipms swarm addrs local 1>/dev/null; then
    echo ipms not running
@@ -36,6 +39,9 @@ fi
 fi
 kwextract="/ipfs/$release/kwextract.pl"
 kwsubsti="/ipfs/$release/kwsubsti.pl"
+
+#qmext=$(ipms resolve $kwextract); qmext=${qmext#/ipfs/}
+#qmsub=$(ipms resolve $kwsubsti); qmsub=${qmsub#/ipfs/}
 
 gwhost=$(ipms config Addresses.Gateway | cut -d'/' -f 3)
 gwport=$(ipms config Addresses.Gateway | cut -d'/' -f 5)
@@ -97,6 +103,7 @@ source: $source
 date: $date
 previous: $pv
 tic: $tic
+zero: $zero
 EOT
      ipms cat $kwsubsti | perl /dev/stdin /tmp/$bname.yml $file
      qm=$(ipms add -Q $file)

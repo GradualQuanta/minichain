@@ -39,6 +39,10 @@ echo ''
   url = digraph.substring(start+3,end).replace(/\s+/g,'');
   url = url.replace(/&amp;/g,'&');
   url = url.replace(/&gt;/g,'>');
+  /* url = url.replace(/{/g,'%7B');
+  url = url.replace(/[/g,'%5B');
+  url = url.replace(/]/g,'%5D');
+  url = url.replace(/}/g,'%7D'); */
   console.log('url: '+url)
   document.getElementById('doti').src=url
 

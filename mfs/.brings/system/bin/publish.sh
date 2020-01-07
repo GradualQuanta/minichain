@@ -51,7 +51,7 @@ create_identity_if_necessary $peerid
 update_bootstrap_path /.brings/bootstrap 
 
 check_exist_of_directory "/root"
-post_identity_to_root;
+# post_identity_to_root; # disable when network is larger !
 
 check_exist_of_directory "/.brings/logs"
 writelog_of_mutable_of_logfile /my/identity/public.yml /.brings/logs/identity.log
@@ -60,7 +60,7 @@ writelog_of_mutable_of_logfile /public /.brings/logs/public.log
 fi
 
 writelog_of_mutable_of_logfile /root /.brings/logs/root.log
-writelog_of_mutable_of_logfile /my /.brings/logs/my.log
+writelog_of_mutable_of_logfile /my /.brings/logs/my.log # to be encrypted ...
 
 post_brings;
 #ipms files read "/.brings/logs/brings.log"
@@ -77,7 +77,6 @@ echo "url: https://cloudflare-ipfs.com/ipfs/$brkey"
 # PUBLISH /.brings to self (peerid)
 ipms $offline name publish --allow-offline $brkey | sed -e 's/^/info: /';
 # -----------------------------------------------------------------------
-
 }
 
 check_exist_of_directory()
@@ -270,7 +269,7 @@ update_bootstrap_path() {
 }
 
 dollar_zero() {
-  	
+  echo "\$0: $zero";
 }
 
 main $@ ;
