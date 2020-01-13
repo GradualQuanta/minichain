@@ -1,7 +1,7 @@
 #
 
-export BRNG_HOME=${BRNG_HOME:=$HOME/.brings}
-export IPMS_HOME=${IPMS_HOME:=$HOME/.ipms}
+export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
+export IPMS_HOME=${IPMS_HOME:-$HOME/.ipms}
 export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
 
 # vim: sw=3 et ts=2
@@ -23,10 +23,15 @@ if test -d $BRNG_HOME/etc; then
 export DICT="$BRNG_HOME/etc"
 fi
 # ---------------------------------------------------------------------
-if test -d $BRNG_HOME/perl5/lib/perl5; then
 # perl's local lib
+if [ "x$PERL5LIB" != 'x' ]; then
+eval $(perl -I$PERL5LIB -Mlocal::lib=${PERL5LIB%/lib/perl5})
+else
+if test -d $BRNG_HOME/perl5/lib/perl5; then
 eval $(perl -I$BRNG_HOME/perl5/lib/perl5 -Mlocal::lib=$BRNG_HOME/perl5)
 fi
+fi
+# ---------------------------------------------------------------------
 
 unset LC_MEASUREMENT
 unset LC_PAPER

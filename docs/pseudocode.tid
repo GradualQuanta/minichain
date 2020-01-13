@@ -1,0 +1,71 @@
+<pre><code>
+[[block:hash]] = mhash("$1") // note: hashes hold content as well (i.e. they are push to ipms !)
+sandbox:hash = create_sandbox(/tmp/fetch)
+status:bool = check_if_ipms_is_running()
+friends:hash = [[mut_resolve]](self@mfs:/my/friends/[[peerids.yml]])
+friends:hash = addfriend(friends:hash,nickname,friendid:key)
+
+ kword:hash = extract_keywords(block:hash)
+ mutable:key = extract_yml(kword:hash,'mutable')
+ head:hash = mut_resolve("self@mfs:$mutable:key")
+
+ new_head_h:hash = fetch(head_h:hash):hash
+
+function fetch(head:hash) {
+      meta:yml = extract_keywords(head:hash)
+	 peers:array[:key] = extract_yml(meta:yml)
+
+	 foreach peer:key (peers:array[:key]) {
+	    ping peer:key
+	       connect peer:key
+	       head_hashes[peer] = mut_resolve("$peer@mfs:$mutable")
+
+	 }
+      return merged:hash = merge_n(head_hashes:array[:hash])
+}
+
+mutable:hash = mut_update(mutable:key, new_head:hash)
+mut_publish(mutable:key,mutable:hash)
+
+
+function merge_n(hashes:array[:hash]):hash {
+ n = hashes.size
+ current_hash = hashes[0]
+ // TBD: plan for 2 passes:
+ //  merge w/o conflicts and then merge w/ conflicts resolution
+ for i (1 .. n) {
+  current:hash = merge2(current_hash,hashes[i])
+ }
+ return current:hash
+}
+
+function merge2(a:hash,b:hash):hash {
+   merge3(a,b,x=common_ancestor(a,b));
+}
+
+function common_ancestor(a:hash,b:hash):hash {
+  ha = get_history(a);
+  hb = get_history(b);
+  for x (reverse ha) { // anti-chronological
+    for y (reverse hb) {
+      last if (x = y)
+    }
+  }  
+  return x
+}
+
+function merge3(a,b,x):hash {
+   xa = apply_patch(diff2(b,x),a) 
+   xb = apply_patch(diff2(a,x),b) 
+   if (xa = xb) {
+      return xa
+   } else {
+      return resolve_conflict(xa,xb)
+   }
+}
+
+function resolve_conflict(a,b):hash {
+  print "ask for help !"
+  return null:hash
+}
+</code></pre>

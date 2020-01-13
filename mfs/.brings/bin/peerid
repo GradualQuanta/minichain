@@ -1,3 +1,25 @@
 #
 
-ipms --offline config Identity.PeerID
+# return peerid corresponding to a nickname
+#
+# peerid -> [ friends, nickname ]
+#
+if [ "x$1" = 'x-a' ]; then shift; all=1; else all=0; fi
+
+nick="${1:-self}"
+
+if [ "$nick" = 'self' ]; then
+  ipms --offline config Identity.PeerID
+else 
+  peerid=$(ipms files read /my/friends/peerids.yml | grep -w $nick | cut -d' ' -f 2)
+  if [ $all -eq 0 ]; then
+  echo -n $peerid
+  else 
+  echo "--- # ${0##*/}"
+  echo peerid: $peerid
+  echo nick: $nick
+  echo tic: $(date +%s)
+  fi
+fi
+
+

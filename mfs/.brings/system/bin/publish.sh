@@ -1,9 +1,14 @@
 #!/bin/sh
 
 # this script publish the hash of /.brings to the peerid
+# $Source: /.brings/system/bin/publish.sh $
 # $Date: 12/12/19$
 # $tic: 1576165431$
 # $qm: z2kauxcKpPgNG2Y6Pit8kxGh2BjjQeSo1JQnxQWFniAw133$
+
+# ----------------------------------------------------------------------------------------
+zero=shift; # /!\ all smart contract need to have their own hash passed as 1st argument !
+# ----------------------------------------------------------------------------------------
 
 export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}
 export PATH="$BRNG_HOME/bin:$PATH"
@@ -14,7 +19,7 @@ red="[31m"
 nc="[0m"
 tic=$(date +%s)
 # set up local IPFS environment ...
-export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
+# export IPFS_PATH=${IPFS_PATH:-$BRNG_HOME/ipfs}
 
 main(){
 
@@ -46,7 +51,7 @@ create_identity_if_necessary $peerid
 update_bootstrap_path /.brings/bootstrap 
 
 check_exist_of_directory "/root"
-post_identity_to_root;
+# post_identity_to_root; # disable when network is larger !
 
 check_exist_of_directory "/.brings/logs"
 writelog_of_mutable_of_logfile /my/identity/public.yml /.brings/logs/identity.log
@@ -55,7 +60,7 @@ writelog_of_mutable_of_logfile /public /.brings/logs/public.log
 fi
 
 writelog_of_mutable_of_logfile /root /.brings/logs/root.log
-writelog_of_mutable_of_logfile /my /.brings/logs/my.log
+writelog_of_mutable_of_logfile /my /.brings/logs/my.log # to be encrypted ...
 
 post_brings;
 #ipms files read "/.brings/logs/brings.log"
@@ -63,14 +68,15 @@ ipms files stat /.brings/logs/brings.log
 echo .
 brkey=$(ipms files stat --hash /.brings)
 ipms --offline name publish --allow-offline $brkey 1>/dev/null 2>&1
-echo "url: https://gateway.ipfs.io/ipfs/$brkey"
 echo "url: http://$gwhost:$gwport/ipns/$peerid"
+echo "url: http://$gwhost:$gwport/ipfs/$brkey"
+echo "url: https://gateway.ipfs.io/ipfs/$brkey"
+echo "url: https://cloudflare-ipfs.com/ipfs/$brkey"
 
 # -----------------------------------------------------------------------
 # PUBLISH /.brings to self (peerid)
 ipms $offline name publish --allow-offline $brkey | sed -e 's/^/info: /';
 # -----------------------------------------------------------------------
-
 }
 
 check_exist_of_directory()
@@ -83,7 +89,7 @@ check_exist_of_directory()
 check_ipms_running()
 {
    #if ! ipms cat mAVUACHJ1bm5pbmcK 1>/dev/null 2>&1; then false; fi
-   if ! ipms swarm addrs local | sed -e 's/^/info: /'; then
+   if ! ipms swarm addrs local 1>/dev/null; then
       echo " ${yellow}WARNING no ipms daemon running${nc}"
       echo " ${yellow}INFO running start.sh${nc}"
       ipfsd.sh
@@ -171,7 +177,9 @@ writelog_of_mutable_of_logfile()
    else 
      echo logfile: $logfile
    fi
-   qm=$(ipms files stat --hash ${mutable})
+   if ! qm=$(ipms files stat --hash ${mutable}); then
+      qm='QmbFMke1KXqnYyBBWxB74N4c5SBnJMVAiMNRcGu6x1AwQH'
+   fi
 
    if sz=$(ipms files stat --format="<size>" ${logfile} 2>/dev/null)
    then
@@ -195,6 +203,9 @@ post_brings()
     bot=$(ipms add -Q $0) # adding self 
     if ipms files rm /.brings/${0##*/} 2>/dev/null; then true; fi
     ipms files cp /ipfs/$bot "/.brings/${0##*/}"
+    else
+    if ipms files rm /.brings/$zero 2>/dev/null; then true; fi
+    ipms files cp /ipfs/$zero "/.brings/zero/$zero"
     fi
 
     brkey=$(ipms files stat --hash /.brings)
@@ -232,6 +243,7 @@ update_bootstrap_path() {
   echo update: bootstrap
 
    key="QmVdu2zd1B8VLn3R8xTMoD2yBVScQ1w9UMbW7CR1EJTVYw"
+   key="QmYUJadBPHYf2JfLTbuTgfTWJbHuh75Jp6n2UJFdbR3T9g"
    mfspath="$1"
 
    if [ $debug -eq 1 ]; then
@@ -254,6 +266,10 @@ update_bootstrap_path() {
      ipms $offline name publish --allow-offline --key=bootstrap /ipfs/$qm | sed -e 's/^/info: /'
    fi
   
+}
+
+dollar_zero() {
+  echo "\$0: $zero";
 }
 
 main $@ ;

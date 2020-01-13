@@ -24,7 +24,7 @@ which ipms
 
 #export IPFS_PATH=${IPFS_PATH:=$BRNG_HOME/ipfs}
 if ! ipms swarm addrs local 2>/dev/null; then
-  echo "${red}WARNING no ipms daemon running${nc}, starting one !"
+  echo "${yellow}Starting ipms daemon${nc}"
   OPTIONS="--unrestricted-api --enable-namesys-pubsub"
   if [ "x$IPFS_PATH" != 'x' ]; then
     pp=$(cat $IPFS_PATH/config | xjson Addresses.Gateway | cut -d'/' -f 5)
@@ -41,7 +41,11 @@ if ! ipms swarm addrs local 2>/dev/null; then
     if which xterm 1>/dev/null; then
       xterm -geometry 128x18 -bg black -fg orange -name IPFS -n "$pp" -title "ipms daemon:$pp (${IPFS_PATH:-~/.ipfs}) ~ $name" -e ipms daemon $OPTIONS &
     else
-      gnome-terminal --title "ipms daemon:$pp ($IPFS_PATH) ~ $name" -- ipms daemon $OPTIONS &
+      if which xterm 1>/dev/null; then
+        gnome-terminal --title "ipms daemon:$pp ($IPFS_PATH) ~ $name" -- ipms daemon $OPTIONS &
+      else
+        ipms daemon $OPTIONS &
+      fi
     fi
   fi
 

@@ -1,17 +1,22 @@
 #
 
+set -e
 mfspath="$1"
 fname=${mfspath##*/}
 tmpf=/tmp/$fname
-pv=$(ipfs files stat --hash $mfspath)
-ipfs files read $mfspath > $tmpf
-gvim --servername MFS --remote-wait-tab-silent $tmpf
+pv=$(ipms files stat --hash $mfspath)
+ipms files read $mfspath > $tmpf
+if which gvim; then
+  gvim --servername MFS --remote-wait-tab-silent $tmpf
+else
+  vi $tmpf
+fi
 sed -i "s!\\\$\\(Previous\\): .*\\\$!\\\$\\1: $pv\\\$!" $tmpf
-qm=$(ipfs add -Q $tmpf)
-ipfs files rm $mfspath~ 2>/dev/null
-ipfs files mv $mfspath $mfspath~
-ipfs files cp /ipfs/$qm $mfspath
-ipfs files stat $mfspath
+qm=$(ipms add -Q $tmpf)
+if ipms files rm $mfspath~ 2>/dev/null; then true; fi
+ipms files mv $mfspath $mfspath~
+ipms files cp /ipfs/$qm $mfspath
+ipms files stat $mfspath
 
 
 exit $?; # $Source: /my/shell/scripts/vimfs$

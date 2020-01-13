@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 BEGIN { our $brsdir = (__FILE__ =~ m{(.*+)/}) ? "$1" : '..'; }
-# $Source: /my/perl/script/version.pl$
+# $Source: /my/perl/script/hstamp.pl$
 # $mtime: 1577480412 $
 
 our $dbug=0;
@@ -8,25 +8,9 @@ our $dbug=0;
 eval "\$$1='$2'"while $ARGV[0] =~ /^(\w+)=(.*)/ && shift;
 printf "@INC: (%s)\n",join(', ',@INC) if $dbug;
 
-my $file = shift || __FILE__;
 my $mtime = &kwx(*DATA,'mtime'); # /!\ need __END__
-
-my @times = sort { $a <=> $b } (lstat($file))[9,10]; # ctime,mtime
-my $vtime = $times[-1]; # biggest time...
-my $version = &rev($vtime);
-my $shk = &get_shake(160,$file);
-my $pn = unpack('n',substr($shk,-4)); # 16-bit
-my $build = &word($pn);
 printf "--- # %s %.2f\n",(&fname($0))[2], scalar &rev($mtime);
-printf "file: %s\n",$file;
-printf "date: %s\n",&hdate($vtime);
-printf "shk160: z%s\n",&encode_base58(pack('H','1914').$shk);
-printf "revision: %.2f\n",$version;
-printf qq'version: "%.2f - %s"\n',$version,$build;
-my ($m,$r) = &rev($vtime);
-printf "major %d\n",$m;
-printf "minor: %d\n",$r;
-printf qq'release: "v%.1f.%d" # (%s+%s)\n',int($m/10)/10,$m%10+$r,$m,$r;
+printf "date: %s\n",&hdate($mtime);
 printf "stamp: %s\n",&stamp();
 exit $?;
 
@@ -93,55 +77,6 @@ sub fdow {
    return $fdow;
 }
 # -----------------------------------------------------------------------
-sub get_shake { # use shake 256 because of ipfs' minimal length of 20Bytes
-  use Crypt::Digest::SHAKE;
-  my $len = shift;
-  local *F; open F,$_[0] or do { warn qq{"$_[0]": $!}; return undef };
-  #binmode F unless $_[0] =~ m/\.txt/;
-  my $msg = Crypt::Digest::SHAKE->new(256);
-  $msg->addfile(*F);
-  my $digest = $msg->done(($len+7)/8);
-  return $digest;
-}
-# -----------------------------------------------------
-sub word { # 20^4 * 6^3 words (25bit worth of data ...)
- use integer;
- my $n = $_[0];
- my $vo = [qw ( a e i o u y )]; # 6
- my $cs = [qw ( b c d f g h j k l m n p q r s t v w x z )]; # 20
- my $str = '';
- if (1 && $n < 26) {
- $str = chr(ord('a') +$n%26);
- } else {
- $n -= 6;
- while ($n >= 20) {
-   my $c = $n % 20;
-      $n /= 20;
-      $str .= $cs->[$c];
-   #print "cs: $n -> $c -> $str\n";
-   my $c = $n % 6;
-      $n /= 6;
-      $str .= $vo->[$c];
-   #print "vo: $n -> $c -> $str\n";
-
- }
- if ($n > 0) {
-   $str .= $cs->[$n];
- }
- return $str;
- }
-}
-# -----------------------------------------------------------------------
-sub encode_base58 { # btc
-  use Math::BigInt;
-  use Encode::Base58::BigInt qw();
-  my $bin = join'',@_;
-  my $bint = Math::BigInt->from_bytes($bin);
-  my $h58 = Encode::Base58::BigInt::encode_base58($bint);
-  $h58 =~ tr/a-km-zA-HJ-NP-Z/A-HJ-NP-Za-km-z/;
-  return $h58;
-}
-# -----------------------------------------------------------------------
 sub hdate { # return HTTP date (RFC-1123, RFC-2822) 
    my ($time,$delta) = @_;
    my $stamp = $time+$delta;
@@ -163,9 +98,12 @@ sub stamp { # Hash-like date timestamp
    my ($sec,$min,$hour,$mday,$mon,$yy,$wday,$yday) = (localtime($tic))[0..7];
    # pseudo-day normalized date signature (not Gregorian-style)
    my $ddate = 365 * $yy + 30 * $mon + $yday;
+   printf "ddate: %s\n",$ddate;
    my $tdate = 3600 * $hour + 60 * $min + $sec; # Second normalized time signature
+   printf "tdate: %s\n",$tdate;
    local *DATE; open(DATE, "date +%N |"); my $theDate = <DATE>; close(DATE);
    my $nsdate = int($theDate); # Nanosecond normalized time
+   printf "nsdate: %s\n",$nsdate;
    my $xdate = $ddate ^ $tdate ^ $nsdate; # Combinate signatures by xor
    my $pdate = pack("a*", $xdate); # Pack signature to a string
    return $pdate;

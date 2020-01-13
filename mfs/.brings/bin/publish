@@ -1,12 +1,50 @@
 #
 
-xurl=/.brings/system/bin/${0##*/}.sh
+# smart contract execution ...
+tag=master
+release='QmeuB1Aie8MK3MSu5AF9mA4Pj5pL5r76Wjdxib28SJyLvi'
+qmref='QmX99dhdqsaNUnt8gr1ae3mrUziA67aACJmgbM33ndHxEv'
+# $Previous: QmQgC7W6hzpyopGCYrpam2sg6Zbcd4nnQhQqUpuhCxpaZE $
+script=/.brings/system/bin/${0##*/}.sh
 
 set -e
-url=https://raw.githubusercontent.com/Gradual-Quanta/minichain/master/mfs/.brings/${xurl#/.brings}
-qm=$(ipms add -Q $url --progress=0)
-qm=${qm:-QmX99dhdqsaNUnt8gr1ae3mrUziA67aACJmgbM33ndHxEv}
-ipms cat /ipfs/$qm | sh - /dev/stdin $*
-if false; then
+if [ "x$1" = 'x-u' ]; then update; shift; fi
+# ----------------------------------------------------------------------
+main() {
+# use local mfs script if exists ...
+   if qm=$(ipms files stat --hash "$script" 1>/dev/null 2>&1); then
+      ipms files read $script | sh - /dev/stdin ${@}
+   else # use github file otherwise ...
+      raw="https://raw.githubusercontent.com/gradual-quanta/minichain/$release"
+      url=$raw/mfs${script}
+      qm=$(ipms add -Q $url --progress=0)
+      qm=${qm:-QmX99dhdqsaNUnt8gr1ae3mrUziA67aACJmgbM33ndHxEv}
+      ipms cat /ipfs/$qm | sh - /dev/stdin $qm $*
+   fi
+}
+# ----------------------------------------------------------------------
+update() {
+   # ipms key list -l | grep -w system
+   key='QmV2TqhdDGw41mnzYZCSBXKcyyqJ1qKfpoHSXWooYm1yNi'
+   echo "update from $(fullname $key)"
+   if rel_ipath=$(ipms name resolve $key); then
+   echo "rel_ipath: $rel_ipath"
+      sed -i -e "s,release='.*'$,release='${rel_ipath#/ipfs/}'," $0
+      exit 0;
+   else
+      echo "error: can find key: $key"
+      exit $$;
+   fi
+}
+
+main ${@};
+if [ "$qm" != "$qmref" ]; then
+ sed -i -e "s/qmref='.*'$/qmref='$qm'/" $0
+fi
+# ----------------------------------------------------------------------
+if false; then # default fallback
  sed -i -e "s/qm=\${qm:-.*}$/qm=\${qm:-$qm}/" -e 's/if [t]rue;/if false;/' $0
 fi
+exit $?
+# ----------------------------------------------------------------------
+true; # $Source: /my/shell/scripts/publish.sh $

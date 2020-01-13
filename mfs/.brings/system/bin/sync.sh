@@ -5,7 +5,7 @@ set -e
 # $qm: ~$
 #
 dir=$(pwd)
-name=${dir##*/minimal/}
+name=${dir##*/.brings/}
 echo name: $name
 
 qm=$(ipms add -Q -r .)
@@ -17,7 +17,9 @@ else
  if ipms files mkdir -p /.brings/$name 1>/dev/null; then true; fi
  ipms files cp /ipfs/$qm /.brings/$name
 fi
-echo url: https://gateway.ipfs.io/ipfs/$(ipms files stat --hash /.brings/$name)
+qm=$(ipms files stat --hash /.brings/$name)
+echo url: https://gateway.ipfs.io/ipfs/$qm
+xdg-open https://cloudflare-ipfs.com/ipfs/$qm
 
 exit $?;
 true; # $Source: /.brings/system/bin/sync.sh$

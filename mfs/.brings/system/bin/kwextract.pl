@@ -33,6 +33,7 @@ if (-e $file) {
    my $qm = 'z'.&encode_base58(pack('H4','01551220').&hashr('SHA256',1,$buf));
 	 $keywords->{qm} = $qm;
    seek(F,0,0);
+   $/ = "\n";
    while (<F>) {
       if (m/\$([A-Z]\w+|qm|mutable|tic):\s*([^\$]*?)\s*\$/) {
          printf "debug: %s %s\n",$1,$2 if $dbug;
@@ -61,12 +62,12 @@ if (-e $file) {
    if (! defined $keywords->{source}) {
       if ($file =~ m{^/.*/([^/]+)/([^/]+)/?$}) {
          my $source = $1.'/'.$2; $source =~ s,/_,/,g;
-         $keywords->{source} = '/.brings/files/'.$source;
+         $keywords->{source} = '/my/files/'.$source;
       } else {
          use Cwd qw(cwd);
          cwd() =~ m{/([^/]+)/?$};
          my $source = $1.'/'.$file; $source =~ s,/_,/,g;
-         $keywords->{source} = '/.brings/files/'.$source;
+         $keywords->{source} = '/my/files/'.$source;
       }
    }
 
