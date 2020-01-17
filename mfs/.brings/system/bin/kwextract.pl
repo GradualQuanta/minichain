@@ -35,7 +35,7 @@ if (-e $file) {
    seek(F,0,0);
    $/ = "\n";
    while (<F>) {
-      if (m/\$([A-Z]\w+|qm|mutable|tic):\s*([^\$]*?)\s*\$/) {
+      if (m/\$([A-Z]\w+|qm|mutable|previous|tic):\s*([^\\\$]*?)\s*\$(?<=['"\Z])?/) {
          printf "debug: %s %s\n",$1,$2 if $dbug;
          my $keyw=lc($1);
          $keywords->{$keyw} = $2;
@@ -49,13 +49,13 @@ if (-e $file) {
    if (! defined $keywords->{mutable}) {
       if ($file =~ m{^/.*/([^/]+)/([^/]+)/?$}) {
          my $mutable = $1.'/'.$2.'.log'; $mutable =~ s,/_,/,g;
-         $keywords->{mutable} = '/.brings/mutables/'.$mutable;
+         $keywords->{mutable} = '/my/etc/mutables/'.$mutable;
 
       } else {
          use Cwd qw(cwd);
          cwd() =~ m{/([^/]+)/?$};
          my $mutable = $1.'/'.$file.'.log'; $mutable =~ s,/_,/,g;
-         $keywords->{mutable} = '/.brings/mutables/'.$mutable;
+         $keywords->{mutable} = '/my/etc/mutables/'.$mutable;
       }
    }
    # if no source invent one !
