@@ -1,8 +1,8 @@
 ## how to have better colors with a light background
 
--> use a bettet ```LS_COLORS``` variable !
+-> use a better ```LS_COLORS``` variable !
 
-colors are difined in the file : [dircolors][1]
+colors are defined in the file : [dircolors][1]
 you can load the color definition with 
 
 ## for more colors :
