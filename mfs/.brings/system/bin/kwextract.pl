@@ -1,8 +1,11 @@
 #!/usr/bin/perl
 # $Source: /my/perl/script/kwextract.pl,v$
-# $mutable /.brings/system/bin/kwextract.pl$
-# $Previous: QmPbNezoXD6PBFaJvDxG1mYvkNoZvVckPejfHFam8ptzKr$
-# $tic: 1575654442$
+# $Date: $
+# $mutable: /.brings/system/bin/kwextract.pl$
+# $previous: QmU1RDLsAGNPVuwDjKD3RQx7R6aEuQfcmSiubviDZ2XRVC$
+#
+# $parents: QmRU26t5KP5QLiNbjWMxSbyfaARvzshfdzozj6M4K73auH$
+# $tic: 1579258505$
 
 our $dbug=0;
 #--------------------------------
@@ -34,14 +37,22 @@ if (-e $file) {
 	 $keywords->{qm} = $qm;
    seek(F,0,0);
    $/ = "\n";
+   $dbug = 1;
    while (<F>) {
-      if (m/\$([A-Z]\w+|qm|mutable|previous|tic):\s*([^\\\$]*?)\s*\$(?<=['"\Z])?/) {
-         printf "debug: %s %s\n",$1,$2 if $dbug;
+      if (m/(?<![\\\$])\$([A-Z]\w+):/) { # User's keywords ...
+         printf "line: %s",$_ if $dbug;
+         if (m/(?<![\\\$])\$([A-Z]\w+):\s*([^\\\$]*?)\s*(?<!\\)?\$(?=['"\Z\s])/) { # keywords value
+            printf "debug: \$&=%s\n",$& if $dbug;
+            printf "debug: %s %s\n",$1,$2 if $dbug;
+            $keywords->{$1} = $2;
+         }
+      } elsif (m/(?<!\\)\$(qm|mutable|previous|next|tic|spot):\s*([^\\\$]*?)\s*\$(?=['"\Z\s])/) { # reserved
+         #printf "debug: %s %s\n",$1,$2 if $dbug;
          my $keyw=lc($1);
          $keywords->{$keyw} = $2;
       } else {
          chomp;
-         printf "dbug: %s\n",$_ if $dbug;
+         #printf "dbug: %s\n",$_ if $dbug;
       }
    }
    close F;
@@ -59,15 +70,15 @@ if (-e $file) {
       }
    }
    # if no source invent one !
-   if (! defined $keywords->{source}) {
+   if (! defined $keywords->{Source}) {
       if ($file =~ m{^/.*/([^/]+)/([^/]+)/?$}) {
          my $source = $1.'/'.$2; $source =~ s,/_,/,g;
-         $keywords->{source} = '/my/files/'.$source;
+         $keywords->{Source} = '/my/files/'.$source;
       } else {
          use Cwd qw(cwd);
          cwd() =~ m{/([^/]+)/?$};
          my $source = $1.'/'.$file; $source =~ s,/_,/,g;
-         $keywords->{source} = '/my/files/'.$source;
+         $keywords->{Source} = '/my/files/'.$source;
       }
    }
 
