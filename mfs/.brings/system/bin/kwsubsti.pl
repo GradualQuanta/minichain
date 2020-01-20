@@ -1,8 +1,4 @@
 #!/usr/bin/perl
-# $NOKEYWORD: doesn't work $abc $
-# $NOKEYWORD: skipped \$
-# \$NOKEYWORD: skipped $
-# $$NOKEYWORD: skipped $
 # $Name: kwsubsti.pl$ ...
 # $Source: /.brings/files/bin/kwsubsti.pl$
 # $Date: 12/12/19$
@@ -10,9 +6,18 @@
 
 # $tic: 1576163731$
 # $spot: ~$
-# $qm: z6t$
+# $qm: z6CfPrhCREyKcfWPVAvnbPmwaAbzXHwevCFvxyyrBTCL$
 
+# below are keywords that shouldn't work !
+# $NOKEYWORD: skipped too $abc $
+# $NOKEYWORD: skipped \$
+# \$NOKEYWORD: skipped $
+# $$NOKEYWORD: skipped $
 #
+# ---------------------------------------
+# qm used for payload hash computation :
+#ipms add keywords.txt --hash sha3-224 --cid-base base58btc
+my $qmstatic='z6CfPrhCREyKcfWPVAvnbPmwaAbzXHwevCFvxyyrBTCL';
 
 # usage: perl kwsubsti.pl keywords.yml file.txt
 
@@ -25,7 +30,7 @@ my $spot = &get_spot($^T);
 
 local $/ = undef;
 my $buf = <>;
-$buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: ~\$/m;
+$buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: $qmstatic\$/m;
 my $qm = 'z'.&encode_base58(pack('H4','01551220').&hashr('SHA256',1,$buf));
 $buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: $qm\$/m; # replace w/ current qm
 $buf =~ s/\$tic: [^\$]*\s*\$$/\$tic: $^T\$/m; # update timestamp

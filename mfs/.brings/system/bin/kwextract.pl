@@ -37,16 +37,17 @@ if (-e $file) {
 	 $keywords->{qm} = $qm;
    seek(F,0,0);
    $/ = "\n";
-   $dbug = 1;
    while (<F>) {
-      if (m/(?<![\\\$])\$([A-Z]\w+):/) { # User's keywords ...
+      if (m/\$([A-Z]\w+):.*\$/) { # User's keywords ...
          printf "line: %s",$_ if $dbug;
+         # $ not preceded w/ \ or $
+         # last $ not preceded w/ \ and followed by ' " or \s
          if (m/(?<![\\\$])\$([A-Z]\w+):\s*([^\\\$]*?)\s*(?<!\\)?\$(?=['"\Z\s])/) { # keywords value
             printf "debug: \$&=%s\n",$& if $dbug;
             printf "debug: %s %s\n",$1,$2 if $dbug;
             $keywords->{$1} = $2;
          }
-      } elsif (m/(?<!\\)\$(qm|mutable|previous|next|tic|spot):\s*([^\\\$]*?)\s*\$(?=['"\Z\s])/) { # reserved
+      } elsif (m/(?<!\\)\$(qm|source|parents|mutable|previous|next|tic|spot):\s*([^\\\$]*?)\s*\$(?=['"\Z\s])/) { # reserved
          #printf "debug: %s %s\n",$1,$2 if $dbug;
          my $keyw=lc($1);
          $keywords->{$keyw} = $2;
@@ -70,7 +71,7 @@ if (-e $file) {
       }
    }
    # if no source invent one !
-   if (! defined $keywords->{Source}) {
+   if (! defined $keywords->{Source} || $keywords->{Source} eq '') {
       if ($file =~ m{^/.*/([^/]+)/([^/]+)/?$}) {
          my $source = $1.'/'.$2; $source =~ s,/_,/,g;
          $keywords->{Source} = '/my/files/'.$source;
@@ -99,7 +100,7 @@ if ($yml) {
 } elsif (defined $keywords->{'mutable'}) {
    print $keywords->{mutable};
 } else {
-   print $keywords->{source};
+   print $keywords->{Source};
 }
 
 exit $?;

@@ -7,7 +7,7 @@
 # $qm: z2kauxcKpPgNG2Y6Pit8kxGh2BjjQeSo1JQnxQWFniAw133$
 
 # ----------------------------------------------------------------------------------------
-zero=shift; # /!\ all smart contract need to have their own hash passed as 1st argument !
+zero=${1:-~}; shift; # /!\ all smart contract need to have their own hash passed as 1st argument !
 # ----------------------------------------------------------------------------------------
 
 export BRNG_HOME=${BRNG_HOME:-$HOME/.brings}

@@ -1,22 +1,22 @@
 #
 # $Id: $
 
-# $Source: /.brings/files/bin/add.sh$
-# $Date: 12/24/19$
+# $Source: $
+# $Date: 01/17/20$
 # $Author: Michel G. Combes$
 #
-# $Parent: /my/shell/dircolors/upload.sh$
-# $Previous: QmXihc28sxVvJzXXt6HwDCYtZe5v11wFA92DjdGR8BkryZ$
-# $Next: ~$
+# $Origin: /my/shell/dircolors/upload.sh$
+# $previous: QmQPWEEAjyKDqW1WNH1U1Wm3NuE3oRBBRK1UBas9KJDwUK$
+# $next: ~$
+# $zero: QmbcWKay5CeR64uSSKRdS6F3Spvdh7ue61xrddTg9gSMup$
 #
-# $tic: 1577210295$
-# $spot: 2668474423$
+# $tic: 1579425198$
+# $spot: 1550486377$
 # $Signature: ~$
 #
 # this script add a files to mfs ...
 # all script executed remotely have their hash as "$1"
-zero=shift
-zero=${zero:-~}
+zero=${1:-~}; shift
 
 if ! ipms swarm addrs local 1>/dev/null; then
    echo ipms not running
@@ -59,9 +59,11 @@ for file in $list; do
   bname=${file##*/}
   mutable=$(ipms cat $kwextract | perl /dev/stdin -k mutable $file)
   echo "mutable: $mutable # for $bname"
+  
+
   #source=$(curl -s "http://$gwhost:$gwport$kwextract" | perl /dev/stdin $file)
   #source=$(ipms files read /.brings/system/bin/source.pl | perl /dev/stdin $file)
-  source=$(ipms cat $kwextract | perl /dev/stdin -k source $file)
+  source=$(ipms cat $kwextract | perl /dev/stdin -k Source $file)
   source=${source##*:} # (remove remote host part)
   #echo mfs: $source
   bdir=${source%/*} # create parent directory if necessary
@@ -70,24 +72,29 @@ for file in $list; do
      ipms files mkdir -p $bdir
   fi  
   if pv=$(ipms files stat --hash $source 2>/dev/null); then
-     if echo $source | grep -q '/$'; then
+     if echo $source | grep -q '/$'; then # source is a folder !
 	  ipms files rm -r $source
      else
 	  ipms files rm $source
      fi
   else
     pv=$(ipms add -Q $file)
+    
+  fi
+  parents=$(ipms cat $kwextract | perl /dev/stdin -k parents $file 2>/dev/null);
+  if [ "x$parents" = 'x~' ]; then
+  # no parents : use previous
+    parents=$pv
   fi
   if echo $source | grep -q '/$'; then # source is a folder
      bdir=${source%/*}
-
-     parent=${file%/*}
-     if echo $parent | grep -q '^/'; then
+     parentdir=${file%/*}
+     if echo $parentdir | grep -q '^/'; then
 	     true;
      else
-        parent=$(pwd)
+        parentdir=$(pwd)
      fi
-     qm=$(ipms add -Q -r $parent)
+     qm=$(ipms add -Q -r $parentdir)
      #echo info: ips files cp /ipfs/$qm $bdir
      ipms files cp /ipfs/$qm $bdir
      ipms files cp /ipfs/$pv $bdir/prev
@@ -101,13 +108,14 @@ name: $bname
 file: $file
 source: $source
 date: $date
+parents: "$parents"
 previous: $pv
 tic: $tic
 zero: $zero
 EOT
      ipms cat $kwsubsti | perl /dev/stdin /tmp/$bname.yml $file
      qm=$(ipms add -Q $file)
-     ipfs_files_append "- $qm" $mutable
+     ipfs_mutable_update $qm $parents $mutable
      ipms files cp /ipfs/$qm $source
      echo -n 'qm: '
      ipms files stat $source
@@ -119,31 +127,44 @@ done
 
 }
 
-ipfs_files_append(){
-   string="$1"
-   file="$2"
+ipfs_mutable_update(){
+   qm="$1"
+   parents="$2"
+   file="$3"
    tmpf=/tmp/${file##*/}
    mdir=${file%/*}
    if ! ipms files stat --hash $mdir 1>/dev/null 2>&1; then
       ipms files mkdir -p $mdir
    fi
-   if sz=$(ipms files stat --format="<size>" ${file} 2>/dev/null); then
-      ipms files read "${file}" > $tmpf
+   if qm=$(ipms files stat --hash ${file} 2>/dev/null); then
+      ipms cat /ipfs/$qm |\
+      sed -e "s,\$parents: .*\$,\$parents: $parents\$" \
+          -e "s,\$tic: .*\$/tic: $tic\$" > $tmpf
       echo "$string" >> $tmpf
+      history=$(ipms add -Q $tmpf --hash sha3-224 --cid-base base58btc)
+      sed -i -e "s,\$history: .*\$/history: $history\$" $tmpf
       ipms files write --create  --truncate "${file}" < $tmpf
-   else 
+   else
       genesis=z83ajSANGx6FnQqFaaELyCGFFtrxZKM3C
+      # echo -n 'no history !' | ipms add --hash sha3-224 --cid-base base58btc
+      history=z6CfPtEY5uJ2QozjweVm2wcwdEHGq263NA1FqCHKY6NZ
       ipms files write --create --raw-leaves "${file}" <<EOF
 --- # blockRing for ${file##*/}
 # \$Source: ${file}$
 # \$Author: ${peerid}$
-# \$Previous: ${genesis}$
+# \$previous: ${genesis}$
+# \$parents: ${parents}$
+# \$history: ${history}$
+# \$qm: ${qm}$
+# \$zero: ${zero}$
 - $qm
 EOF
+   history=$(ipms add -Q $tmpf --hash sha3-224 --cid-base base58btc)
    fi
-
    rm -f $tmpf
+   return $history
 }
 
 main $@
 exit $?
+true;
