@@ -1,0 +1,11 @@
+# $parents: QmdN5u3ecqF48QD1EhJgPeGSekUgvhXuZK5sRhx8u2dH87$
+This is Michel's file
+it has 3 lines plus a header of 3
+
+added a line here !
+
+line 1 : Hello World ! (correcting the "casing of "hello")
+line 2 : nothing to say for line 2 :)
+line 3 : this is in fact line 6
+
+.

@@ -1,0 +1,15 @@
+<title>Form to upload file</title>
+<h2>Form to upload file</h2>
+
+<p>
+Below is the form to upload a file to the <a href=https://iph.heliohost.org/cgi-bin/posted.pl>posted endpoint</a>.
+</p>
+
+<!--
+<form action="http://127.0.0.1:5121/api/v0/add?arg=/tmp/myfile.txt" method=post enctype="multipart/form-data">
+</form>
+-->
+<form action=https://iph.heliohost.org/cgi-bin/posted.pl method=post enctype="multipart/form-data">
+<input type="file" id="input1" name="fileupload" data-file-accept="pdf, doc, docx, xls, csv, txt, rtf, html, zip, mp3, wma, mpg, flv, avi, jpg, jpeg, png, gif" data-file-maxsize="10240" data-file-minsize="0" data-file-limit="0" data-component="fileupload" />
+<br><input id="input2" type="submit" name="button" value="submit">
+</form>
