@@ -18,7 +18,7 @@ else
  ipms files cp /ipfs/$qm /.brings/$name
 fi
 qm=$(ipms files stat --hash /.brings/$name)
-echo qm copied to /.brings/$name
+echo "qm: $qm # copied to /.brings/$name"
 echo url: https://gateway.ipfs.io/ipfs/$qm
 xdg-open https://cloudflare-ipfs.com/ipfs/$qm
 

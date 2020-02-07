@@ -59,4 +59,4 @@ xdg-open https://ipfs.blockringtm.ml/ipfs/$qm
 
 
 exit $?
-true; # $Source: /my/shell/scripts/push_to_ipfs.sh$
+true; # $Source: /.brings/files/minichain/push_to_ipfs.sh$

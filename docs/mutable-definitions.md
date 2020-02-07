@@ -2,26 +2,75 @@
 
 immutable == content placed at the address = hash(content) 
 
-   fixed contenty at fixed address 
 
+   fixed content at fixed address (ipfs is immutable system == content addressable store))
+   
+   
 ## Mutable:
 
-   address fixed for variable content
+   address fixed for variable content (key value store)
+   
+   key -> {signed value + public key} stored at hash(public key)
 
 1. ipns'mutable :
-   mutable == variable content which has a signed reference to a immutable, and is placed
-           at the address of the hash of the signer's public.
+   mutable == variable content which has a signed reference to a immutable,
+      and is placed at the address of the hash of the signer's public key.
            (mutables need to be published via gossip protocol)
 
 2. mfs mutable (source) :
-   mutable == variable content which place at a fixed path on mfs
+   mutable == variable content which is placed at a fixed path on mfs
    (mutables need to be published via owner's peerid)
 
 3. ipms mutable (ipfs) :
-   mutable == variable content which has a signed reference to a immutable, and is placed
-              at the address "mutable-hash" on IPFS network i.e. fixed address
+   mutable == variable content which has a signed reference to a immutable,
+     and is placed at the address "mutable-hash" on IPFS network i.e. fixed address
 
-   mutuable-hash(content1) == mutable-hash(content2) 
+   mutable-hash(content1) == mutable-hash(content2) 
+   
+### example:
+
+ipns'mutable : /ipns/QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
+mfs mutable: michel@mfs:/public/myfile.txt
+ipms'mutable: /ipfs/z6D1ERe2CSjzD4PGUVxgezuVs1cXJreBh8nNApCAEwfr
+
+more info in resolve code: (https://discordapp.com/channels/553095799869931521/553139874149171210/672131869852041236)
+```perl
+my $addr = shift;
+# bifurcation depending on address type
+if ($addr =~ m{^(?:self@)?(?:mfs:|/files)(/.*)})  {
+# local mutable address of type:
+# . self@mfs:/mfspat
+# . mfs:/mfspat
+# . /files/mfspat (webui)
+  $hash = &ipms_local_mutable_resolve('mfs:'.$1);
+
+} elsif ($addr =~ m{\w+:(/ipns/.*)} ) { # P2P request 127.0.0.1:808)
+  # dweb:/ipns/mkey (mutable)
+  $hash = &ipms_name_resolve($1);
+} elsif ($addr =~ m{ipfs:/(/.*)} ) { # immutable
+  # ipfs://mhash
+  $hash = &ipms_path_resolve('/ipfs'.$1);
+} elsif ($addr =~ m{(/ipfs/.*)} ) { # immutable
+  # /ipfs/mhash
+  $hash = &ipms_path_resolve($1);
+} elsif ($addr =~ m{(\w+)\@ipms:(/.*)} ) { # remote
+  # nickname@ipms:/my/identity/public.yml
+  $hash = &ipms_remote_mutable_resolve($1,$2);
+} elsif ($addr =~ m{/ipms/(\w+)(/.*)} ) { # remote, using nickname
+  # /ipms/nickname/path
+  # /ipms/symbol/path
+  $hash = &ipms_remote_mutable_resolve($1,$2);
+} elsif ($addr =~ m{(\w+)\@mfs:(/.*)} ) { # remote, using keys
+  # peeridkey@mfs:/mfspath
+  # symbolkey@mfs:/mfspath
+  $hash = &mfs_remote_mutable_resolve($1,$2);
+} else {
+  $hash = &mfs_unknow_resolve($addr);
+}
+
+```
+
+
 
 ## Blockchain:
 
@@ -33,7 +82,7 @@ immutable == content placed at the address = hash(content)
 
 
 
-$Source: /public/docs/mutable-definition.md$
+$Source: /public/docs/mychelium/mutable-definition.md$
 $Previous: QmatcgcxAZHvUUguXFCDHKzoUSmn7WKKSh9njsqvLodTRf$
 
 

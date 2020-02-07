@@ -82,7 +82,7 @@ To run the demo :
 * [/root](http://ipfs.io/webui/#/files/root) : the /root for sharing files
 * [/public](http://ipfs.io/webui/#/files/public) : the your public files
 * [/my](http://ipfs.io/webui/#/files/my) : the your personal files
-* [/etc](http://ipfs.io/webui/#/files/etc) : miscelleaneous files
+* [/etc](http://ipfs.io/ipns/webui.ipfs.io/#/files/etc ) : miscelleaneous files
 
 The only required files are under [/.brings][brng]
 

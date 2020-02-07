@@ -108,7 +108,7 @@ name: $bname
 file: $file
 source: $source
 date: $date
-parents: "$parents"
+parents: "$pv" # add forces parent be previous.
 previous: $pv
 tic: $tic
 zero: $zero
@@ -136,14 +136,17 @@ ipfs_mutable_update(){
    if ! ipms files stat --hash $mdir 1>/dev/null 2>&1; then
       ipms files mkdir -p $mdir
    fi
-   if qm=$(ipms files stat --hash ${file} 2>/dev/null); then
-      ipms cat /ipfs/$qm |\
-      sed -e "s,\$parents: .*\$,\$parents: $parents\$" \
-          -e "s,\$tic: .*\$/tic: $tic\$" > $tmpf
-      echo "$string" >> $tmpf
+   if qmlog=$(ipms files stat --hash ${file} 2>/dev/null); then
+      ipms cat /ipfs/$qmlog |\
+      sed -e "s,\$parents: .*\$,\$parents: $parents\$," \
+          -e "s/\$tic: .*\$/tic: $tic\$/" \
+          -e "s/\$zero: .*\$/zero: $zero\$/" \
+          -e "s/\$history: .*\$/history: $qmlog\$/" > $tmpf
+      echo "- $qm" >> $tmpf
       history=$(ipms add -Q $tmpf --hash sha3-224 --cid-base base58btc)
-      sed -i -e "s,\$history: .*\$/history: $history\$" $tmpf
+      sed -i -e "s,\$history: .*\$,history: $history\$," $tmpf
       ipms files write --create  --truncate "${file}" < $tmpf
+      rm -f $tmpf
    else
       genesis=z83ajSANGx6FnQqFaaELyCGFFtrxZKM3C
       # echo -n 'no history !' | ipms add --hash sha3-224 --cid-base base58btc
@@ -155,14 +158,13 @@ ipfs_mutable_update(){
 # \$previous: ${genesis}$
 # \$parents: ${parents}$
 # \$history: ${history}$
-# \$qm: ${qm}$
+# \$payload: ~$
 # \$zero: ${zero}$
 - $qm
 EOF
-   history=$(ipms add -Q $tmpf --hash sha3-224 --cid-base base58btc)
+   history=$(ipms files read "${file}" | ipms add -Q - --hash sha3-224 --cid-base base58btc)
    fi
-   rm -f $tmpf
-   return $history
+   echo history: $history
 }
 
 main $@

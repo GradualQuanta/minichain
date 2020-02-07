@@ -84,7 +84,7 @@ sub mfs_remote_mutable_resolve { # w/ keys
  # 
  # get /.brings/mutables/brindex.log
  my $mh = &ipms_api('resolve',"$brng/mutables/brindex.log");
- my $buf = &get_content($mh->{Path});
+ my $buf = &get_hash_content($mh->{Path});
  my $list = YAML::Syck::Load($buf);
  my %table = ();
  @table{map { s,/$,,; $_ } values %$list} = (keys %$list);
@@ -132,9 +132,6 @@ if (0) {
 }
  
 
- 
-  
-
 sub get_peerkey {
  my $nobodykey = 'QmcEAhNT1epnXAVzuaFmvHWrQYZkxiiwipsL3W4hL1pHY9';
  my $nickname = shift;
@@ -144,7 +141,7 @@ sub get_peerkey {
  }
  my $peerids_hash = &ipms_local_mutable_resolve('mfs:/my/friends/peerids.yml');
  printf "peerids_hash: %s\n",$peerids_hash;
- #my $buf = &get_content($peerids_hash);
+ #my $buf = &get_hash_content($peerids_hash);
  my $buf = &get_mutable_content('mfs:/my/friends/peerids.yml');
  
  my $peerids_table = &YAML::Syck::Load($buf);
@@ -165,7 +162,7 @@ sub get_mutable_content {
   #printf "%s.\n",Dump($buf) if $dbug;
   return $buf;
 }
-sub get_content {
+sub get_hash_content {
   my $hash = shift;
   my $buf = &ipms_api('cat',$hash);
   #printf "%s.\n",Dump($buf) if $dbug;

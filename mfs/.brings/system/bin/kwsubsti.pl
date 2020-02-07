@@ -30,8 +30,9 @@ my $spot = &get_spot($^T);
 
 local $/ = undef;
 my $buf = <>;
+# compute payload (w/ original file i.e. before substitution)
 $buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: $qmstatic\$/m;
-my $qm = 'z'.&encode_base58(pack('H4','01551220').&hashr('SHA256',1,$buf));
+my $qm = 'z'.&encode_base58(pack('H8','01551220').&hashr('SHA256',1,$buf));
 $buf =~ s/\$qm: [^\$]*\s*\$$/\$qm: $qm\$/m; # replace w/ current qm
 $buf =~ s/\$tic: [^\$]*\s*\$$/\$tic: $^T\$/m; # update timestamp
 $buf =~ s/\$spot: [^\$]*\s*\$$/\$spot: $spot\$/m; # update space-time spot!
