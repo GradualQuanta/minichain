@@ -1,0 +1,15 @@
+<title>Write a mfs:file</title>
+<h2>Form to write a file in mfs (IPFS)</h2>
+
+<p>
+Below is the form to write a file to the <a href=https://iph.heliohost.org/cgi-bin/posted.pl>posted endpoint</a>.
+</p>
+
+<!--
+<form action="http://127.0.0.1:5121/api/v0/add?arg=/tmp/myfile.txt" method=post enctype="multipart/form-data">
+<form action=https://iph.heliohost.org/cgi-bin/posted.pl method=post enctype="multipart/form-data">
+-->
+<form action="http://127.0.0.1:5121/api/v0/files/write?arg=/tmp/myfile.txt&create=true" method=post enctype="multipart/form-data">
+<input type="file" id="input1" name="file" data-file-accept="pdf, doc, docx, xls, csv, txt, rtf, html, zip, mp3, wma, mpg, flv, avi, jpg, jpeg, png, gif" data-file-maxsize="10240" data-file-minsize="0" data-file-limit="0" data-component="data" />
+<br><input id="input2" type="submit" name="button" value="submit">
+</form>

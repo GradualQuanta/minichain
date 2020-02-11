@@ -1,0 +1,5 @@
+Date: Tue Feb 11 06:21:18 CET 2020
+
+This is the data.txt file !
+-- 4194
+michelc

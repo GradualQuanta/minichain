@@ -1,0 +1,141 @@
+#!/usr/bin/perl
+
+# This code is for writing a file to IPFS via the http api interface
+#
+# usage: perl write_api.pl
+#
+# ex:
+#  perl write_api.pl dbug=1
+#
+use YAML::Syck qw(Dump);
+
+#understand variable=value on the command line...
+eval "\$$1='$2'"while $ARGV[0] =~ /^(\w+)=(.*)/ && shift;
+
+# =================================================================================
+my $buf = "$^T: this is the data to be writen to IPFS!\n-- $$\n";
+
+my $options = '&create=1&parents=0';
+my $mh = &ipms_post_api('files/write','/var/tmp/data.txt',$buf,$options);
+if (ref($mh) eq 'HASH') {
+  printf "write: %s\n",Dump($mh);
+} else {
+  printf "write: %s\n",$mh;
+}
+exit $?;
+# =================================================================================
+
+sub ipms_post_api {
+   use JSON qw(decode_json);
+   use LWP::UserAgent qw();
+   use HTTP::Request 6.07;
+   #use MIME::Base64 qw(encode_base64 decode_base64);
+
+   my $cmd = shift;
+   my $filename = shift;
+   my $data = shift;
+   my $opt = join'',@_;
+   my $filepath = '/tmp/blob.data';
+   my $api_url;
+   # ----------------------------
+   # select alternative endpoint:
+   if ($ENV{HTTP_HOST} =~ /postman/) {
+      $api_url = 'https://postman-echo.com/post?cmd=%s&arg=%s%s';
+   } elsif ($ENV{HTTP_HOST} =~ m/blockring/) {
+      $api_url = sprintf'https://%s/api/v0/%%s?arg=%%s%%s','ipfs.blockringtm.ml';
+   } elsif ($ENV{HTTP_HOST} =~ m/heliohost/) { # for debug purpose !
+      $api_url = 'https://iph.heliohost.org/cgi-bin/posted.pl?cmd=%s&arg=%s%s';
+   } else {
+      my ($apihost,$apiport) = &get_apihostport();
+      $api_url = sprintf'http://%s:%s/api/v0/%%s?arg=%%s%%s',$apihost,$apiport;
+   }
+   # ----------------------------
+   my $url;
+   if ($cmd eq 'add') {
+      $url = sprintf $api_url,$cmd,$filepath,$opt; # name of type="file"
+   } elsif ($cmd =~ m/write$/) {
+      $url = sprintf $api_url,$cmd,$filename,$opt;
+   } else {
+      my $sha2 = &hashr('SHA256',1,$data);
+      return 'z'.encode_base58(pack('H8','01551220').$sha2);
+   }
+   my $ua = LWP::UserAgent->new();
+   my $form = [
+#        Content_Type => 'multipart/form-data',
+#       You are allowed to use a CODE reference as content in the request object passed in.
+#       The content function should return the content when called. The content can be returned
+#       Content => [$filepath, $filename, Content => $data ]
+      'file' => ["$filepath" => "$filename", Content => "$data" ]
+#      'file' => ["$filepath" => "$filename" ]
+   ];
+   if ($dbug) {
+      printf "\$url: %s\n",$url;
+      printf "\@form: %s.\n",Dump($form);
+   }
+
+    #my $resp = $ua->post($url,$form, 'Content_Type' => 'form-data');
+    my $resp = $ua->post($url,$form, 'Content-Type' => 'multipart/form-data;boundary=-----a-special-boundary-543-67');
+   if ($resp->is_success) {
+      # printf "X-Status: %s<br>\n",$resp->status_line;
+      $content = $resp->decoded_content;
+   } else { # error ... 
+      print "<pre>";
+      printf "X-api-url: %s\n",$url;
+      printf "Status: %s\n",$resp->status_line;
+      $content = $resp->decoded_content;
+      local $/ = "\n";
+      chomp($content);
+      printf "Content: %s\n",$content;
+      print "</pre>\n";
+   }
+#printf qq'content: "%s"\n',$content;
+   if ($content =~ m/^{/) { # }
+      my $resp = &decode_json($content);
+      return $resp;
+   } else {
+      return $content;
+   }
+
+}
+
+# -----------------------------------------------------
+sub hashr {
+   my $alg = shift;
+   my $rnd = shift; # number of round to run ...
+   my $tmp = join('',@_);
+   use Crypt::Digest qw();
+   my $msg = Crypt::Digest->new($alg) or die $!;
+   for (1 .. $rnd) {
+      $msg->add($tmp);
+      $tmp = $msg->digest();
+      $msg->reset;
+      #printf "#%d tmp: %s\n",$_,unpack'H*',$tmp;
+   }
+   return $tmp
+}
+# -----------------------------------------------------
+sub encode_base58 { # btc
+  use Math::BigInt;
+  use Encode::Base58::BigInt qw();
+  my $bin = join'',@_;
+  my $bint = Math::BigInt->from_bytes($bin);
+  my $h58 = Encode::Base58::BigInt::encode_base58($bint);
+  $h58 =~ tr/a-km-zA-HJ-NP-Z/A-HJ-NP-Za-km-z/;
+  return $h58;
+}
+# -----------------------------------------------------
+sub get_apihostport {
+  my $IPFS_PATH = $ENV{IPFS_PATH} || $ENV{HOME}.'/.ipfs';
+  my $conff = $IPFS_PATH . '/config';
+  local *CFG; open CFG,'<',$conff or warn $!;
+  local $/ = undef; my $buf = <CFG>; close CFG;
+  use JSON qw(decode_json);
+  my $json = decode_json($buf);
+  my $apiaddr = $json->{Addresses}{API};
+  my (undef,undef,$apihost,undef,$apiport) = split'/',$apiaddr,5;
+      $apihost = '127.0.0.1' if ($apihost eq '0.0.0.0');
+  return ($apihost,$apiport);
+}
+# -----------------------------------------------------
+
+1; # $Source: /my/perl/scripts/write_api.pl $
