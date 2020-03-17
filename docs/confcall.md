@@ -3,6 +3,7 @@
 
 
 
+* Discord : https://discord.gg/ARBJQQF
 * Hangouts : [bWdjb21iZXNAZ21haWwuY29t](https://hangouts.google.com/hangouts/_/calendar/bWdjb21iZXNAZ21haWwuY29t.03vnq6fcsqc06lq6tv5ic1j8q7)
 * JitSi : <https://meet.jit.si/blockrings>
 * Appear.in : <https://appear.in/blockrings>

@@ -4,7 +4,7 @@
 my $dot = shift;
 
 my $name;
-my $deps = {};
+my $dag = {};
 local *F;
 open F,'<',$dot;
 while (<F>) {
@@ -20,14 +20,14 @@ while (<F>) {
       my @sources = split/,\s*/,$1;
       foreach my $target (@targets) {
         $target =~ s/"//g;
-        push @{$deps->{$target}}, map { s/"//g; $_ } @sources;
+        push @{$dag->{$target}}, map { s/"//g; $_ } @sources;
         printf "$. %s: [%s]\n",$target,join', ', @sources;
       }
     } elsif (/\s*-+>?\s*([\w_\-:]+)/) { # .. -> ABC
       my $source = $1; $source =~ s/"//g;
       foreach my $target (@targets) {
         $target =~ s/"//g;
-        push @{$deps->{$target}}, $source;
+        push @{$dag->{$target}}, $source;
         printf "$. %s: %s\n",$target,join', ',$source;
       }
    }
@@ -35,20 +35,20 @@ while (<F>) {
      my $target = $1; $target =~ s/"//g;
     if (/\s*-+>?\s*{\s*([^}]*?)\s*}/) { # ... -> {}
       my @sources = split/,\s*/,$1;
-      push @{$deps->{$target}}, map { s/"//g; $_ } @sources;
+      push @{$dag->{$target}}, map { s/"//g; $_ } @sources;
       printf "$. %s: [%s]\n",$target,join', ', @sources;
     } elsif (/\s*-+>?\s*([\w_\-:]+)/) { # .. -> ABC
       my $source = $1; $source =~ s/"//g;
-      push @{$deps->{$target}}, $source;
+      push @{$dag->{$target}}, $source;
       printf "$. %s: %s\n",$target,join', ',$source;
     }
   } 
 }
 
 use YAML::Syck qw(DumpFile Dump);
-printf "--- # deps %s...\n",&Dump($deps);
+printf "--- # dag %s...\n",&Dump($dag);
 my $file = $dot; $file =~ s/\.dot$//; $file .= '.yml';
-DumpFile($file,$deps);
+DumpFile($file,$dag);
 
 exit $?;
 

@@ -27,11 +27,62 @@ immutable == content placed at the address = hash(content)
 
    mutable-hash(content1) == mutable-hash(content2) 
    
+
+   
 ### example:
 
 ipns'mutable : /ipns/QmcfHufAK9ErQ9ZKJF7YX68KntYYBJngkGDoVKcZEJyRve
 mfs mutable: michel@mfs:/public/myfile.txt
 ipms'mutable: /ipfs/z6D1ERe2CSjzD4PGUVxgezuVs1cXJreBh8nNApCAEwfr
+
+### resolution performance
+
+ a mutable need to be globally distibuted each time it is updated,
+ the usual protocol to achieve this quickly is "[[gossip]]", which
+ randomly broadcast to a subset of neightbors (discovered peers).
+ 
+ anyone can distribute a mutable, this is why they are "signed",
+ so only valid ones are kept (DDoS mitigation).
+ each mutable have a limited life-time (TTL) i.e. they expired.
+ 
+ resolution is done in a similar way by discovering the peers how has the requested files
+ IPFS: collect 20 mutables to choose the best.
+ 
+ This leads to a very slow resolution of mutables ...
+ 
+ Annonymous Distibuted-Key-value-Store : extremement difficile ...
+
+ IMHO:
+  - (perfect turin machine = ! exists)
+  - (perfect decentralize KVS = ! exits)
+
+### IPMS approach :
+
+  - Content-Addressable-Store are EASY (1 hash -> 1 value)
+  - how can we have mutables stored on a CAS network (IPFS style)
+
+    what we want : 1 hash -> 2 different content == /!\ hash collision !!!
+    
+    hash non-cryptographically secure can be mutables...   
+    
+    mut5(data0) = substr(SHA256(data0,timestamp),0,5) = ZREAF
+    mut5(data1) = substr(SHA256(date1."nonce",timestamp),0,5) = ZREAF
+    
+    ident20("data012345678901234567.extra") = data012345678901234567
+    
+  - 2 new hash functions:
+    mut224() shake-256, clipped to 224 (sponge: sha3 keccak  NIST3.0)
+    ident20([hash,data]) = hash; (PR)
+    
+    extended identity = "modulo" ident .
+    
+    
+    
+    
+ all this leading to slow time response
+ 
+
+
 
 more info in resolve code: (https://discordapp.com/channels/553095799869931521/553139874149171210/672131869852041236)
 ```perl
